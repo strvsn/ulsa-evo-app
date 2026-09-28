@@ -1,0 +1,62 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "ulsa-evo-app-base",
+  "main": "worker/index.ts",
+  "compatibility_date": "2026-09-04",
+  "compatibility_flags": ["nodejs_compat"],
+  "assets": {
+    "binding": "ASSETS",
+    "directory": "./dist",
+    "not_found_handling": "single-page-application",
+    "run_worker_first": ["/api/*"]
+  },
+  "observability": {
+    "enabled": true,
+    "logs": { "head_sampling_rate": 1 },
+    "traces": { "enabled": true, "head_sampling_rate": 0.01 }
+  },
+  "env": {
+    "staging": {
+      "name": "ulsa-evo-app-staging",
+      "assets": {
+        "binding": "ASSETS",
+        "directory": "./dist",
+        "not_found_handling": "single-page-application",
+        "run_worker_first": ["/api/*"]
+      },
+      "vars": {
+        "ALLOWED_ORIGINS": "*",
+        "ESP32_INCLUDE_PRERELEASES": "true",
+        "STM32_ACCESS_MODE": "public",
+        "STM32_INCLUDE_PRERELEASES": "true",
+        "STM32_DOWNLOAD_TOKEN_TTL_SECONDS": "300"
+      },
+      "r2_buckets": [
+        { "binding": "FIRMWARE_BUCKET", "bucket_name": "replace-with-your-staging-bucket" }
+      ]
+    },
+    "production": {
+      "name": "ulsa-evo-app",
+      "workers_dev": false,
+      "assets": {
+        "binding": "ASSETS",
+        "directory": "./dist",
+        "not_found_handling": "single-page-application",
+        "run_worker_first": ["/api/*"]
+      },
+      "routes": [
+        { "pattern": "app.example.invalid", "custom_domain": true }
+      ],
+      "vars": {
+        "ALLOWED_ORIGINS": "https://app.example.invalid,capacitor://localhost,http://localhost",
+        "ESP32_INCLUDE_PRERELEASES": "false",
+        "STM32_ACCESS_MODE": "public",
+        "STM32_INCLUDE_PRERELEASES": "false",
+        "STM32_DOWNLOAD_TOKEN_TTL_SECONDS": "300"
+      },
+      "r2_buckets": [
+        { "binding": "FIRMWARE_BUCKET", "bucket_name": "replace-with-your-production-bucket" }
+      ]
+    }
+  }
+}

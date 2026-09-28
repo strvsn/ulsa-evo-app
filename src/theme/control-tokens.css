@@ -1,0 +1,85 @@
+/*
+ * Shared control vocabulary. These variables describe interaction semantics
+ * only; page layout and legacy control visuals remain owned by each surface.
+ */
+:root {
+  --control-size-i44: 44px;
+  --control-size-c36: 36px;
+  --control-size-m44: 44px;
+  --control-size-l48: 48px;
+  --control-size-r56: 56px;
+  --control-size-s80: 80px;
+  /* Visual surfaces may be smaller than their 44px interaction boxes. */
+  --control-visual-action: 40px;
+  --control-visual-choice: 36px;
+  --control-radius-icon: 12px;
+  --control-radius-compact: 9px;
+  --control-radius-standard: 10px;
+  --control-radius-row: 12px;
+  --control-radius-surface: 16px;
+  --control-focus-width: 2px;
+  --control-focus-offset: 2px;
+  --control-focus-color: var(--instrument-accent, #59dfff);
+  --control-disabled-opacity: 0.42;
+  --control-press-scale: 0.98;
+  --control-transition-duration: 150ms;
+  --control-transition-easing: ease;
+  --control-accent-surface: rgba(94, 234, 212, 0.16);
+  --control-accent-border: rgba(94, 234, 212, 0.48);
+  --control-accent-text: var(--instrument-accent, #59dfff);
+  --control-accent-shadow: 0 0 16px rgba(94, 234, 212, 0.18);
+  --control-success-surface: rgba(101, 230, 167, 0.16);
+  --control-success-border: rgba(101, 230, 167, 0.48);
+  --control-success-text: var(--instrument-live, #65e6a7);
+  --control-success-shadow: 0 0 16px rgba(101, 230, 167, 0.18);
+  --control-neutral-surface: rgba(166, 183, 192, 0.06);
+  --control-neutral-border: rgba(166, 183, 192, 0.26);
+  --control-neutral-text: var(--instrument-text-secondary, #a6b7c0);
+  --control-pending-surface: rgba(245, 165, 76, 0.12);
+  --control-pending-border: rgba(245, 165, 76, 0.5);
+  --control-pending-text: #ffc477;
+  --control-recording-surface: rgba(255, 102, 120, 0.12);
+  --control-recording-border: rgba(255, 102, 120, 0.52);
+  --control-recording-text: #ff8292;
+  --control-error-surface: rgba(255, 98, 113, 0.12);
+  --control-error-border: rgba(255, 98, 113, 0.54);
+  --control-error-text: #ff9ca7;
+  --control-destructive-surface: rgba(255, 98, 113, 0.1);
+  --control-destructive-border: rgba(255, 98, 113, 0.5);
+  --control-destructive-text: #ff9ca7;
+}
+
+.dashboard-content.light-theme,
+.ble-modal-light,
+.ble-settings-drawer-light {
+  --control-accent-surface: rgba(10, 122, 162, 0.12);
+  --control-accent-border: rgba(8, 122, 162, 0.48);
+  --control-accent-text: #0b607c;
+  --control-accent-shadow: 0 0 14px rgba(8, 122, 162, 0.14);
+  --control-success-surface: rgba(22, 129, 104, 0.1);
+  --control-success-border: rgba(13, 112, 88, 0.46);
+  --control-success-text: #0d7058;
+  --control-success-shadow: 0 0 14px rgba(13, 112, 88, 0.12);
+  --control-neutral-surface: rgba(71, 85, 105, 0.045);
+  --control-neutral-border: rgba(71, 85, 105, 0.24);
+  --control-neutral-text: #526674;
+  --control-pending-surface: rgba(185, 106, 19, 0.09);
+  --control-pending-border: rgba(185, 106, 19, 0.48);
+  --control-pending-text: #94520c;
+  --control-recording-surface: rgba(198, 42, 65, 0.08);
+  --control-recording-border: rgba(198, 42, 65, 0.46);
+  --control-recording-text: #b51e39;
+  --control-error-surface: rgba(185, 48, 55, 0.08);
+  --control-error-border: rgba(185, 48, 55, 0.48);
+  --control-error-text: #a72632;
+  --control-destructive-surface: rgba(185, 48, 55, 0.07);
+  --control-destructive-border: rgba(185, 48, 55, 0.48);
+  --control-destructive-text: #a72632;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --control-transition-duration: 0ms;
+    --control-press-scale: 1;
+  }
+}

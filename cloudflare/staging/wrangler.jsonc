@@ -1,0 +1,22 @@
+{
+  "$schema": "../../node_modules/wrangler/config-schema.json",
+  "name": "your-evo-app-staging",
+  "pages_build_output_dir": "../../build/cloudflare-pages",
+  "compatibility_date": "2026-09-05",
+  "compatibility_flags": [
+    "nodejs_compat"
+  ],
+  "vars": {
+    "ALLOWED_ORIGINS": "*",
+    "ESP32_INCLUDE_PRERELEASES": "true",
+    "STM32_ACCESS_MODE": "public",
+    "STM32_INCLUDE_PRERELEASES": "true",
+    "STM32_DOWNLOAD_TOKEN_TTL_SECONDS": "300"
+  },
+  "r2_buckets": [
+    {
+      "binding": "FIRMWARE_BUCKET",
+      "bucket_name": "your-evo-firmware-staging"
+    }
+  ]
+}

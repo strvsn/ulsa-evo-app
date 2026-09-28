@@ -1,0 +1,2550 @@
+{
+  "schemaVersion": 1,
+  "status": "release",
+  "product": "ulsa-evo-app",
+  "version": "1.1.1",
+  "iosMarketingVersion": "1.1.1",
+  "releaseTag": "ulsa-evo-app-v1.1.1",
+  "sourceSnapshotSha256": "91084b5b909f1344236ddc0378584018803951373c3a06f57215e5cb4f4d9487",
+  "files": [
+    {
+      "path": ".browserslistrc",
+      "size": 74,
+      "sha256": "435c258e4dd8b334654427222ba8ba5186e43df15a07b668b82c19190f2473dc"
+    },
+    {
+      "path": ".env.example",
+      "size": 683,
+      "sha256": "137875fcb83638e550a4de3ba3dc317a482f89ff71e4ff9267a4a8161f92cf5b"
+    },
+    {
+      "path": ".github/workflows/build.yml",
+      "size": 1556,
+      "sha256": "f85e3c8a7ebe0e4d8bfff4af074565227ceafb754b97d59b77b6d8f6a022af07"
+    },
+    {
+      "path": ".gitignore",
+      "size": 330,
+      "sha256": "961962e0211600ea5a66dc00913835fbb7c10a1a4e5956cd833ac400394a157b"
+    },
+    {
+      "path": "ASSET_LICENSE.md",
+      "size": 1203,
+      "sha256": "d9e90f36a22d83405f08b9abac1c112150ddf61b7cc720b0119aa50f441bbe18"
+    },
+    {
+      "path": "capacitor.config.ts",
+      "size": 1212,
+      "sha256": "5138f8562458027a6bb34548d44e89918b2594f2920eb2ef67665d975c55dfa7"
+    },
+    {
+      "path": "cloudflare/production/wrangler.jsonc",
+      "size": 651,
+      "sha256": "17bde037475de80c35f7ac91eb2e3e58b69978e4072298be1340197a4a038fa0"
+    },
+    {
+      "path": "cloudflare/staging/wrangler.jsonc",
+      "size": 578,
+      "sha256": "f7672f2c58287133ddc16cd2a638fb1dafc2b6032a929b8cf7bb9bdcf22cee50"
+    },
+    {
+      "path": "CODE_OF_CONDUCT.md",
+      "size": 408,
+      "sha256": "8861722e3145f0d7b90a05d1c2c71d6eec64e27c41964283e367fe3de11af4a8"
+    },
+    {
+      "path": "config/timezone_catalog.json",
+      "size": 43302,
+      "sha256": "8371ac21c8af88160b6c7040c728c9c741a6649085b9d401a669e424a16c0e5e"
+    },
+    {
+      "path": "contracts/ulsa-evo-ble-contract.json",
+      "size": 3619,
+      "sha256": "e998626f5b03e54c6e427498bb4542394236907890e611b8beeb45de7ae8f512"
+    },
+    {
+      "path": "CONTRIBUTING.md",
+      "size": 607,
+      "sha256": "8cb5ee7211f14a133821a374429fc2a413cf15f2f13ff1edd6a05ae33576ecf9"
+    },
+    {
+      "path": "cypress.config.ts",
+      "size": 239,
+      "sha256": "771fb2478b5322877bd9df711f884253fc487c2b5eee81d6b914175cc2fc17bd"
+    },
+    {
+      "path": "cypress/ble-device-list-harness.html",
+      "size": 306,
+      "sha256": "584953d214f95ce9adeb013fa0ae5417f2824563680d67d094a3823294ad4b7b"
+    },
+    {
+      "path": "cypress/drawer-layout-harness.html",
+      "size": 442,
+      "sha256": "fe2ad6f9e6f6814420f25b5584fdf618e6611d83598fe370cf1fb7e0e721ec57"
+    },
+    {
+      "path": "cypress/e2e/ble-multiple-devices.cy.ts",
+      "size": 2551,
+      "sha256": "a26bac11b70c3cdbd237e3412b7c20fe2afccba5a47713fb3c4bd66a9018dbaf"
+    },
+    {
+      "path": "cypress/e2e/control-height-normalization.cy.ts",
+      "size": 2581,
+      "sha256": "854add56cf5477db9f3bc8349dc2db5d455a33a1efd85e3bb851e377670386eb"
+    },
+    {
+      "path": "cypress/e2e/drawer-compact-actions.cy.ts",
+      "size": 4516,
+      "sha256": "c5cc7a47f29fa55507933bdfd64045039bc28b5f4a4c82f92df47a350e22e280"
+    },
+    {
+      "path": "cypress/e2e/drawer-responsive-layout.cy.ts",
+      "size": 14349,
+      "sha256": "0ba4c53128390381eef22f6b5d865c8f149211b7a0c745a6b1186fd746ffbc9c"
+    },
+    {
+      "path": "cypress/e2e/firmware-update-wizard.cy.ts",
+      "size": 11406,
+      "sha256": "0e398d31726e4009a9cc79ee7a67b657222a9b6e98cce0d253a332c2e213e4ce"
+    },
+    {
+      "path": "cypress/e2e/firmware-version-refresh.cy.ts",
+      "size": 1599,
+      "sha256": "2c25b8a32e4158d9a86acee4a87d079bf3965dbcd5ba56e1ff7764984f525fc8"
+    },
+    {
+      "path": "cypress/e2e/log-recording-card.cy.ts",
+      "size": 2201,
+      "sha256": "f20390429c4a714014b4bfdc2dd076f26cc70dceb0a704b593fe17e648f28fcd"
+    },
+    {
+      "path": "cypress/e2e/metric-value-alignment.cy.ts",
+      "size": 2318,
+      "sha256": "8e19de99dd4e16fbac0dedd6b14e00cba2bf9f1c6f2cb2c5d2b1048ec32f8b06"
+    },
+    {
+      "path": "cypress/e2e/test.cy.ts",
+      "size": 24048,
+      "sha256": "05a2437420cced74105a9132ad42d4d1a1268546d0328437303ac2b21d7c054f"
+    },
+    {
+      "path": "cypress/firmware-update-harness.html",
+      "size": 324,
+      "sha256": "73e7c1b86d9b1aecad1dfa7618122d3ea91539f2681beb33df8829c7d5d85047"
+    },
+    {
+      "path": "cypress/fixtures/example.json",
+      "size": 155,
+      "sha256": "1800ff4b34f25a4a02d9e697a1724e84b2483faa85b7cf7812036916d6f6982b"
+    },
+    {
+      "path": "cypress/log-recording-harness.html",
+      "size": 349,
+      "sha256": "86190910fe8cc6f465886a6602404451389db16cf7c09b269169c2a2bbb51f7c"
+    },
+    {
+      "path": "cypress/metrics-layout-harness.html",
+      "size": 435,
+      "sha256": "5adc0fac3898d70af70215399543086259ddd922d52ea386eb7c214f3ffce606"
+    },
+    {
+      "path": "cypress/support/ble-device-list-harness.tsx",
+      "size": 2074,
+      "sha256": "70d26f2ed09aec88141450e0cef1f2ecb4a7bfa4cc4538edab4e717c49df3a8d"
+    },
+    {
+      "path": "cypress/support/commands.ts",
+      "size": 1314,
+      "sha256": "0e4227990e3c62ba02b79dfb72f8cd9686c04e993e54be98d9a5c5b79ae78d74"
+    },
+    {
+      "path": "cypress/support/drawer-layout-fixture.ts",
+      "size": 11805,
+      "sha256": "1d59ff0e4af536fd7732ec312f7218fd5ac036cc6abfb98d8720f5edf4c05b7d"
+    },
+    {
+      "path": "cypress/support/drawer-layout-geometry.ts",
+      "size": 5045,
+      "sha256": "bb58901227ca986f3cbfa3dbf3b26b7770aeb3e0897a6de826aac75e50004e1a"
+    },
+    {
+      "path": "cypress/support/drawer-layout-harness.tsx",
+      "size": 2136,
+      "sha256": "b0d887699e008dd4d473774895d74691676f1e63d33a4f16e4864cabb8b8b896"
+    },
+    {
+      "path": "cypress/support/drawer-layout-scenarios.ts",
+      "size": 1498,
+      "sha256": "a6db4ed6dbf2733ce4680653190d3e956544a24d64d2b9d17a1caecf734363d0"
+    },
+    {
+      "path": "cypress/support/e2e.ts",
+      "size": 667,
+      "sha256": "3bea1b7a288a6be689573992a8d9b68bd0ecc718ee2b9211249d2df0f41ba2d0"
+    },
+    {
+      "path": "cypress/support/firmware-update-harness.tsx",
+      "size": 3745,
+      "sha256": "76f3e5cb2aece045fe019f69c2022595d5d8e01f0d1eb6f40dada68c58f4b920"
+    },
+    {
+      "path": "cypress/support/log-recording-harness.tsx",
+      "size": 1683,
+      "sha256": "9e42622a1c81e98c6a4140ca5d1154d8cdd80cebdcd5878ef7a2bccddbde34f1"
+    },
+    {
+      "path": "cypress/support/metrics-layout-harness.tsx",
+      "size": 1816,
+      "sha256": "6d692167b04768d8e9e00ffb27b26cfbe397073777ee9f18de7c52ced2320542"
+    },
+    {
+      "path": "DESIGN.md",
+      "size": 8891,
+      "sha256": "017a8169c9f52399d1f555b9766b28ba515b472bd771b836f2cd5a45c7f5e931"
+    },
+    {
+      "path": "docs/ARCHITECTURE.md",
+      "size": 970,
+      "sha256": "5dc71cf57030f6a6a82f12023a879bb6bd731c44ba18ad753ef8b780310c8e00"
+    },
+    {
+      "path": "docs/BLE_SPECIFICATION.md",
+      "size": 79689,
+      "sha256": "261c016b878d2a92e0f12ce347c356ccb66d5b994c84853122a22fc89d34bae5"
+    },
+    {
+      "path": "docs/BUILD_WEB_IOS.md",
+      "size": 1823,
+      "sha256": "bddb787d8029c3dd22f08996e9396ff75d7436f01aa21f92eef8caa519dba681"
+    },
+    {
+      "path": "docs/FIRMWARE_UPDATE_BOUNDARY.md",
+      "size": 1375,
+      "sha256": "166b7fc15c17d0094e2a0dd1247d8494db3aa0eac00a2a6408ad7a43c4dc4e2f"
+    },
+    {
+      "path": "docs/PRIVACY_AND_PERMISSIONS.md",
+      "size": 862,
+      "sha256": "9dbbef55f8a45bbb00408f72d7e7ceaf29958667fa1c932528cc6c30fb49df0e"
+    },
+    {
+      "path": "eslint.config.js",
+      "size": 908,
+      "sha256": "623dbd7d15438cd4804aeac1b243953f02385a522219b852f04befe60f6c233a"
+    },
+    {
+      "path": "index.html",
+      "size": 1616,
+      "sha256": "28f98115fb1a3db0c7d46301b23f4d322ffdc2864658f5fb01639adf8e2dc30e"
+    },
+    {
+      "path": "ionic.config.json",
+      "size": 75,
+      "sha256": "49187c039eb97ce2ac89e18d88c9e86d46c9166e3dae2de41da1a8bc21eb643c"
+    },
+    {
+      "path": "ios/.gitignore",
+      "size": 206,
+      "sha256": "2b7132a9943d2622e51e656897ca5162f56b121b40b423dedce1fbc699dba88a"
+    },
+    {
+      "path": "ios/App/App.xcodeproj/project.pbxproj",
+      "size": 19845,
+      "sha256": "80f3671e6ed3d1a17af346ffb42bbc96452e9b706b208cc6a13a99d47a565348"
+    },
+    {
+      "path": "ios/App/App.xcodeproj/project.xcworkspace/contents.xcworkspacedata",
+      "size": 135,
+      "sha256": "7f3b00b5c3fdb45242d7b87e1e5c4e25d1fa8129a16c94295ecc4e8ea2235c5f"
+    },
+    {
+      "path": "ios/App/App.xcodeproj/project.xcworkspace/xcshareddata/IDEWorkspaceChecks.plist",
+      "size": 238,
+      "sha256": "dfa0f9bb85b95ccba9c6811adadf8cb407fb5d52088e89db83ebc308ec448542"
+    },
+    {
+      "path": "ios/App/App.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved",
+      "size": 408,
+      "sha256": "71ac254e1ab876dc8ffda52c43896c165304395f69ca73ece520947db4d7a68a"
+    },
+    {
+      "path": "ios/App/App/App.entitlements",
+      "size": 261,
+      "sha256": "1ddc4c0a92d12274e087f279eccc15f4f495f856b858926d5b9072bff0325246"
+    },
+    {
+      "path": "ios/App/App/AppDelegate.swift",
+      "size": 4168,
+      "sha256": "cd9f265c5005079447e14c1ddf6517581a627c63cdee70621cade258d4dc5286"
+    },
+    {
+      "path": "ios/App/App/Assets.xcassets/AppIcon.appiconset/AppIcon-512@2x.png",
+      "size": 211148,
+      "sha256": "f69dc33ece3cf397598c7c812e6325ddd08239be80809017aae31ffb83a744a4"
+    },
+    {
+      "path": "ios/App/App/Assets.xcassets/AppIcon.appiconset/Contents.json",
+      "size": 218,
+      "sha256": "5c09bec6eede599b14fa9e4c44b03e7febebc930615a0cd70f02981c09dfe48a"
+    },
+    {
+      "path": "ios/App/App/Assets.xcassets/Contents.json",
+      "size": 62,
+      "sha256": "972ec1fd42325872438eb085ac29e94f51c10788ec18ec5549439950866c541d"
+    },
+    {
+      "path": "ios/App/App/Base.lproj/LaunchScreen.storyboard",
+      "size": 1817,
+      "sha256": "55030eec1e52f4f847e47fdab1e5c5413db47d40013134e36a6b6258b8e50ab7"
+    },
+    {
+      "path": "ios/App/App/Base.lproj/Main.storyboard",
+      "size": 1047,
+      "sha256": "e08d6c5b12b229c5f1ef55d3d9e9641eb98f3f1377994dca5eb0ec0994d981f6"
+    },
+    {
+      "path": "ios/App/App/Info.plist",
+      "size": 3876,
+      "sha256": "84537ac291dbc2cd0757262afbd4bc021ccc10ca38bf7144ba23d4ac6716276e"
+    },
+    {
+      "path": "ios/App/App/PrivacyInfo.xcprivacy",
+      "size": 600,
+      "sha256": "08d90e6946dbfea0d0b5b17fb659d77eed23e443b745d8e7b5b9fa378cb74477"
+    },
+    {
+      "path": "ios/App/App/SceneDelegate.swift",
+      "size": 1458,
+      "sha256": "4c43c0d4b6e7d070c897d11631bbac7950294eaf1fb30abeac78dc9d7acf2d50"
+    },
+    {
+      "path": "ios/App/App/ULSAEvoBridgeViewController.swift",
+      "size": 13295,
+      "sha256": "5b3a19501046f41c53c52c1a83ffc540af3884edc3dacb76f92c898e6f4499e4"
+    },
+    {
+      "path": "ios/App/App/ULSASlideImageSharePlugin.swift",
+      "size": 5100,
+      "sha256": "3c75f23c71e2eb5e4a671c6500a7de1e8e9081c1fd2a5c2684a5f1dc6c4fc628"
+    },
+    {
+      "path": "ios/App/App/ULSASoftApPlugin.swift",
+      "size": 7850,
+      "sha256": "f92a0d241a3168e2a14798cd3f1b476b8eb2ea5d1881ee0f2e51c52c57bff270"
+    },
+    {
+      "path": "ios/App/App/ULSATrueHeadingPlugin.swift",
+      "size": 10049,
+      "sha256": "1421c6206fa8970526ee27232cf06b86af880ece9e580328572d126fe54b0e34"
+    },
+    {
+      "path": "ios/App/App/ULSAWindPiPPlugin.swift",
+      "size": 23434,
+      "sha256": "adad46bdcb00d1ad275e92d34aa5c3ed9ea3dc4b4548ca914fa6686e0db3762f"
+    },
+    {
+      "path": "ios/App/App/ULSAWindPiPRenderer.swift",
+      "size": 21996,
+      "sha256": "4e5c6c54ceae8c06ca2fa2c7d7ce1dae1f8a1018936cee5584d6b068546fd0f1"
+    },
+    {
+      "path": "ios/App/App/ULSAWindRoseMotionModel.swift",
+      "size": 21018,
+      "sha256": "83092c890aadbe26da1d81a0460df8691b2bb71f41bbd089bcac35024671c7ee"
+    },
+    {
+      "path": "ios/App/App/ULSAWindRoseTheme.swift",
+      "size": 10232,
+      "sha256": "4293331937aa86d0ac3c94b4433bf9af7232afdeb47d1125b749cc332f2fc3a4"
+    },
+    {
+      "path": "ios/App/CapApp-SPM/.gitignore",
+      "size": 165,
+      "sha256": "4b958e2b4dd57319aadef2551153c74b9cb5ffe9f89d6e3e491122a94913f016"
+    },
+    {
+      "path": "ios/App/CapApp-SPM/Package.swift",
+      "size": 927,
+      "sha256": "7cc22a71a04dbac4c4875fdfd82ff641749ec52f96bcffe3055cdd84cb208635"
+    },
+    {
+      "path": "ios/App/CapApp-SPM/README.md",
+      "size": 157,
+      "sha256": "57b818dc59b59e0a00887c6cca7ab2917dd056ee29b58dee314831b13fcd4f9f"
+    },
+    {
+      "path": "ios/App/CapApp-SPM/Sources/CapApp-SPM/CapApp-SPM.swift",
+      "size": 33,
+      "sha256": "70bf9dafddc35e3877dfb133a996f5be7ccd1e132897a98fdbf4869ff605ece9"
+    },
+    {
+      "path": "ios/debug.xcconfig",
+      "size": 23,
+      "sha256": "4838938a72b913b99cfda54a43bbe73f05893071dc6e3702b0adc44794b64272"
+    },
+    {
+      "path": "LICENSE",
+      "size": 1073,
+      "sha256": "4994d81d70f488aa2f60a6f4aeadfee8c4004aaba41c84863d3696ad60e4043c"
+    },
+    {
+      "path": "package-lock.json",
+      "size": 511244,
+      "sha256": "5b2c17e2d1d8701562b50c085acef96d52d752181b98fa052b0e0c6c3e746296"
+    },
+    {
+      "path": "package.json",
+      "size": 4380,
+      "sha256": "7da1e63bce04b983db40c611207f768f27bfd35096b20d99963cffe153825b87"
+    },
+    {
+      "path": "public/apple-touch-icon.png",
+      "size": 16566,
+      "sha256": "c7c15c57ab34720a9d532f588b4a4bd92d3e0d00b348cf67ad3b3d47f30ac4ce"
+    },
+    {
+      "path": "public/assets/app-logo-ios-512.png",
+      "size": 88826,
+      "sha256": "48bdcd5cbfa2f97edb80f6c52b274987104f095f3492dff78704dd93aacc66cf"
+    },
+    {
+      "path": "public/assets/app-logo-web-512.png",
+      "size": 83668,
+      "sha256": "fb797e20cc32089c43937a35c3048c053d56b3741b1613230eb3696047ce6bc2"
+    },
+    {
+      "path": "public/assets/icon/icon-144x144.png",
+      "size": 12987,
+      "sha256": "20ad15abf5944d561ef270eef70bd5bc9e027b546665537f0f7526292126c11f"
+    },
+    {
+      "path": "public/assets/icon/icon-192x192.png",
+      "size": 19662,
+      "sha256": "391ffbf8ab051f3017985620dbbce46285b5e3660f5d9047e005985746208a40"
+    },
+    {
+      "path": "public/assets/icon/icon-256x256.png",
+      "size": 28833,
+      "sha256": "56f0631a24258b7a32661c3729a57667ba6d51437d6aa0c7c0f8a8027f4d4b68"
+    },
+    {
+      "path": "public/assets/icon/icon-384x384.png",
+      "size": 56345,
+      "sha256": "3b20adc4325a96ae9b34e9593c9213ccce41b78503d3735a796b1a4d658e15ac"
+    },
+    {
+      "path": "public/assets/icon/icon-512x512.png",
+      "size": 81596,
+      "sha256": "dad2d5c33e35d71276734295ee3b51d52299065cc1925bfc0f16feb27a0016ea"
+    },
+    {
+      "path": "public/favicon.png",
+      "size": 3833,
+      "sha256": "48a44cab4f6291b5d850131e9e3ded055428ccd0b4e07a457b751a7d551ce707"
+    },
+    {
+      "path": "public/logo-inverse.png",
+      "size": 9352,
+      "sha256": "b3610ccb37ad79f114b2f6629901e4caddeb1030f82d2a96ada1a6354348331c"
+    },
+    {
+      "path": "public/logo.png",
+      "size": 9075,
+      "sha256": "6168970248d579b14d737772a0934ac097963c3f9097a063702099b5d2d87990"
+    },
+    {
+      "path": "public/manifest.json",
+      "size": 888,
+      "sha256": "5a5466c97133748000f66762fc44f090e58711c74bdf05c7689b1e0370d9536d"
+    },
+    {
+      "path": "public/ulsa-evo-product.png",
+      "size": 842964,
+      "sha256": "baa3a5868bfcbae5fffefcd9d2a2a3ef111674afe64b38603e1537d135e51500"
+    },
+    {
+      "path": "README.md",
+      "size": 8084,
+      "sha256": "044bdac70ff582b528a61b0fac76095dde289d8e9ed8a113856f1f8e6973b4fa"
+    },
+    {
+      "path": "sbom/development.cdx.json",
+      "size": 463799,
+      "sha256": "2335f3f2c474d16ce6ce2495c10f3e0a2a546f9471fc92ef6f3d274cb360c420"
+    },
+    {
+      "path": "sbom/runtime.cdx.json",
+      "size": 26964,
+      "sha256": "ca6c58e21c31d8d902e6349a38d7fdd0eb61cd4184108bf62ed66f1a6993d588"
+    },
+    {
+      "path": "scripts/build-cloudflare-pages.mjs",
+      "size": 8052,
+      "sha256": "5bdf60c91d53f7a927210b660bbecce2dceb8f04100821f36fe959797ef42963"
+    },
+    {
+      "path": "scripts/build-pwa-service-worker.mjs",
+      "size": 4206,
+      "sha256": "bd243988edf42514a819e19ac5e4cc0b113b7591122ec2ccfc9e75e8eca6d592"
+    },
+    {
+      "path": "scripts/cloudflare-deploy-digest.mjs",
+      "size": 1359,
+      "sha256": "b5210567c545e7b27fa13b0b5251f51de14b40ed0f0ade676557b77a12946cbd"
+    },
+    {
+      "path": "scripts/cloudflare-pages-dev.mjs",
+      "size": 1981,
+      "sha256": "c8cd91be06efb788624c50ad32fce78c593d0d576f751a92852eb9f4d12df6ce"
+    },
+    {
+      "path": "scripts/cloudflare-pages-smoke.mjs",
+      "size": 6104,
+      "sha256": "b4b2ecf7549087703a8a05eaa858a8c27c545a429808772be47eebbc84a140c6"
+    },
+    {
+      "path": "scripts/dev-https.mjs",
+      "size": 2392,
+      "sha256": "36ec65b26377b22d8aa0f960dd9869cc3350c615f4f69c022fb8c75cad8de3c2"
+    },
+    {
+      "path": "scripts/public-source/common.mjs",
+      "size": 7399,
+      "sha256": "ca2edaca37124eb8a61cba5181214e74cc2b0c41ad789c9c96ecffe4981bc358"
+    },
+    {
+      "path": "scripts/public-source/compliance.mjs",
+      "size": 5628,
+      "sha256": "15cbb3eb77c9d02ea9ca6f7a63ac704fa8fb5fd30c4f11eeb0650840eecf63b7"
+    },
+    {
+      "path": "scripts/public-source/secret-scan.mjs",
+      "size": 3323,
+      "sha256": "988d21a851853a9bd3fae4ffa943cb23f0070979b12e3c0376ca47cdc863ee08"
+    },
+    {
+      "path": "scripts/public-source/verify.mjs",
+      "size": 10351,
+      "sha256": "38cb481d30acc8058c15a3e48e34cc4eacb326d38d38a67e1b7518608ec68cad"
+    },
+    {
+      "path": "scripts/pwa-offline.node-test.mjs",
+      "size": 3439,
+      "sha256": "dd55536f90ac59be7516be9ed2bab1b3238a608da408b9571ec747963c4be108"
+    },
+    {
+      "path": "scripts/release-identity.mjs",
+      "size": 6619,
+      "sha256": "15ee740fba2338421b001ab87222263f9e2d0a139d6589773a9ebfd3d1641105"
+    },
+    {
+      "path": "scripts/release-identity.node-test.mjs",
+      "size": 2161,
+      "sha256": "ae1325cefb09734aad6a82b17b3b88e08b9a3127b95ba6e4504555371e019b64"
+    },
+    {
+      "path": "scripts/verify-ble-docs.mjs",
+      "size": 4652,
+      "sha256": "7d6415b44e43544821750c48018647a009360e766963cb1d6d4fce15abbc18af"
+    },
+    {
+      "path": "scripts/verify-ios-web-assets.mjs",
+      "size": 2500,
+      "sha256": "4dc030201d4abadfceead9848942666eadc1b44a8ae7aebf6ad500e2c1743e80"
+    },
+    {
+      "path": "scripts/verify-live-release-identity.mjs",
+      "size": 1624,
+      "sha256": "c28ae9a73c62120c5415f09c1a05cdd0f5c4f4789ed8ff0f66a532f975d2aec5"
+    },
+    {
+      "path": "scripts/verify-timezone-catalog.mjs",
+      "size": 2871,
+      "sha256": "1065b0ef7138b7a9383e54e264dcb981b73fb4fd5af896a74b683dd70f1f8ee4"
+    },
+    {
+      "path": "scripts/verify-wind-rose-parity.mjs",
+      "size": 15492,
+      "sha256": "3ee1d97fb2e1bc3b27deb94c5acf01717e4848ec6c554acd028cdd7fc162bdfa"
+    },
+    {
+      "path": "scripts/xcodebuild-ios.mjs",
+      "size": 2757,
+      "sha256": "26f1c4938ad34a34ee124c2871ca02749ca82b2f54c88b164396f7e1a99a2a44"
+    },
+    {
+      "path": "SECURITY.md",
+      "size": 652,
+      "sha256": "3b037e836598f37bf035fb323b343f99cab1d6a254b5f85abc25652938b0088b"
+    },
+    {
+      "path": "src/App.test.tsx",
+      "size": 1729,
+      "sha256": "d7ec755afac46c4f77c432ff6cede5753b6cf2f065688816253db072e532ab8b"
+    },
+    {
+      "path": "src/App.tsx",
+      "size": 1860,
+      "sha256": "b5aa3466fa0aa2bdc1c7d2eaad4418aa4cfe3b11a7d956282c0d6ab353c8dd0a"
+    },
+    {
+      "path": "src/components/ble-modal/AvailableDevicesCard.tsx",
+      "size": 6506,
+      "sha256": "1f512137e0d1ccc1d96b797580b615daebfb280ac5ca0bd424c91f3436f4b7de"
+    },
+    {
+      "path": "src/components/ble-modal/BLEModalTheme.test.ts",
+      "size": 1541,
+      "sha256": "1ecc8c651cfd979ffe3fb2abe3b14728b99e4e2d369db657ee397b5a8d4c8833"
+    },
+    {
+      "path": "src/components/ble-modal/ConnectedDeviceCard.tsx",
+      "size": 1153,
+      "sha256": "38de069f4c11426c7b062465bed4804252547cea0330f7da6c9c81060d888d1f"
+    },
+    {
+      "path": "src/components/ble-modal/memo.ts",
+      "size": 353,
+      "sha256": "5c01b6d2b225b2a2b0f351788b35f6b95a06eddd9c8eb42fa0641ce894e4ec6f"
+    },
+    {
+      "path": "src/components/ble-modal/styles/modal-core.css",
+      "size": 7423,
+      "sha256": "22927e03f5ce0ab8b870e289bb41d18bfc828d7b8a3d6d08641c2f99b058895a"
+    },
+    {
+      "path": "src/components/ble-modal/styles/modal-theme-responsive.css",
+      "size": 10443,
+      "sha256": "3f90e09fd93453aa27690329d3e1825a443d6660c8f706150ccae12a91d1d088"
+    },
+    {
+      "path": "src/components/ble-modal/styles/modal-visual-refresh.css",
+      "size": 7322,
+      "sha256": "35cf40792ebf97a181162171695c89c2ae896fea612b51bc3da97d4b5d0ef371"
+    },
+    {
+      "path": "src/components/ble-modal/types.ts",
+      "size": 860,
+      "sha256": "cf45b36fcb855a2651dd8dc07023fc1eb663f695cd96dd2abe05f6bbbed4a10a"
+    },
+    {
+      "path": "src/components/ble-settings/AppearancePanel.tsx",
+      "size": 2597,
+      "sha256": "28c03852d79e8cf1c01a0e1924be0f709979f5fece0dd0b92dbf6e1faa348a02"
+    },
+    {
+      "path": "src/components/ble-settings/BrowserLogStoragePanel.test.tsx",
+      "size": 11106,
+      "sha256": "4825f7b8a57daa74d83e81716a17eb82fbac736238b56463f85152cf063ab673"
+    },
+    {
+      "path": "src/components/ble-settings/BrowserLogStoragePanel.tsx",
+      "size": 22577,
+      "sha256": "07aad6be8f6fc20d6a3a8f1e383159ec24aa8064518aaaad6575d048496545b1"
+    },
+    {
+      "path": "src/components/ble-settings/DevicePanel.tsx",
+      "size": 2180,
+      "sha256": "f9ed89b6fb4f5db4d68bd4c2dd5fc99ba7d7afbd238c845f5ea17b0fe9c9dde6"
+    },
+    {
+      "path": "src/components/ble-settings/DrawerResponsiveLayout.test.ts",
+      "size": 7677,
+      "sha256": "aa8a1156ec6798d9942e6b245dffea239d6af4a93512cfe6b343c88d9a68ff08"
+    },
+    {
+      "path": "src/components/ble-settings/FirmwareUpdateEntry.test.tsx",
+      "size": 3666,
+      "sha256": "879da380d9f0b74b7719084fa74dd85a3a9d4fdd83e312f34f9fe5e47ab71d01"
+    },
+    {
+      "path": "src/components/ble-settings/FirmwareUpdateEntry.tsx",
+      "size": 4299,
+      "sha256": "76c1b7542d2f7da41372ed8468c267120946693c376fb2fe6ee4dcd4d35bbaf2"
+    },
+    {
+      "path": "src/components/ble-settings/firmwareUpdateError.ts",
+      "size": 2941,
+      "sha256": "d3ab27d6f59a0c2428b8fba6ca68407e4d2d2e9a09828d2eda5855cfdfac354c"
+    },
+    {
+      "path": "src/components/ble-settings/FirmwareUpdateFlow.test.tsx",
+      "size": 46525,
+      "sha256": "14abfd6bc13d87bc61c14f07834c399c36b011f5560f37bf7978032a5cae0ffa"
+    },
+    {
+      "path": "src/components/ble-settings/FirmwareUpdateProduct.tsx",
+      "size": 2378,
+      "sha256": "1bd120aaf58023073b858d0094a2f08b3fa8d67a379fc187cf5296eefee53e09"
+    },
+    {
+      "path": "src/components/ble-settings/FirmwareUpdateWifiCopy.test.tsx",
+      "size": 4980,
+      "sha256": "57a5b5ca41de879d6f88c7fd669dfe54ca15bf002f43adaf09d5414495a9db3f"
+    },
+    {
+      "path": "src/components/ble-settings/FirmwareUpdateWizard.tsx",
+      "size": 12575,
+      "sha256": "6a782e5c52cbdd70eda978d8a3758142903e64030e692b06d7e7909cf26205d2"
+    },
+    {
+      "path": "src/components/ble-settings/formatters.test.ts",
+      "size": 8690,
+      "sha256": "716a3822cc15431f9a69c956c900e9ed4fc19c115cf9f9bfa9c83c779dfc0e3a"
+    },
+    {
+      "path": "src/components/ble-settings/formatters.ts",
+      "size": 15428,
+      "sha256": "1c91a0b83d8157abf01b5ecdd2e8833ce7b4a721f7ad90636831b9a5e190abc2"
+    },
+    {
+      "path": "src/components/ble-settings/I2cPanel.tsx",
+      "size": 8386,
+      "sha256": "8fd087ee8794c3dd453aadf68c8be4a2c362195f5f571f99565c0be659e1cfd5"
+    },
+    {
+      "path": "src/components/ble-settings/InfoPanel.test.tsx",
+      "size": 4504,
+      "sha256": "9226876cb573d9b556c5bfe648eeb1c538f921a2dc0fba5af2417b9753e2fb4b"
+    },
+    {
+      "path": "src/components/ble-settings/InfoPanel.tsx",
+      "size": 4801,
+      "sha256": "cf438a9c87d76b79b7ea3e6ecf546fa926d29d265413f55090ad6d9e095028fd"
+    },
+    {
+      "path": "src/components/ble-settings/initialDemoSessionClaim.ts",
+      "size": 1947,
+      "sha256": "0cefa67de8c3685daa08986e77e4736f79bf13378be8998f785751ee61f338f6"
+    },
+    {
+      "path": "src/components/ble-settings/InitialFirmwareSetupVisualContract.test.ts",
+      "size": 4990,
+      "sha256": "d10688b81079ca695b66c8f4528829ade57d605d4095f46b96d01378b9b99fb3"
+    },
+    {
+      "path": "src/components/ble-settings/InitialFirmwareSetupWizardView.test.tsx",
+      "size": 18837,
+      "sha256": "25961e2bc7683eb9b54fe15de791d5304f73f7abbf8fc7c8741aac738ac41b55"
+    },
+    {
+      "path": "src/components/ble-settings/InitialFirmwareSetupWizardView.tsx",
+      "size": 19355,
+      "sha256": "4553d75faf5c2c077e388ed67e5f299dbd7438d652a2648395bd7983bf7afde1"
+    },
+    {
+      "path": "src/components/ble-settings/LedBrightnessLevelSelector.tsx",
+      "size": 1876,
+      "sha256": "b2c7c83342aff33e11c146913a5e2b256bae16a764339b619bbd7834fe83a601"
+    },
+    {
+      "path": "src/components/ble-settings/LedWindReactiveThemeSelector.tsx",
+      "size": 1859,
+      "sha256": "9e8dfad4da6b1eb9db68690ee7fa5302762170c9c4e5f40228303c04b4c5c9ea"
+    },
+    {
+      "path": "src/components/ble-settings/memo.ts",
+      "size": 490,
+      "sha256": "944c9ee409653f1a07cc852277698aa52464ec53552035b76bce8d366407272e"
+    },
+    {
+      "path": "src/components/ble-settings/otaAuthorizationFlow.ts",
+      "size": 2265,
+      "sha256": "9a324d42875b23cea3143da2db5068c637732357c309adfc44609ea475d9967c"
+    },
+    {
+      "path": "src/components/ble-settings/OtaPanel.accessibility.test.tsx",
+      "size": 7034,
+      "sha256": "07122aea1c9371bbe50fd59e9d65974d3b2192950787ff4136a6aa8b4533c560"
+    },
+    {
+      "path": "src/components/ble-settings/OtaPanel.tsx",
+      "size": 27570,
+      "sha256": "cd1eb411be2db6429dc93c8a1d394e2d0aa215e761247022bd9b7e4219c7a85a"
+    },
+    {
+      "path": "src/components/ble-settings/otaPanelHelpers.test.ts",
+      "size": 5272,
+      "sha256": "5d3227fe56b8581a81430491d021c609fa48e84ee59c0a8791798793f90e6b35"
+    },
+    {
+      "path": "src/components/ble-settings/otaPanelHelpers.ts",
+      "size": 7945,
+      "sha256": "b853b876d4ae5c7143e4965468f0cc0879e3c4d150197a7bb1ecd08828b5df23"
+    },
+    {
+      "path": "src/components/ble-settings/OtaPanelView.tsx",
+      "size": 7233,
+      "sha256": "6744dc5f83b4d3f5c65e71c3142a2bec1c78dd37855d49f4da0b7b6c16cb8fc7"
+    },
+    {
+      "path": "src/components/ble-settings/OtaSessionDetails.test.tsx",
+      "size": 3007,
+      "sha256": "ab7b239574073954e4243ca6532bdcbcfc4d22e4fe91cf451b07b5cb26e07853"
+    },
+    {
+      "path": "src/components/ble-settings/OtaSessionDetails.tsx",
+      "size": 2944,
+      "sha256": "d3633cbea0a187398386ca2a67b10cf634c539047d2d1104c31f7169176a8e3b"
+    },
+    {
+      "path": "src/components/ble-settings/OverviewPanel.test.tsx",
+      "size": 2706,
+      "sha256": "01b9d60c306dd9df030ed7288fc7878eb0ba0ae11b6b7b613de14f955829cb91"
+    },
+    {
+      "path": "src/components/ble-settings/OverviewPanel.tsx",
+      "size": 2887,
+      "sha256": "203adf4d5fa8fd5d52365848d4ec29522a68f97f2aa75eac6a1121ff3a531751"
+    },
+    {
+      "path": "src/components/ble-settings/primitives.tsx",
+      "size": 1709,
+      "sha256": "7ebf90dbe0243b9627525c105ece82b4cdd61b26c1be9fe56dd02fcb9393059c"
+    },
+    {
+      "path": "src/components/ble-settings/SettingsDrawerTypography.test.ts",
+      "size": 1625,
+      "sha256": "328567550a4403a8bd81397b5aad8e736b1732a7d6b92ac85c3d99c9a3acb11d"
+    },
+    {
+      "path": "src/components/ble-settings/stm32CompletionGuard.test.ts",
+      "size": 1283,
+      "sha256": "f514e2b93c5618eee237047cec3c9872950912dcc6412ebec87a01fd975f74db"
+    },
+    {
+      "path": "src/components/ble-settings/stm32CompletionGuard.ts",
+      "size": 994,
+      "sha256": "de04bdb71039bf3f4a23da6b3c43968d5cb4b1c2125f46c389230728deeb7070"
+    },
+    {
+      "path": "src/components/ble-settings/Stm32FirmwareUpdatePanel.test.tsx",
+      "size": 47266,
+      "sha256": "4df9b7d556c3099de489459305d601f8545db37bedd3dc655da6e34b38142932"
+    },
+    {
+      "path": "src/components/ble-settings/Stm32FirmwareUpdatePanel.tsx",
+      "size": 23486,
+      "sha256": "08fc7558f6b7f060f6472c9b87983a06d2af485cdd20022b2cd6b4c76f3dca6d"
+    },
+    {
+      "path": "src/components/ble-settings/Stm32FirmwareUpdatePanel.types.ts",
+      "size": 854,
+      "sha256": "fa078391d1765433ee30d3fa1841ab2fb89b041940d4e3626810d02f249bf742"
+    },
+    {
+      "path": "src/components/ble-settings/Stm32FirmwareUpdatePanelView.tsx",
+      "size": 10188,
+      "sha256": "29ff433b0fafc18a3c7322f838a3e37dec9a5be322fc08889a8ce2d2be626fd2"
+    },
+    {
+      "path": "src/components/ble-settings/stm32SyncProbeProof.test.ts",
+      "size": 3989,
+      "sha256": "1d2f5dd5ab926b7ab17040aca7920f7064adc3a566bfd3cf95651ffa13942f73"
+    },
+    {
+      "path": "src/components/ble-settings/stm32SyncProbeProof.ts",
+      "size": 2652,
+      "sha256": "5e126115462136ff220799c44e3bc51d1f829a69e55fb4b4432cdc1cfe9b552a"
+    },
+    {
+      "path": "src/components/ble-settings/Stm32UpdateFlowControls.test.tsx",
+      "size": 5751,
+      "sha256": "acc83f03f62979d07fb4f04b9c02ed15a531da381bf2cc1523dce85a1e3b2898"
+    },
+    {
+      "path": "src/components/ble-settings/Stm32UpdateMessage.test.tsx",
+      "size": 942,
+      "sha256": "6aabdbfc8dc844d46e56c654884f24a2b124fdc1a71c297d70d328178e5b0dab"
+    },
+    {
+      "path": "src/components/ble-settings/Stm32UpdateMessage.tsx",
+      "size": 414,
+      "sha256": "8c277510387854bb496eb1fc3b993847db2021f237f3d287737ba4d0e2547fed"
+    },
+    {
+      "path": "src/components/ble-settings/Stm32UpdatePanelChrome.tsx",
+      "size": 1703,
+      "sha256": "5d273254af9f0e25d0a323304cf8b2bcd9b917fb8a33291f7007afb5cb8d1226"
+    },
+    {
+      "path": "src/components/ble-settings/stm32UpdatePanelHelpers.test.ts",
+      "size": 12901,
+      "sha256": "bac45e05fcff6afc4be8bfdccfc4e01ee190e03a253bc0068524a5185562fdef"
+    },
+    {
+      "path": "src/components/ble-settings/stm32UpdatePanelHelpers.ts",
+      "size": 12822,
+      "sha256": "1442447099224c082a9178b0924284b4efde213b2d8cf489a7163c64a746caca"
+    },
+    {
+      "path": "src/components/ble-settings/Stm32UpdateStatusDetails.tsx",
+      "size": 5683,
+      "sha256": "f6b712d0729a03218f690db16784288a3cfc99580bd0ce6b5e80ce1860e0d4fb"
+    },
+    {
+      "path": "src/components/ble-settings/StoragePanel.tsx",
+      "size": 24059,
+      "sha256": "bfe4f2a87fc6b5ad694bf1b32809a4f735912e7435d7bd2f8c888b81551f96b9"
+    },
+    {
+      "path": "src/components/ble-settings/styles/drawer-content-containment.css",
+      "size": 5590,
+      "sha256": "d403c9f137d94496b6039bd900dbeb4f3c7a782e2fad894805c2d696cedfc755"
+    },
+    {
+      "path": "src/components/ble-settings/styles/drawer-information.css",
+      "size": 872,
+      "sha256": "98c8badc73c4d7880bfa45d25d747c11916119073f32c97c7455535544060cb2"
+    },
+    {
+      "path": "src/components/ble-settings/styles/drawer-layout.css",
+      "size": 13388,
+      "sha256": "5a03c4e439b1858ab698bfa0c7839209ea9f0be02a6e0710f22e9b4f83a12bea"
+    },
+    {
+      "path": "src/components/ble-settings/styles/drawer-log-settings.css",
+      "size": 7776,
+      "sha256": "e109afed4f1d01a4a23577954b0e0f03bd063103e8e5579cbd431db0f920c44e"
+    },
+    {
+      "path": "src/components/ble-settings/styles/drawer-status-summary.css",
+      "size": 1249,
+      "sha256": "8beefc93b4c64b9fda38c17e0720425df14fbda5506d5c1572d2365bd1335f78"
+    },
+    {
+      "path": "src/components/ble-settings/styles/drawer-theme-responsive.css",
+      "size": 7470,
+      "sha256": "9762dd9ef1ca23adae912b0b99ac8594da8e8d0da2897b003c9c2b47c17ecaef"
+    },
+    {
+      "path": "src/components/ble-settings/styles/drawer-visual-refresh.css",
+      "size": 14989,
+      "sha256": "d1c42bdabe7a524163c7f9ffde3871da7beaca04317964dfc7555e32896fd8da"
+    },
+    {
+      "path": "src/components/ble-settings/styles/firmware-update-wizard.css",
+      "size": 11197,
+      "sha256": "07665c753a259de00c735fa0c1defe8ff55d45e63d8491cf5aca33d3f3c5f29b"
+    },
+    {
+      "path": "src/components/ble-settings/styles/initial-firmware-setup-wizard.css",
+      "size": 12945,
+      "sha256": "59c851ad1c2cc5ef2213a94a76ac38cc66522aa32dc00517d6aa0fc8771c67f4"
+    },
+    {
+      "path": "src/components/ble-settings/styles/led-brightness-level-selector.css",
+      "size": 1747,
+      "sha256": "0fed4a73f237c30fc3d61a19bd999780cefa481d1407e0b55288055001016d27"
+    },
+    {
+      "path": "src/components/ble-settings/styles/led-wind-reactive-theme-selector.css",
+      "size": 3357,
+      "sha256": "ab3617bc122c898c0c096e40380dd5c97f6a255487db14e50cffefd0c16e5d66"
+    },
+    {
+      "path": "src/components/ble-settings/styles/rtc-timezone-panel.css",
+      "size": 3075,
+      "sha256": "4d7f5132f3bdc5136e0fbd075d76b16dfb745d1b7e9706ac24d33275a4469d6d"
+    },
+    {
+      "path": "src/components/ble-settings/ThemeSelectors.test.tsx",
+      "size": 4166,
+      "sha256": "712f88597cece6d9e6e39c64ae19841894cb7a9423112aa7aa8e3591f159d471"
+    },
+    {
+      "path": "src/components/ble-settings/TimePanel.test.tsx",
+      "size": 5720,
+      "sha256": "5510bb1af18ba45bb1e7624b25e1fe40d691d17019631322e7ca289f41c0b734"
+    },
+    {
+      "path": "src/components/ble-settings/TimePanel.tsx",
+      "size": 9686,
+      "sha256": "6ac827fe82cc46201e3dfc514ed5a204a52e3e7d952a960aa48ce27cd3a74b54"
+    },
+    {
+      "path": "src/components/ble-settings/types.ts",
+      "size": 6447,
+      "sha256": "571c9b81d4c3f990674d8d782b237eda2a1b805d1b74a470cfbe43fca370a25c"
+    },
+    {
+      "path": "src/components/ble-settings/useDrawerDialogA11y.test.tsx",
+      "size": 6122,
+      "sha256": "57a2d3819ced9614d004908ae93e93232c81f09a506314bd7681c4a6579b64a5"
+    },
+    {
+      "path": "src/components/ble-settings/useDrawerDialogA11y.ts",
+      "size": 4072,
+      "sha256": "10f8ca66602468c5c506886af553b8c97b5214bc1b5c17a52ba06c36ff39474c"
+    },
+    {
+      "path": "src/components/ble-settings/useOtaPreparation.ts",
+      "size": 2104,
+      "sha256": "69d2610933dac4f96aaea93b42ca62c9f744e9e48c1277ec121147ed821e12c8"
+    },
+    {
+      "path": "src/components/ble-settings/UserDevicePanel.tsx",
+      "size": 3476,
+      "sha256": "bad3931bb5f0fee347f7f6fa3531d5e0bb2fb45285f522a4e0816275b35759b0"
+    },
+    {
+      "path": "src/components/ble-settings/userFirmwareLabel.test.ts",
+      "size": 605,
+      "sha256": "83067211603e652ff797dbe2372a3af97b0f1507ec4414142d51ac89cf90b409"
+    },
+    {
+      "path": "src/components/ble-settings/userFirmwareLabel.ts",
+      "size": 399,
+      "sha256": "1ea3ed89201a99cac4d38e2764603b44e7236759a46f49e5b8a0d756398f0622"
+    },
+    {
+      "path": "src/components/ble-settings/UserSettings.test.tsx",
+      "size": 9032,
+      "sha256": "098471df587fc97c2424660605df029fe40c305c6d266e9cde3f943514ae23bb"
+    },
+    {
+      "path": "src/components/ble-settings/useStm32ReleaseCatalog.ts",
+      "size": 4764,
+      "sha256": "dcb021fb09b311925b773759fe49375b205a462e525746e039799d7e60ca20c7"
+    },
+    {
+      "path": "src/components/ble-settings/useStm32SafeWriteFlow.ts",
+      "size": 19889,
+      "sha256": "5defe6486c8a8ca0940f81dc63918fadddf2dad3824c273cc64e2ee02c045aa6"
+    },
+    {
+      "path": "src/components/BLEModal.css",
+      "size": 157,
+      "sha256": "dc1cf864e2248df5097a5a76c20d0abe55958ec076ada7491c10c3d6dd0ef3db"
+    },
+    {
+      "path": "src/components/BLEModal.test.tsx",
+      "size": 12168,
+      "sha256": "f08b106cc61786a20fd9c51e1b17f5b2ed8bd21fe69283e91746b8681eca73dd"
+    },
+    {
+      "path": "src/components/BLEModal.tsx",
+      "size": 7773,
+      "sha256": "19262ba42d0192e55db8f74effc2cff06bab3e0ed052606f77f2f8666dfc8061"
+    },
+    {
+      "path": "src/components/BLESettingsDrawer.css",
+      "size": 600,
+      "sha256": "659788675391bb578c18fa28c7ffb9ae9b11df5f6bc9c0f38577440fb02bbdab"
+    },
+    {
+      "path": "src/components/BLESettingsDrawer.test.tsx",
+      "size": 63373,
+      "sha256": "4420379601fadb898f1880b31872e384f2da01a2a561439c51ee985543918113"
+    },
+    {
+      "path": "src/components/BLESettingsDrawer.tsx",
+      "size": 19332,
+      "sha256": "e7c5266d1fc454fa026503544dccb4fb263b7b72bc217c085da2b4d7f886fd16"
+    },
+    {
+      "path": "src/components/BLESettingsDrawerBridge.tsx",
+      "size": 6198,
+      "sha256": "33e450a0e995b3ea857bb727cbce255d9db84f287443a66f45bfa85428a3789b"
+    },
+    {
+      "path": "src/components/BLESignalStrength.css",
+      "size": 980,
+      "sha256": "fcfb583379c413f54bfa227dbd7e275431edab4da6c7f5f6eac513acf2a437bf"
+    },
+    {
+      "path": "src/components/BLESignalStrength.test.tsx",
+      "size": 1380,
+      "sha256": "ed95b9367bafea8803c53ce603078c8fb398c49b11b5eb1c1fe0701766856079"
+    },
+    {
+      "path": "src/components/BLESignalStrength.tsx",
+      "size": 1244,
+      "sha256": "da82bb0b7267f8f9189b7fc70b6b6966e47a4f51a5f77ce199a1b95a5cd6fe31"
+    },
+    {
+      "path": "src/components/bleSignalStrengthUtils.ts",
+      "size": 681,
+      "sha256": "1e117ef237a5a8e73c3970987d5a35e12a2e570dbe402bfd2d55e4abed1bc82e"
+    },
+    {
+      "path": "src/components/charts/ChartLifecycle.test.tsx",
+      "size": 35087,
+      "sha256": "3b9940f2cb891584b56ec268e00f00564fc497c24050e6400d17006047ae271b"
+    },
+    {
+      "path": "src/components/charts/GaugeChart.accessibility.test.tsx",
+      "size": 2313,
+      "sha256": "a68a8be631ee405f68c67d6f0a2900ffb4301ca104432a9de78a08670e114080"
+    },
+    {
+      "path": "src/components/charts/GaugeChart.tsx",
+      "size": 11954,
+      "sha256": "90ca522629cc3e3957e3ffe89203537eebbb9be89e9c9dd5f80d3aca360b9f34"
+    },
+    {
+      "path": "src/components/charts/index.ts",
+      "size": 698,
+      "sha256": "93c2fbdc867c0c5c85c5008dc51bd1d8a7f7c9a7b877dddb298bd29708b0cc0c"
+    },
+    {
+      "path": "src/components/charts/LineChart.tsx",
+      "size": 18471,
+      "sha256": "6fafc803f0b7849903b2c7efb5f48698dfe8b66662eb00281c585f43bf4d1a63"
+    },
+    {
+      "path": "src/components/charts/lineChartAccessibility.test.ts",
+      "size": 1194,
+      "sha256": "18c97c2c6616ae51d7cddd0be72accbf3b0e276a7d889c5dcdda51093b57e591"
+    },
+    {
+      "path": "src/components/charts/lineChartAccessibility.ts",
+      "size": 2267,
+      "sha256": "c90af2d433857742471009654554c600c0a4fd87d0fb9af0cbbaf121cdd664be"
+    },
+    {
+      "path": "src/components/charts/lineChartAxis.ts",
+      "size": 3421,
+      "sha256": "a22fb24aba20931d5b7636e3608300aed21b3fdc8cf5b002852649c512866728"
+    },
+    {
+      "path": "src/components/charts/lineChartConfig.ts",
+      "size": 1942,
+      "sha256": "8cf2003c5acf76cf4d08c5277bf823e8e5f4cab1a6e699bcb034c0ca843865be"
+    },
+    {
+      "path": "src/components/charts/lineChartData.ts",
+      "size": 5005,
+      "sha256": "22c688c0b51925d164a58b0306b1d5233dd8cd98de2ded603e1f0d81c1ab97e0"
+    },
+    {
+      "path": "src/components/charts/lineChartSeriesOptions.ts",
+      "size": 1393,
+      "sha256": "e4f454c5e8cd20f417272dc8080d965c4e687fac1e4817b9aca6706f8bebc120"
+    },
+    {
+      "path": "src/components/charts/temperatureSeries.ts",
+      "size": 427,
+      "sha256": "d5d1a316c2a6f0ff6e41e246bbb506f9c125cbf078c4cb9cd2ee82cddccf8431"
+    },
+    {
+      "path": "src/components/charts/windRoseCanvasRenderer.test.ts",
+      "size": 21021,
+      "sha256": "569c7d227768d7dd701c4ed0db378e7058b5c3d903fd64708721c7cfde8df29c"
+    },
+    {
+      "path": "src/components/charts/windRoseCanvasRenderer.ts",
+      "size": 18998,
+      "sha256": "6c88fe3e5ccd3072249201c2c8dd86341a423268a8ab8b4c7728586c5e422223"
+    },
+    {
+      "path": "src/components/charts/windRoseCompass.test.ts",
+      "size": 13889,
+      "sha256": "e2638176b544aa9d931d79655b7580920e287a548922eabf95e5f7f4bbd7a13d"
+    },
+    {
+      "path": "src/components/charts/windRoseCompass.ts",
+      "size": 14454,
+      "sha256": "7cadfd04c4dbe9989ed3cb91156023b5e13221273c01bde9185fe9ae23358d2a"
+    },
+    {
+      "path": "src/components/charts/windRoseDataFreshness.test.ts",
+      "size": 2144,
+      "sha256": "5339db9938b5f3100a22766864d0338f2ca0717b1dc44f4fcdb16f996d6c43ef"
+    },
+    {
+      "path": "src/components/charts/windRoseDataFreshness.ts",
+      "size": 1393,
+      "sha256": "dab9c6a5e01611d086e72740972633c406263329a562360dcf35d8f5632fb183"
+    },
+    {
+      "path": "src/components/charts/WindRoseGauge.tsx",
+      "size": 13213,
+      "sha256": "1cb547326ceb95f627a7525e8632a7f936d838137b4d8e1c904ef2f4490cb42a"
+    },
+    {
+      "path": "src/components/charts/windRoseGaugeMath.test.ts",
+      "size": 3906,
+      "sha256": "3e0ebc9d5b71cb2cf09914416b46badd73f8a374e451c7d4a8ca287761785242"
+    },
+    {
+      "path": "src/components/charts/windRoseGaugeMath.ts",
+      "size": 5321,
+      "sha256": "8612693b0df8b855b2c3c443b526afe6f6113202dcc28f1d0798729d7aa36de7"
+    },
+    {
+      "path": "src/components/charts/windRoseMotionModel.test.ts",
+      "size": 9524,
+      "sha256": "ad77083672472b0a56f3d15bccbff2e15a8fe09b0431e5ba0dd01d4ac658c6f3"
+    },
+    {
+      "path": "src/components/charts/windRoseMotionModel.ts",
+      "size": 19440,
+      "sha256": "729a517c7fcd066b1ef3843c65849b7e5cb621c5beaddc1206b5e94f3dfcaf0e"
+    },
+    {
+      "path": "src/components/charts/windRoseRenderCadence.test.ts",
+      "size": 941,
+      "sha256": "bef8bda16acb27197aa5536eee5fd905c93a38718ef0fcd36eb9c488c72e1ed4"
+    },
+    {
+      "path": "src/components/charts/windRoseRenderCadence.ts",
+      "size": 992,
+      "sha256": "424bcd97e2223bbe7291e5aa13b77e0920ada0992b3fc1fbd2f2f573393abd52"
+    },
+    {
+      "path": "src/components/charts/windRoseStaticLayerCache.test.ts",
+      "size": 973,
+      "sha256": "5b06cab719735a241803e6f3aa68a64f68edd05b19771e6f6951731fafb9ef87"
+    },
+    {
+      "path": "src/components/charts/windRoseStaticLayerCache.ts",
+      "size": 582,
+      "sha256": "56230f1d982ae61a809355a57c1298689bca565ed2160d8593d46a4a257a2923"
+    },
+    {
+      "path": "src/components/charts/windRoseTheme.test.ts",
+      "size": 4500,
+      "sha256": "dfb5362fa236d957c4a139c656dde8848b3d26bcd63823f20f4c8cd5725fadad"
+    },
+    {
+      "path": "src/components/charts/windRoseTheme.ts",
+      "size": 10064,
+      "sha256": "1e3955a0d4f0565b1594821b676f7faaf5c4ad6aae7cda047cdf955e84697285"
+    },
+    {
+      "path": "src/components/charts/windSpeedSeries.ts",
+      "size": 586,
+      "sha256": "245b478235667e6fb6777b72b0d26b2c23ce9ddeb1749e85e4d21dd62f0b4509"
+    },
+    {
+      "path": "src/components/controls/control.css",
+      "size": 3263,
+      "sha256": "9905583666da2fc329dce7adaf5ee811acd6a3abce5ee82ed96b333ae7d66de2"
+    },
+    {
+      "path": "src/components/controls/ControlIconButton.tsx",
+      "size": 568,
+      "sha256": "a8b125255029cc26e5d6a2ed3b8aa03acc6ae2ac82bae8a5c138c969b7f7e2e2"
+    },
+    {
+      "path": "src/components/controls/controlMigration.test.ts",
+      "size": 8981,
+      "sha256": "80bad247bcd1342ad7478f54d6e66c18baec790410dd2650d22556f305356ba7"
+    },
+    {
+      "path": "src/components/controls/controlTypes.ts",
+      "size": 1765,
+      "sha256": "3b8fdeaaffa5be46d52813928971b61a83aab3f96fd4006f42fde1e28d20651c"
+    },
+    {
+      "path": "src/components/controls/index.ts",
+      "size": 432,
+      "sha256": "4301c8cb748c16d556e2b760fb6ceb31fcb4e10c774a647701a663e620fde87f"
+    },
+    {
+      "path": "src/components/controls/IonicControlButton.tsx",
+      "size": 3058,
+      "sha256": "ef76c855e55e125071fe273ca0527aad897157a91e712c2340faa524d0f88749"
+    },
+    {
+      "path": "src/components/controls/NativeControlButton.test.tsx",
+      "size": 2556,
+      "sha256": "89535f38e3046774d471e3c79bd489847e9e7bc6cd26e0f3601cb64967c239d5"
+    },
+    {
+      "path": "src/components/controls/NativeControlButton.tsx",
+      "size": 1458,
+      "sha256": "2b0f71901c1b53fa43d29ced143266e997babafb55537a7bb93f3380e8c8d032"
+    },
+    {
+      "path": "src/components/derived-metrics/derivedMetricCards.css",
+      "size": 5020,
+      "sha256": "7df8b1d43b2e33388b94593efa7e0a1e893021a3bf99dc2633986c893c350eab"
+    },
+    {
+      "path": "src/components/derived-metrics/DerivedMetricControls.tsx",
+      "size": 2648,
+      "sha256": "961ddf6ff8f50b10a1f7dac4b6b8cdbe4165a6da0e3b739027151319caea2c57"
+    },
+    {
+      "path": "src/components/derived-metrics/derivedMetricPreferences.ts",
+      "size": 3181,
+      "sha256": "4f710a556bac503cf3f143884c00949a51bf043927e80f9bb30a0b955db0907b"
+    },
+    {
+      "path": "src/components/InitialFirmwareSetupEntry.test.tsx",
+      "size": 3136,
+      "sha256": "aa3afd614e6e26299213e44a9e52221ccba93a34f78392959a8786ec86fe01db"
+    },
+    {
+      "path": "src/components/InitialFirmwareSetupEntry.tsx",
+      "size": 3183,
+      "sha256": "4062e2b6c3f05dc8a452e1704cdf1adb556af90c2445b4780f50c39996574733"
+    },
+    {
+      "path": "src/components/LogRecordingCard.test.tsx",
+      "size": 7880,
+      "sha256": "e4ebb6b8a851796bb172292f7b87429c962390058c928910555d89d58df644e1"
+    },
+    {
+      "path": "src/components/LogRecordingCard.tsx",
+      "size": 8166,
+      "sha256": "4345f8f437ff98214660315f516c2b990379b16fd6f05f7139807c89368ae407"
+    },
+    {
+      "path": "src/components/MemoryMonitor.css",
+      "size": 2805,
+      "sha256": "e14cec53d6ce0e1b28c80656f538fd62657d1026f8e6f75e43a67a79847c3a15"
+    },
+    {
+      "path": "src/components/MemoryMonitor.tsx",
+      "size": 5934,
+      "sha256": "85c68548f746fae588a16f5850d7d5e3a6910d70ef34b61d9159c964c7cde101"
+    },
+    {
+      "path": "src/components/MetricCard.tsx",
+      "size": 1838,
+      "sha256": "b3f6b47f91e66998dac12bd82792f38097d40663b056196e27ab5c9b084d3130"
+    },
+    {
+      "path": "src/components/MetricsGrid.tsx",
+      "size": 9888,
+      "sha256": "d4901a03290814178b7236b1a5f089965dab57e67eaa8a45a9951ed3798d9583"
+    },
+    {
+      "path": "src/components/slides/ChartSlide.test.tsx",
+      "size": 14443,
+      "sha256": "328e1b89e35e4ec99b3f8862e37c1b7fb79b2101d1bbc65365b822766f1d411e"
+    },
+    {
+      "path": "src/components/slides/ChartSlide.tsx",
+      "size": 14288,
+      "sha256": "6027e62b25cb96c36cc5dfdcbdb8c41c6eae971c61c314d37c5bc9e3bb3330a4"
+    },
+    {
+      "path": "src/components/slides/GaugeSlide.test.tsx",
+      "size": 7857,
+      "sha256": "b375eba85cbd8faedfb9af0e924b393b9bb5afd8b375a8ef71c2dbd422117089"
+    },
+    {
+      "path": "src/components/slides/GaugeSlide.tsx",
+      "size": 12674,
+      "sha256": "9cd16ea1d2c56761f872d2bbc9e4324582d8686384e3421b8c861fb5e6a9b144"
+    },
+    {
+      "path": "src/components/slides/index.ts",
+      "size": 245,
+      "sha256": "5297f95db7e3dd33b69b57ddc016b6025e3dcd2c3889220d187da318a27abf86"
+    },
+    {
+      "path": "src/components/slides/WindRoseGaugeSlide.css",
+      "size": 12875,
+      "sha256": "cf0de6c83d7be9f33359c44cad7a8c439d9f9c6e36012a6e26039c03c4762c88"
+    },
+    {
+      "path": "src/components/slides/WindRoseGaugeSlide.test.tsx",
+      "size": 24562,
+      "sha256": "a6829f590ff3c95955342208e5f05539d293b5e6d96711d8e09b9c3799780442"
+    },
+    {
+      "path": "src/components/slides/WindRoseGaugeSlide.tsx",
+      "size": 22583,
+      "sha256": "1bab76a5f69e2f518f595709e3de39531176162969d0b4b772f57765d5b89599"
+    },
+    {
+      "path": "src/components/StatusAndMetrics.test.tsx",
+      "size": 19008,
+      "sha256": "bee48ed59892b0a7e310f38b44e652497a77becf478c39b7fabf8384596b0e72"
+    },
+    {
+      "path": "src/components/StatusCard.accessibility.test.tsx",
+      "size": 6913,
+      "sha256": "e2b1d5c5a155901735021ad8ee0a607257c939cc05c3f3baaaf3e103c90445de"
+    },
+    {
+      "path": "src/components/StatusCard.tsx",
+      "size": 7844,
+      "sha256": "296828dc18fc13c1e5e11278874a9a63ce2157f52102465c180dae3c4b7d810f"
+    },
+    {
+      "path": "src/config/appInformation.test.ts",
+      "size": 1523,
+      "sha256": "b3118e18a1a19cffd3474b23434f9e994c59aa0750ce7ccf67bd2abaea523f82"
+    },
+    {
+      "path": "src/config/appInformation.ts",
+      "size": 1418,
+      "sha256": "79bdfd4cd96b2681334e3163c8374694e25070048fbba0bf0b75e4a47a164a7c"
+    },
+    {
+      "path": "src/config/stm32UpdaterFeature.test.ts",
+      "size": 715,
+      "sha256": "2d13378f2a2287964018110a14afd2e7d8d32105457defb8f061299b8b51cd4a"
+    },
+    {
+      "path": "src/config/stm32UpdaterFeature.ts",
+      "size": 144,
+      "sha256": "4859decf4054d3a658f7e1637cf54705409c1953851cf9eba7d1607ac0f6ac25"
+    },
+    {
+      "path": "src/constants/themes.test.ts",
+      "size": 1357,
+      "sha256": "90f69d91c86cfe56ded83fb7fda78b57064430c659a5b793c9a069251d5378f8"
+    },
+    {
+      "path": "src/constants/themes.ts",
+      "size": 6723,
+      "sha256": "4c676e2cb5e5e8a3e5718f0fe7be5d9217760fa7890710a0812f62b99064e946"
+    },
+    {
+      "path": "src/hooks/ble/activatePortalDisconnect.test.tsx",
+      "size": 5667,
+      "sha256": "692257291ba72c77aca1f0a99ee84edd4893c802054f358edc883aaa013f5cd5"
+    },
+    {
+      "path": "src/hooks/ble/activatePortalDisconnect.ts",
+      "size": 867,
+      "sha256": "38729ab2fe50f8d77165e264618b29aa83bd08de63e1726c69017da2fb827b01"
+    },
+    {
+      "path": "src/hooks/ble/connectedNodeIdentity.ts",
+      "size": 600,
+      "sha256": "d035dfd8e64ab88af45655c0c0ecb28b2c5b16c9f554fa25c6a1643b2418b1b5"
+    },
+    {
+      "path": "src/hooks/ble/connectedRssiPolling.test.ts",
+      "size": 2845,
+      "sha256": "dee0ae503785a4e590916908512bc4902330dc6b00f92a7293455697e58012e2"
+    },
+    {
+      "path": "src/hooks/ble/connectedRssiPolling.ts",
+      "size": 1444,
+      "sha256": "6c93297fc6d18c5e89f0012ea8940a263d6c8314d3817310e685f50a985c94b5"
+    },
+    {
+      "path": "src/hooks/ble/constants.ts",
+      "size": 1569,
+      "sha256": "5c0069048fb4bec5af304a52a26dac7c92185f8bc2bbb81e68ff979c69d0f7fe"
+    },
+    {
+      "path": "src/hooks/ble/deviceList.ts",
+      "size": 1827,
+      "sha256": "4eda4b9e7fc8ca1f96e3f1e50230952716901005fa38580dd9ca3cada274a456"
+    },
+    {
+      "path": "src/hooks/ble/optionalConnectionInitialization.test.ts",
+      "size": 2272,
+      "sha256": "55235b7902fea3ed56553e3b5b5be45c4cfeb902abf414c2d0611d14f3330e42"
+    },
+    {
+      "path": "src/hooks/ble/optionalConnectionInitialization.ts",
+      "size": 9073,
+      "sha256": "1311cf9704513e5f609efe9d85eabff2d3ca92bea0d45eb3977d43448d7aab68"
+    },
+    {
+      "path": "src/hooks/ble/readCardLogControlSafely.ts",
+      "size": 692,
+      "sha256": "d5cfac4d6e4d2cdf55419ff2f0cd2a32380aba0b7fba80fcbe9d8db1f9703d0a"
+    },
+    {
+      "path": "src/hooks/ble/scanMessages.ts",
+      "size": 173,
+      "sha256": "062018fdc319ba4451feea45c807c9a3dec3da10e845e46d877a626660a1be48"
+    },
+    {
+      "path": "src/hooks/ble/statusEquality.ts",
+      "size": 8950,
+      "sha256": "ec4c98adf6144d7ca10f66066c5d2228c25e492c7128513f1f6cb176a9c064c2"
+    },
+    {
+      "path": "src/hooks/ble/types.ts",
+      "size": 6013,
+      "sha256": "f4d66e707852ee1765dcaec47899fc4fc8150677fb63df0220fa0956d25ce61e"
+    },
+    {
+      "path": "src/hooks/ble/useBLECardLogRuntimeSync.ts",
+      "size": 5278,
+      "sha256": "c98c88dbcbd6a736c9aeb3873b6521bfafa05b65fd5ce8d67d532cc37eb7d106"
+    },
+    {
+      "path": "src/hooks/ble/useBLEConnectionLifecycle.ts",
+      "size": 31315,
+      "sha256": "61f9e4629903639e3b0c1d6cd7615efa523e3da1a3720e087fbeae2261fdfd13"
+    },
+    {
+      "path": "src/hooks/ble/useBLEDeviceResetControl.ts",
+      "size": 5436,
+      "sha256": "180c09ca0fdbd163299a5fa7a9a0e4200e3e82bdd90aa4117cb2ddd5987e90ce"
+    },
+    {
+      "path": "src/hooks/ble/useBLEFirmwareInfoRefresh.test.ts",
+      "size": 7312,
+      "sha256": "a3bd6b00f362e2aa5311ae0710c7496861d1b0445fad036eeb559d6a8d1b96bd"
+    },
+    {
+      "path": "src/hooks/ble/useBLEFirmwareInfoRefresh.ts",
+      "size": 4816,
+      "sha256": "780a28298bda577813ff7abf5d33c6777bb250da927e3426b9ba5fd19f139aeb"
+    },
+    {
+      "path": "src/hooks/ble/useBLEInitialization.ts",
+      "size": 2217,
+      "sha256": "30b5461c3be67b3f7bb08a0328bd28341d7b4aa3c4413110d9f10ca355f812e4"
+    },
+    {
+      "path": "src/hooks/ble/useBLEInstalledDemoVerification.test.tsx",
+      "size": 6934,
+      "sha256": "7c58e4970bf7e8272a95f479ea370cbaacbaa42245e3f122107dc7a5a6fd9c73"
+    },
+    {
+      "path": "src/hooks/ble/useBLEInstalledDemoVerification.ts",
+      "size": 4197,
+      "sha256": "d2118a3a91207e6ce37e2d23936756257a4be2feea818c66d9970e78e80afa77"
+    },
+    {
+      "path": "src/hooks/ble/useBLELedBrightnessControl.ts",
+      "size": 3029,
+      "sha256": "66d318a6b49d8bff974f09a2bef6a23fe2c1157c3a8009e6f135fb11a2c725a6"
+    },
+    {
+      "path": "src/hooks/ble/useBLELedWindReactiveControl.ts",
+      "size": 3632,
+      "sha256": "b463e1ee74cc0b20a1e2fba7d84f8fc264631e211fa66afa31570de44759a715"
+    },
+    {
+      "path": "src/hooks/ble/useBLEOtaControl.ts",
+      "size": 3495,
+      "sha256": "a7771c062a3a3473adf56063aa91e081499567cbbda5236b40e7c7268e37c568"
+    },
+    {
+      "path": "src/hooks/ble/useBLERtcControl.ts",
+      "size": 7226,
+      "sha256": "52f478d296d8645de6e361dcb6d5e1183e69199453825950e2e85fada0729c23"
+    },
+    {
+      "path": "src/hooks/ble/useBLEStatusUpdaters.ts",
+      "size": 6246,
+      "sha256": "e11179a2fab8908bc1a849c740d74d7b930799cb077ebd7b9803b557acec176b"
+    },
+    {
+      "path": "src/hooks/ble/useBLEStm32UpdateControl.ts",
+      "size": 3756,
+      "sha256": "bd7883fa859645d0d60ce1e5d1b107b9083435e35f8788592c04a3d8e31cd244"
+    },
+    {
+      "path": "src/hooks/ble/useConnectedSensorMonitors.ts",
+      "size": 2564,
+      "sha256": "b105a12cb1a85190b657a3e219e2b78cedb915483a7d8c3a143273ecd7b18d05"
+    },
+    {
+      "path": "src/hooks/ble/useSensorNotificationPauseController.ts",
+      "size": 3737,
+      "sha256": "201b0aa78498c9bce1cab0aec015fc12af8dcdd954a8a2bbefd9e653d98d8f9f"
+    },
+    {
+      "path": "src/hooks/ble/useSensorUiFrameCommit.test.tsx",
+      "size": 6788,
+      "sha256": "659e7f15cd861a1866be54235c14247e2ff28209b0378b4980f663693b909443"
+    },
+    {
+      "path": "src/hooks/ble/useSensorUiFrameCommit.ts",
+      "size": 4410,
+      "sha256": "388c23b1c2c78829b1533d9dcd19d3dfbf2fbeec03e37ce17018d25952a5dc7b"
+    },
+    {
+      "path": "src/hooks/logging/logRecordingPreferences.test.ts",
+      "size": 1712,
+      "sha256": "28cc8acc7e5e66c7ce10521aaace5788e7a41783f613bf5f4960b54caac8e0c3"
+    },
+    {
+      "path": "src/hooks/logging/logRecordingPreferences.ts",
+      "size": 2851,
+      "sha256": "9f3ca462f91a51532bc882c042e7d340ab5229966d45745e82b15988edc339e1"
+    },
+    {
+      "path": "src/hooks/logging/logRecordingVisuals.test.ts",
+      "size": 5448,
+      "sha256": "6aa96d1a250a16e95d392d52bea9185abe0a4202eb9240acd8c4f8070eb5cfca"
+    },
+    {
+      "path": "src/hooks/logging/logRecordingVisuals.ts",
+      "size": 3465,
+      "sha256": "90b38c0a899b3249b7ee54e6e3a2c0184ba261d421a08e8153492f47fc862c55"
+    },
+    {
+      "path": "src/hooks/logging/useLogRecording.test.tsx",
+      "size": 33858,
+      "sha256": "4906c04a4fc230b5c0c7a9fa552ba5e8c466fede9863290091db1b7d1d612723"
+    },
+    {
+      "path": "src/hooks/logging/useLogRecording.ts",
+      "size": 21565,
+      "sha256": "84a27b1c71277ff9c70c6f751960c6a2049dbcfc10a2dc5a9dce577c12a37a1b"
+    },
+    {
+      "path": "src/hooks/logging/useRecordingElapsedTime.ts",
+      "size": 883,
+      "sha256": "fed74d479eb3567e757f1895c25a8085fa065ab2800929039ae283a24188db06"
+    },
+    {
+      "path": "src/hooks/useBLE.test.tsx",
+      "size": 91499,
+      "sha256": "83c2014f4f6967733345ae2a3a51946ea8b3734546e21c2791e0818f96827a67"
+    },
+    {
+      "path": "src/hooks/useBLE.ts",
+      "size": 29591,
+      "sha256": "09d1a4045da8de3cbe961ab16ec3bec0de6a7deb3dd4e1a06eab5a96f4e170dd"
+    },
+    {
+      "path": "src/hooks/useLongPressSlideImageShare.test.tsx",
+      "size": 3374,
+      "sha256": "74f9dd728a243fa1a158382b174cfcffb757cb0bf78e48f234fced308ad59508"
+    },
+    {
+      "path": "src/hooks/useLongPressSlideImageShare.ts",
+      "size": 3402,
+      "sha256": "0d06c8dc5ec2d981241ad3f159670caf68cdfb2746d4e1c935d5e4ed7649c3b2"
+    },
+    {
+      "path": "src/hooks/useRovingRadioGroup.ts",
+      "size": 2456,
+      "sha256": "f616771f2c86e2ca955e6a73e47910297ad009629983d76046bf367d1fbca7dc"
+    },
+    {
+      "path": "src/hooks/useSensorData.test.tsx",
+      "size": 26363,
+      "sha256": "7f07d19e7e801cf91985994bd92f7de100000dda544df282b11ce8c32aa48d7d"
+    },
+    {
+      "path": "src/hooks/useSensorData.ts",
+      "size": 13699,
+      "sha256": "ca7e1510ac9f1755dd3edb4fbc483e034992699c1fa95fddbc60507cd0e0edc8"
+    },
+    {
+      "path": "src/hooks/useTrueHeading.ts",
+      "size": 3180,
+      "sha256": "84d81db622da3d9d38043f7d9ca2fed3df387f6f6c08e9881b750b5c0e823fe6"
+    },
+    {
+      "path": "src/hooks/useWindPip.test.ts",
+      "size": 8948,
+      "sha256": "a4827f7e85f63fb5ad1c9bb6ac93c6fb1235ade6b56911906b32d06d0d133357"
+    },
+    {
+      "path": "src/hooks/useWindPip.ts",
+      "size": 6687,
+      "sha256": "9d2e18b9331b988f7492751018a2e42c760d25876f75ec60ceb5455916f2a6fc"
+    },
+    {
+      "path": "src/hooks/useWindReferenceNavigation.test.ts",
+      "size": 8366,
+      "sha256": "730b04d6dc421492163376cffa1c32a1eb23b22064f037e11c2c42623f93b0d4"
+    },
+    {
+      "path": "src/hooks/useWindReferenceNavigation.ts",
+      "size": 8665,
+      "sha256": "fa59cab7a9a875cad2991671746a61ab5dfb66086ded9e119a2ef168050c0fef"
+    },
+    {
+      "path": "src/main.tsx",
+      "size": 805,
+      "sha256": "782350820d0c43cf080010b766df8a45e3f843af43f8201884a5bf06db2c49ab"
+    },
+    {
+      "path": "src/pages/Dashboard.css",
+      "size": 535,
+      "sha256": "7f1a0b6bf44d2a961a93865812adccd9b19c9840c707aeeece2898d731a5cad5"
+    },
+    {
+      "path": "src/pages/Dashboard.test.tsx",
+      "size": 74061,
+      "sha256": "2f63ede27fa3b395ecd9c023d899c9fc865cca26a12edf28fb42b3a195621d24"
+    },
+    {
+      "path": "src/pages/Dashboard.tsx",
+      "size": 24309,
+      "sha256": "b690159661aa59a223a74693c2e8db8238af407867137238d5f827d03d184c14"
+    },
+    {
+      "path": "src/pages/dashboard/browserScreenOrientation.ts",
+      "size": 1134,
+      "sha256": "657b4b1fb6153b47ff336faff9e76b5755d04e6acadc460894cc71edd7f8ff81"
+    },
+    {
+      "path": "src/pages/dashboard/chartScaleCycle.test.ts",
+      "size": 724,
+      "sha256": "27fecee1cde1ef14eea98cbb868353c4758e4d90da6c1699fcc3d09b8d3eb0e2"
+    },
+    {
+      "path": "src/pages/dashboard/chartScaleCycle.ts",
+      "size": 628,
+      "sha256": "e93290ccf6c93d3abcd73a3461ad4d28ebecf881443d35f459c9f9b913d1e183"
+    },
+    {
+      "path": "src/pages/dashboard/dashboard-base-controls.css",
+      "size": 8449,
+      "sha256": "3011b46fce9dd905095d2210c078d7153c0e2b5fee610d25c01ceeb3fa8ff2ec"
+    },
+    {
+      "path": "src/pages/dashboard/dashboard-carousel-surface.css",
+      "size": 1040,
+      "sha256": "6730016abdbd116e9fce637a07276e48130025fa92b82c0777e540710cd6a8cc"
+    },
+    {
+      "path": "src/pages/dashboard/dashboard-chart-fullscreen.css",
+      "size": 3983,
+      "sha256": "1ca457a9ddec84a9725fe01a5d56d1c563107b5c1bbf4f66b117b482550d4b6e"
+    },
+    {
+      "path": "src/pages/dashboard/dashboard-log-recording-status.css",
+      "size": 13046,
+      "sha256": "2ef0905b1f98e88ba4e8d30ff8bdf08a88cea6ee8d78ef3b19d44089401e6143"
+    },
+    {
+      "path": "src/pages/dashboard/dashboard-metrics-layout.css",
+      "size": 737,
+      "sha256": "21f56cb4812585f11359ba4fe94cba5559e58b144a2f1547f928360ece396c90"
+    },
+    {
+      "path": "src/pages/dashboard/dashboard-segment-controls.css",
+      "size": 2949,
+      "sha256": "5ba0f08cdb0e80e16b22820e404958e490a8415aaf96989297f0f9de2b83546a"
+    },
+    {
+      "path": "src/pages/dashboard/dashboard-semantic-states.css",
+      "size": 497,
+      "sha256": "81566703dcb1fc6452c5221b9b124168655ef083bf9cb2e2ff97410370bebb35"
+    },
+    {
+      "path": "src/pages/dashboard/dashboard-slides-metrics.css",
+      "size": 10470,
+      "sha256": "d46bd1461795e68a2578253cd7113a59d70d8c14d90cb2ffcb760cc8d7c6fb58"
+    },
+    {
+      "path": "src/pages/dashboard/dashboard-status-responsive.css",
+      "size": 4373,
+      "sha256": "26b9d7a15f8590c6d03644b92b327dec3d82cf67921336bd3ec790256b6470e4"
+    },
+    {
+      "path": "src/pages/dashboard/dashboard-visual-refresh.css",
+      "size": 16210,
+      "sha256": "21d366099d33b5b3ba4d9be6ad1e6cf858a12f50ac43ecf70f844b5ffa1c343f"
+    },
+    {
+      "path": "src/pages/dashboard/dashboardCardDensity.test.ts",
+      "size": 11337,
+      "sha256": "6cc252859b44d1d0f4072a8a73ff47622c5619209f718320d1d10e2a0af3fd05"
+    },
+    {
+      "path": "src/pages/dashboard/dashboardCarouselHeight.test.ts",
+      "size": 3870,
+      "sha256": "dabdb68bcec20858749f6fc62c3da03080a22571e346e8a24c67415f8069191a"
+    },
+    {
+      "path": "src/pages/dashboard/dashboardCarouselNavigation.test.ts",
+      "size": 657,
+      "sha256": "e5544aa9f58ac4aa1d99c29d855d4653be4de9c50426a240e8013ce0fecbf47e"
+    },
+    {
+      "path": "src/pages/dashboard/dashboardCarouselNavigation.ts",
+      "size": 598,
+      "sha256": "4072b78cba8dbbfe626bf5aa17736ed2b354fe66e207c6e73c6ba4141e8a1e95"
+    },
+    {
+      "path": "src/pages/dashboard/dashboardSensorBoundary.tsx",
+      "size": 1391,
+      "sha256": "c79be58646f629367a9953d85d3c893f9beb5e95383f2f9ef3d5ec6588569d43"
+    },
+    {
+      "path": "src/pages/dashboard/dashboardSwiperOptions.ts",
+      "size": 862,
+      "sha256": "8c5d32095b72a56791bc701a2dbf3b080babf0758ebbad62dd97258ed1aca9f6"
+    },
+    {
+      "path": "src/pages/dashboard/nativeDeviceOrientation.ts",
+      "size": 474,
+      "sha256": "4da8b2cd5f10eba1e3d00dd0dbd001f52028e09776a949d0e36624757becf703"
+    },
+    {
+      "path": "src/pages/dashboard/swiperRuntime.ts",
+      "size": 735,
+      "sha256": "379263a26d376e0af2245c2c12880dea6c4fe1865d5cf3bc1bca6194877dd339"
+    },
+    {
+      "path": "src/pages/dashboard/upsideDownPopover.test.ts",
+      "size": 1098,
+      "sha256": "062ff6b08710061cc745d668a989a99edabd6e27d6c586b6d6613e7f10158520"
+    },
+    {
+      "path": "src/pages/dashboard/upsideDownPopover.ts",
+      "size": 1401,
+      "sha256": "0d5be0a70d8a53a6756982ef58bae2e79bef09997d06726b064550eee49ba00a"
+    },
+    {
+      "path": "src/pages/dashboard/useBLEBackgroundNotificationPolicy.test.ts",
+      "size": 1049,
+      "sha256": "7d939fc0110f4a2bae024771fde5fc5a19b0c33b5217b9088f0eead4b5478573"
+    },
+    {
+      "path": "src/pages/dashboard/useBLEBackgroundNotificationPolicy.ts",
+      "size": 2143,
+      "sha256": "eda916ec6ede914b58c7257e5e8d78c9e3e34cffdea8e8011a6668201179f326"
+    },
+    {
+      "path": "src/pages/dashboard/useBleConnectionModal.ts",
+      "size": 2789,
+      "sha256": "a0e4f564ca36a7c432d5eb938a9030844cbbd8a9eb265ef3333106de9e260efe"
+    },
+    {
+      "path": "src/pages/dashboard/useContinuousNativeBleScan.test.tsx",
+      "size": 6806,
+      "sha256": "c03aef5d194feee6dc0a7a5ad9639e4a849e90ae28ea4471e6ed74a3438d6a22"
+    },
+    {
+      "path": "src/pages/dashboard/useContinuousNativeBleScan.ts",
+      "size": 5277,
+      "sha256": "721ec26907f4dd4beeb22206f606679655ead5d4bac415eb42c99ea23ce0d5ca"
+    },
+    {
+      "path": "src/pages/dashboard/useDashboardOrientationFlip.ts",
+      "size": 3436,
+      "sha256": "3a224ba5bc5790c2aa67fb60cb0f078ba63f73336d7f55b98cf2500cfb1659fa"
+    },
+    {
+      "path": "src/pages/dashboard/useNativeScreenMetrics.ts",
+      "size": 2523,
+      "sha256": "ccfbb0be02ab9411c5613ae535d4ef93d76e2f2611abc1eb4534a1fedb295846"
+    },
+    {
+      "path": "src/pages/dashboard/useSettingsDrawerSwipe.ts",
+      "size": 16213,
+      "sha256": "85c2ab33c1886fbae7eeb40cae05ff9184e9376610c78ec700e3b6555a333983"
+    },
+    {
+      "path": "src/pages/dashboard/useThemeBackgroundSync.ts",
+      "size": 1877,
+      "sha256": "0c6d28535a371c9e28763eb0e2b89d65c24cb6e805c0552d8369008a5d48639f"
+    },
+    {
+      "path": "src/pages/dashboardVisibility.test.ts",
+      "size": 582,
+      "sha256": "1ec38db090f5e8cfd53c0ccb875acbe8bc721c0aa47666db0f632f497b551cd3"
+    },
+    {
+      "path": "src/pages/dashboardVisibility.ts",
+      "size": 128,
+      "sha256": "cee2256b7e16ae1aa041dc49c2275f3afdd185d897921f9b7921214f0173ac6b"
+    },
+    {
+      "path": "src/services/ble/BLEAdapterFactory.test.ts",
+      "size": 1874,
+      "sha256": "8395a04693437117246927ce5cc9c03e10712e6cb662a0b2bdd81ab718f0a611"
+    },
+    {
+      "path": "src/services/ble/BLEAdapterFactory.ts",
+      "size": 2601,
+      "sha256": "ac247fce0128fb27f2266e141cf5b3370dcf8a2be7b32582bab3f5118bc7b099"
+    },
+    {
+      "path": "src/services/ble/bleConstants.ts",
+      "size": 2321,
+      "sha256": "7b05e075cc4edd6b06a228106fe0b7aa2a7200058fdc0b9fc35ed925e7ddc5a6"
+    },
+    {
+      "path": "src/services/ble/bleDataParser.test.ts",
+      "size": 2802,
+      "sha256": "c3216089fef94f16b5ed923afee41b8bef2baf9340ce5b28e46281c034c88223"
+    },
+    {
+      "path": "src/services/ble/bleDataParser.ts",
+      "size": 15863,
+      "sha256": "968bbf27d9855e410c6f15420fc52698309a39f7e40c8f3bdf5722b49a1fbe38"
+    },
+    {
+      "path": "src/services/ble/bleLogger.ts",
+      "size": 277,
+      "sha256": "4de6e32f5d431b7741446041f6e1e8a750080b66860e8ef431e5bc68906703b8"
+    },
+    {
+      "path": "src/services/ble/CapacitorBLEAdapter.test.ts",
+      "size": 32443,
+      "sha256": "b3509e1c67e37a5bcad8010d90f4c0da9244e96b55f9951baa86e34e773b2867"
+    },
+    {
+      "path": "src/services/ble/CapacitorBLEAdapter.ts",
+      "size": 20925,
+      "sha256": "3fbe902ebd8913c4014e770c3991b5c47510808e12e1148f35f741bde41f210a"
+    },
+    {
+      "path": "src/services/ble/capacitorBleDeviceIdentify.ts",
+      "size": 2650,
+      "sha256": "1a5d79b66b00bc63d920b05962bac9b20f86c9f1551d68669d0c8dff7a08ec6e"
+    },
+    {
+      "path": "src/services/ble/capacitorBleFeatureAccessors.ts",
+      "size": 17012,
+      "sha256": "5c4f39643a3554f618ba08e13a7a9d9a4b9a7bdbb27d065f2ea763722966ab5a"
+    },
+    {
+      "path": "src/services/ble/capacitorBleRtcTimezoneAccessors.ts",
+      "size": 2087,
+      "sha256": "a9e86c974054136cedf9d1a94606dfa73df38f7df6b740b0154b86d6f1930474"
+    },
+    {
+      "path": "src/services/ble/capacitorBleScanner.ts",
+      "size": 3033,
+      "sha256": "1705e28663d9b12b2ea2fb5725183f2041f55f214c2671d64081a0f048bc18eb"
+    },
+    {
+      "path": "src/services/ble/capacitorBleScanResults.test.ts",
+      "size": 1227,
+      "sha256": "d0e8cb62a17e89e39a991680a8b439b182cee5b8de51ce8ec12698c877444592"
+    },
+    {
+      "path": "src/services/ble/capacitorBleScanResults.ts",
+      "size": 2068,
+      "sha256": "faaac88b6912dbadb1cde39ae64878bc85f94a28bd77020d021ac24db6348d80"
+    },
+    {
+      "path": "src/services/ble/capacitorBleSensorNotifications.ts",
+      "size": 9536,
+      "sha256": "6c99e7e5a99bda43f77a07459c93e5cdf1fb508ba6ab4549461f2caf20500f0a"
+    },
+    {
+      "path": "src/services/ble/cardLogControl.test.ts",
+      "size": 1436,
+      "sha256": "cb8305f2067a4758a237a09784193c0de16dccca56f2a920831934632e3e2a2a"
+    },
+    {
+      "path": "src/services/ble/cardLogControl.ts",
+      "size": 1694,
+      "sha256": "efd7352f31cb4c81367f8cac4c156e78edf4240b746e60c938f2d24be2838a2f"
+    },
+    {
+      "path": "src/services/ble/cardLogSettings.test.ts",
+      "size": 3476,
+      "sha256": "011b8a000d716a1daffed117304afa5b0aa0f2843c114d0df72db87cf1c9851f"
+    },
+    {
+      "path": "src/services/ble/cardLogSettings.ts",
+      "size": 3082,
+      "sha256": "a2b8ee5938664c27b686fdbb79808948edf334becf30b03d4b150254b6fbf2a8"
+    },
+    {
+      "path": "src/services/ble/deviceIdentity.test.ts",
+      "size": 648,
+      "sha256": "35cdb9ee070ccb3e84bc12e3137a88c863049e53b3f0ccf2879d62033ff3df4f"
+    },
+    {
+      "path": "src/services/ble/deviceIdentity.ts",
+      "size": 610,
+      "sha256": "127f3e8ae2d733c473e8fa1980ad0fdba15fd4a17e640c1dbca24cf2aa4d3442"
+    },
+    {
+      "path": "src/services/ble/deviceModeStatus.test.ts",
+      "size": 1802,
+      "sha256": "5774542efb248a9425ec9c3783015cb1b3ac85929b183ba37921cebc196fa5cd"
+    },
+    {
+      "path": "src/services/ble/deviceModeStatus.ts",
+      "size": 1957,
+      "sha256": "d8a13654120cdfff9427fb7add48d855ecbc269daeefe940ae5cd5a1520bc103"
+    },
+    {
+      "path": "src/services/ble/deviceResetControl.test.ts",
+      "size": 1323,
+      "sha256": "369276e925f5e0a2e0b70908fe0fc26f2915c0d857c6fdff387af4f6034af303"
+    },
+    {
+      "path": "src/services/ble/deviceResetControl.ts",
+      "size": 2400,
+      "sha256": "3d52b169fdf06fc6d258b1939e63539de14d9566bca1faaf1e305240a4e1d162"
+    },
+    {
+      "path": "src/services/ble/deviceStatus.ts",
+      "size": 1391,
+      "sha256": "032439a9396b669cfacfe5a1f61bbed3890c560d74527c957087520d4bcda3ae"
+    },
+    {
+      "path": "src/services/ble/i2cConfigControl.test.ts",
+      "size": 3882,
+      "sha256": "223ebf985f5927897e9bf4b5ca09130c7b7bcfcc90f9ebecd46a0a301fecdf80"
+    },
+    {
+      "path": "src/services/ble/i2cConfigControl.ts",
+      "size": 4527,
+      "sha256": "7a128c1ac9bb337d639cd0ae3a732d51dd45d40b26dc9484d8cb2202d9a76027"
+    },
+    {
+      "path": "src/services/ble/IBLEAdapter.ts",
+      "size": 5051,
+      "sha256": "c645cdb0d6ff24cd9232a7a91a28ed0ad28dc18b4d7fd0b31263ec4aac919820"
+    },
+    {
+      "path": "src/services/ble/index.ts",
+      "size": 611,
+      "sha256": "aefc7c41be51b7e06007b488c509d5adfec30a503d36c8688a6f9aa83c42b9ef"
+    },
+    {
+      "path": "src/services/ble/ledBrightness.test.ts",
+      "size": 1059,
+      "sha256": "4d5fedd29e5a0e52e08fedd35414ee294722edc5f34810d4e9c6d606aa27b8f7"
+    },
+    {
+      "path": "src/services/ble/ledBrightness.ts",
+      "size": 1184,
+      "sha256": "2cd65cbeef0390978d89d09baa20565458fc88409789b11ae37407154dde83a3"
+    },
+    {
+      "path": "src/services/ble/ledWindReactive.test.ts",
+      "size": 1551,
+      "sha256": "5af8240aa09c13245fc4b8bdbda3aa3ed2827ba89e70fa52aab0910fe81e7b2a"
+    },
+    {
+      "path": "src/services/ble/ledWindReactive.ts",
+      "size": 2896,
+      "sha256": "280a1b38993ced2e3096e9fdd8ed7d3fc45de410544dbfbf3994539b9ac10c8b"
+    },
+    {
+      "path": "src/services/ble/otaControl.test.ts",
+      "size": 5792,
+      "sha256": "7e84a52e2c95e9f33507a01c81357e3b7cc0f4576151a1fc8f41779286b713f8"
+    },
+    {
+      "path": "src/services/ble/otaControl.ts",
+      "size": 3641,
+      "sha256": "bc32cd49ba4f206e8757e4324ebb303eeaccdb59afbeafa89c7471b38f1f76ce"
+    },
+    {
+      "path": "src/services/ble/platformDetector.test.ts",
+      "size": 3276,
+      "sha256": "66e72f9371239fe3d89acde5a144d70c5f7537dd042b299c13d732310f64616e"
+    },
+    {
+      "path": "src/services/ble/platformDetector.ts",
+      "size": 4424,
+      "sha256": "baebb92a36c6bffdc54dee8fcb2a391bc7efe5d4015729a21d235680735bfc2c"
+    },
+    {
+      "path": "src/services/ble/rtcOffsetEvaluation.test.ts",
+      "size": 873,
+      "sha256": "0bdd11a126d1eda86a219a2c54a28fa859e83b8c490dffb67e30a181bc07bee7"
+    },
+    {
+      "path": "src/services/ble/rtcOffsetEvaluation.ts",
+      "size": 1148,
+      "sha256": "bc7f81bf0e183d7950a4466ead0c5d6a5944d3090963b2cbd576a4b982ce10af"
+    },
+    {
+      "path": "src/services/ble/rtcTimezoneControl.test.ts",
+      "size": 7778,
+      "sha256": "f99caaa68188d71f3d6a482febbc9368c40f1696f2fbd5a09ccd982b12b71189"
+    },
+    {
+      "path": "src/services/ble/rtcTimezoneControl.ts",
+      "size": 7462,
+      "sha256": "f6417c2074418c14ac1f90342d2f8f93e52b32027ced5f44604ddb41aa00b918"
+    },
+    {
+      "path": "src/services/ble/sensorDataDefaults.ts",
+      "size": 523,
+      "sha256": "4abb2045164106a5e65281ba64bec6020481cb404728f9ea85a95a32d9bb48fc"
+    },
+    {
+      "path": "src/services/ble/stm32UpdateControl.test.ts",
+      "size": 3429,
+      "sha256": "0e9e1ab7a7f086fd64d0e87c132c6c626871c2843972ddb1ad04d202e5f1c780"
+    },
+    {
+      "path": "src/services/ble/stm32UpdateControl.ts",
+      "size": 2001,
+      "sha256": "951ee3f2cf55a1ff16727f939212d699520c137d2bb8ce8814b23f6f7c01dfdc"
+    },
+    {
+      "path": "src/services/ble/WebBLEAdapter.test.ts",
+      "size": 39402,
+      "sha256": "02b10c5902a11e32b23a53dcb3ff0d9c1a092f5de358d22ff43ea0df5f2248d9"
+    },
+    {
+      "path": "src/services/ble/WebBLEAdapter.ts",
+      "size": 22980,
+      "sha256": "2adbd43f7b3d5cc58cb4cacada4a4a6485dd12153f814e72208166328e913aa1"
+    },
+    {
+      "path": "src/services/ble/webBleAdapterHelpers.ts",
+      "size": 5484,
+      "sha256": "3dff6bbc1d01183a0674fb4a1d2a10aaea2a410edcd893c2c58915e404559d6a"
+    },
+    {
+      "path": "src/services/ble/webBleCardLogNotifications.ts",
+      "size": 1215,
+      "sha256": "a552b4baa42a7ac957faff6b4b231e7e0c6088338180d6c6b04ee2e37a2ab026"
+    },
+    {
+      "path": "src/services/ble/webBleDiscovery.ts",
+      "size": 467,
+      "sha256": "afa9c50a1f631c8ab365a9245f274186bd1cd048c77b4352a8c1073d9d00cfce"
+    },
+    {
+      "path": "src/services/ble/webBleFeatureAccessors.ts",
+      "size": 19326,
+      "sha256": "e279ea685abf4af799c3ab0cbd4dd770c869f9597238b337d0b413acd204f832"
+    },
+    {
+      "path": "src/services/ble/webBleRtcTimezoneAccessors.ts",
+      "size": 2351,
+      "sha256": "c7ab5be5b60441354c0e0e01a0bbe6b904e503e3025e55ae686b6665e7a139bd"
+    },
+    {
+      "path": "src/services/ble/webBleSensorNotifications.ts",
+      "size": 11777,
+      "sha256": "899382be2077dd51beb0541009099cbd6768a1ae7f9ded0afd3249928afdbfa1"
+    },
+    {
+      "path": "src/services/browserLog/BrowserLogWriter.test.ts",
+      "size": 17788,
+      "sha256": "fc0eb06074d5f81aad01d1144d08588b8694e72f7641ad93d7813361841c55f7"
+    },
+    {
+      "path": "src/services/browserLog/BrowserLogWriter.ts",
+      "size": 23495,
+      "sha256": "1ac99c3cfd6422b3356910767560977f1bb76b5abb4863607a430942d106f8db"
+    },
+    {
+      "path": "src/services/browserLog/catalog.ts",
+      "size": 2448,
+      "sha256": "50c8e9d08441a3f895fbaa8adde1720e5bd26bf64e25ff6c1f028678e3cc383d"
+    },
+    {
+      "path": "src/services/browserLog/csv.ts",
+      "size": 3629,
+      "sha256": "4a5da8cb7ead5bca0177072af1300ff7d8f5c5ca575ec2442e194409f63384c0"
+    },
+    {
+      "path": "src/services/browserLog/exportFiles.test.ts",
+      "size": 11322,
+      "sha256": "2ec7af1283f870d2b6f84c7975a5b08a903d3d1bc4db153a721f10691722b665"
+    },
+    {
+      "path": "src/services/browserLog/exportFiles.ts",
+      "size": 10827,
+      "sha256": "5361e32f22798465acc80f5ca0069bf707bd9bec73b51c8bde6ffdb489f7cc9f"
+    },
+    {
+      "path": "src/services/browserLog/index.ts",
+      "size": 632,
+      "sha256": "0dade2d8c869d9a691db92d2a6d7bc9a671619e0a4e25d342b34ad25f6d10688"
+    },
+    {
+      "path": "src/services/browserLog/lock.ts",
+      "size": 3280,
+      "sha256": "a0fa7b3a796453854f97c0638632c7941c38ba0d59cd20f40816310a8d9dbe30"
+    },
+    {
+      "path": "src/services/browserLog/policy.test.ts",
+      "size": 1041,
+      "sha256": "8ff2c369c001894cda65a6a7a32a16104935f034e19d526ab1f2217d5e11c1c6"
+    },
+    {
+      "path": "src/services/browserLog/policy.ts",
+      "size": 2847,
+      "sha256": "22e0679fff58da6e2fee5c0e816e83b03bf73e0ef279ab6f1ad892ce2054ae9c"
+    },
+    {
+      "path": "src/services/browserLog/store.test.ts",
+      "size": 5933,
+      "sha256": "12cef3d88279801ba23a8b7fb5a4235f85fae442e74fbe6b8dd71a07bf17646b"
+    },
+    {
+      "path": "src/services/browserLog/store.ts",
+      "size": 11506,
+      "sha256": "0a5929ddbb6d4384b4872ffa17abeea3606a9e6dafa051cb84a1515f8eb40caa"
+    },
+    {
+      "path": "src/services/browserLog/types.ts",
+      "size": 3184,
+      "sha256": "89c5bc18a095cdf7327d6816f16c9005fbf5d3d428dced970124341c143e25a7"
+    },
+    {
+      "path": "src/services/chartFullscreen.ts",
+      "size": 1921,
+      "sha256": "98648b5d214369e48ab468e19d69fd4786555f536f13c79afe8dc9d453f1dd03"
+    },
+    {
+      "path": "src/services/initialFirmwareOnboardingPreference.test.ts",
+      "size": 1770,
+      "sha256": "ef6b792a698d13f03739e6ac00b9af1bd2495f4c55831151938d0ae1aad46f92"
+    },
+    {
+      "path": "src/services/initialFirmwareOnboardingPreference.ts",
+      "size": 1148,
+      "sha256": "d2190785862b79cf54d561a78b3db909ad6477f2a499e9d2520c6442a2ed19bb"
+    },
+    {
+      "path": "src/services/nativeAppInfo.test.ts",
+      "size": 1985,
+      "sha256": "bcaf5995ffcb0d10fc2580813935058ae55a6d2d3f5f21e9a2b5b02857dcc4b2"
+    },
+    {
+      "path": "src/services/nativeAppInfo.ts",
+      "size": 1465,
+      "sha256": "e6af08af592eaff3334bbf7545f8ca395be4299a85e3098a131119b214ed438a"
+    },
+    {
+      "path": "src/services/nativeDeviceMotionLifecycle.test.ts",
+      "size": 1377,
+      "sha256": "9c212f3d042363f9e5c01d7a8f7a4a782fbe611fd4714aab48aa8ff603288156"
+    },
+    {
+      "path": "src/services/nativeSlideImageShare.test.ts",
+      "size": 2231,
+      "sha256": "e64a277cbcc6f9d56155d271bc7410712cee621f6fafab90ef85bbff2b9f4b8f"
+    },
+    {
+      "path": "src/services/nativeSlideImageShare.ts",
+      "size": 833,
+      "sha256": "eb93fbc600daf79eb7df233bf1f747f65de984ddb9e2ac8a79f25b00bae8a022"
+    },
+    {
+      "path": "src/services/nativeTrueHeading.test.ts",
+      "size": 3180,
+      "sha256": "8cf42e9feb42b0d6bc8522437f0001df6c2dddaba82a167e72619eba4e7a91e5"
+    },
+    {
+      "path": "src/services/nativeTrueHeading.ts",
+      "size": 2557,
+      "sha256": "5efc40f1038d1b6b36b4482fa76b055692cfbf1bc2758a821f961296d0187c3b"
+    },
+    {
+      "path": "src/services/nativeWindPip.test.ts",
+      "size": 3185,
+      "sha256": "d899910892ddd8ce256d1a6b843e235de7e15a90b3b06227ec486b0b6540d50e"
+    },
+    {
+      "path": "src/services/nativeWindPip.ts",
+      "size": 3332,
+      "sha256": "1ce4a00f66bf173cf65b44827b8e3f6c5fe0e09a1df545f43cd8171c6bedee27"
+    },
+    {
+      "path": "src/services/nativeWindPipLifecycle.test.ts",
+      "size": 4400,
+      "sha256": "f51493a64c930a77709ee9fa6b9c8c3dea7bd9803e0f6f3f1ea11b3f3a213f8f"
+    },
+    {
+      "path": "src/services/ota/esp32FirmwareIdentity.test.ts",
+      "size": 2300,
+      "sha256": "a9d684732cfe311b6dc1b147eb97cacaf1aaae1aff4e8bafb0a933792d685e0a"
+    },
+    {
+      "path": "src/services/ota/esp32FirmwareIdentity.ts",
+      "size": 3384,
+      "sha256": "646056a1060414fac0facd80288938f70fe38c04cecc4ebd14776f621ac6c41e"
+    },
+    {
+      "path": "src/services/ota/esp32OtaTransfer.ts",
+      "size": 2696,
+      "sha256": "01619c2d68fd5e78b2a6011ef6013d08e68568521fcb48c455021d3eb9254dcd"
+    },
+    {
+      "path": "src/services/ota/firmwareReleaseCatalog.test.ts",
+      "size": 4309,
+      "sha256": "2014f714e186446fe69b9f0051080109e622a585704122c8f47ebc9cf6794d1c"
+    },
+    {
+      "path": "src/services/ota/firmwareReleaseCatalog.ts",
+      "size": 5998,
+      "sha256": "ce31c52362d8832383614b6512bb09317d443a62fee6824bd86ca946d76a10ef"
+    },
+    {
+      "path": "src/services/ota/initialDemoOta.test.ts",
+      "size": 2109,
+      "sha256": "36f82e3c27698e57bdb5ff4af54f746225b885d59caf281a704c2f06e1908691"
+    },
+    {
+      "path": "src/services/ota/initialDemoOta.ts",
+      "size": 2524,
+      "sha256": "313d9fab0a0c4101c66d0060e166b7165a53b6cfa4786455dfeb923f40e97edb"
+    },
+    {
+      "path": "src/services/ota/nativeSoftAp.test.ts",
+      "size": 5690,
+      "sha256": "7bbbf45a27e0befbd8fa16a20a7998eb6488a0a421ccd90033920ded0075b9bc"
+    },
+    {
+      "path": "src/services/ota/nativeSoftAp.ts",
+      "size": 6333,
+      "sha256": "41eafe095674ba634c4ad9f4c4eaf72e447355abb9eb524552182244e2173f6f"
+    },
+    {
+      "path": "src/services/ota/stm32FirmwareReleaseCatalog.test.ts",
+      "size": 5894,
+      "sha256": "d306fc9db38d26039802f45f184a5f553282382681a9404d82f6a8298acbdeaa"
+    },
+    {
+      "path": "src/services/ota/stm32FirmwareReleaseCatalog.ts",
+      "size": 7047,
+      "sha256": "ffa3f5309e9d1740e3f5c0f0ea6b964c048744b9d39a7a8226b430f881264787"
+    },
+    {
+      "path": "src/services/ota/stm32FirmwareVersion.test.ts",
+      "size": 1989,
+      "sha256": "1346309a749ad4be9b6e30c4e3503273c17c338197c35144105c5a2a570a6909"
+    },
+    {
+      "path": "src/services/ota/stm32FirmwareVersion.ts",
+      "size": 2630,
+      "sha256": "b10cae074ee5ad39339e214696db59e21364020a93e059166d711e6766eddda7"
+    },
+    {
+      "path": "src/services/ota/stm32OtaStatusValidator.ts",
+      "size": 4493,
+      "sha256": "ce4bb3625a9454a0e7850bea97eefdb71235058a6bcfd66873f04642c3f12d24"
+    },
+    {
+      "path": "src/services/ota/stm32OtaTransfer.test.ts",
+      "size": 17837,
+      "sha256": "761fb3d121712b4e5edf449a0d7b3d6fb397ee2cbe9161cc372e0b988e16ab11"
+    },
+    {
+      "path": "src/services/ota/stm32OtaTransfer.ts",
+      "size": 17364,
+      "sha256": "f24db27faa7fccfa2e57bdd6192f76261ad99a2783094d334dd29fb07ff7d8a7"
+    },
+    {
+      "path": "src/services/timezoneCatalog.test.ts",
+      "size": 1741,
+      "sha256": "72a294fdaa6beab46ea1f41a81aaba48d1ef4aab8c8d9b58005e3331523c0a5d"
+    },
+    {
+      "path": "src/services/timezoneCatalog.ts",
+      "size": 2096,
+      "sha256": "32548704dda6b851540fe8960495950f3f213ea0d5fd59fd6b3cf976e41a6d0b"
+    },
+    {
+      "path": "src/setupTests.ts",
+      "size": 1842,
+      "sha256": "d506458c5fd82b9415753d96142bd4802c78e989e7859e5e66ceb03fc9d4878f"
+    },
+    {
+      "path": "src/theme/control-tokens.css",
+      "size": 3479,
+      "sha256": "40715edab8f0e46147577b7cdbf3ee2018d643967afd4feb67536c318de43564"
+    },
+    {
+      "path": "src/theme/variables.css",
+      "size": 5251,
+      "sha256": "930873bdd587cc3c4accbf4c2e4ca21cc011931cd3a2c6d7d6beddc7057d28aa"
+    },
+    {
+      "path": "src/types/ble.ts",
+      "size": 9741,
+      "sha256": "29b4bcb230aba9cc15800153e3bda547daefd23869c0fdaf753913b54652b1d1"
+    },
+    {
+      "path": "src/types/bleMaintenance.ts",
+      "size": 2513,
+      "sha256": "cd6e66fd3aeb2f1d801771cd6ff64f63a6cf01118675d00bf1ff7bec7431ef04"
+    },
+    {
+      "path": "src/types/rtcTimezone.ts",
+      "size": 1897,
+      "sha256": "79baa86a24364b13143e056fb1f08e029f1a2a369d600de5070be43851f3c9ef"
+    },
+    {
+      "path": "src/types/sensor.ts",
+      "size": 2267,
+      "sha256": "0c4760bb6486278432aa2a1ed8158e2135401b954208f7c53dcef27bfdaddb4c"
+    },
+    {
+      "path": "src/utils/buildInfo.ts",
+      "size": 1050,
+      "sha256": "ca604465810f0860c746bf76a082d8d55c1635ccc180965771f558603350e2c4"
+    },
+    {
+      "path": "src/utils/derivedWindMetrics.test.ts",
+      "size": 3556,
+      "sha256": "4506663700769021a33dcfb6371704ec35ad5423aaf546c9b771721d4a485c91"
+    },
+    {
+      "path": "src/utils/derivedWindMetrics.ts",
+      "size": 3582,
+      "sha256": "aa7d6c743c7f318decc6e1a91364bf2368c80b438437ccc509f6f102e12022c9"
+    },
+    {
+      "path": "src/utils/normalizeBleUserMessage.test.ts",
+      "size": 1776,
+      "sha256": "59e7c17e25836ac7c77333aa64138bca1437ff1827af0ab784a6fb162ed16a92"
+    },
+    {
+      "path": "src/utils/normalizeBleUserMessage.ts",
+      "size": 629,
+      "sha256": "28a11bb193042ecc784baeef028fcedc13dfd5a614825ce3cf4f58e7e487b97f"
+    },
+    {
+      "path": "src/utils/renderPerfDiagnostics.test.ts",
+      "size": 2338,
+      "sha256": "4d61d460149c9af6efb63681cc1d3aa8d1125b528bc09d5dcba592b54d71b174"
+    },
+    {
+      "path": "src/utils/renderPerfDiagnostics.ts",
+      "size": 1731,
+      "sha256": "1e6eba7db54cf5969299f7cd30adfdd83df29ff0dd8da09b4a0159901aea123a"
+    },
+    {
+      "path": "src/utils/RingBuffer.test.ts",
+      "size": 1049,
+      "sha256": "9b767effae6925b0ead851a31d5067ddff1bf926fed2278738c1f2626e59dffd"
+    },
+    {
+      "path": "src/utils/RingBuffer.ts",
+      "size": 6258,
+      "sha256": "977c692d24fff04684c7a5b0a972d382b153003cb93ce1732cb25a2cb4f9dce6"
+    },
+    {
+      "path": "src/utils/trueWind.test.ts",
+      "size": 6403,
+      "sha256": "1c0e52b4d6402a7542b31a949830a8b972cd9be5e54f6056f75906140d5a05e6"
+    },
+    {
+      "path": "src/utils/trueWind.ts",
+      "size": 9475,
+      "sha256": "0b1d590593f7746a47f072918809dbfe7606c0c9db2bbbd768c8f2cbbb3b2cff"
+    },
+    {
+      "path": "src/utils/windSpeedConverter.test.ts",
+      "size": 2299,
+      "sha256": "bb87144b287a367d233247dee6a13bfe2e38cc71dfa78c2caa630df06c3b1a0a"
+    },
+    {
+      "path": "src/utils/windSpeedConverter.ts",
+      "size": 1770,
+      "sha256": "bf44a0a29ef46c7be0c48b4922ce15f50002d3666b98538d07c6b9299c845d05"
+    },
+    {
+      "path": "src/vite-env.d.ts",
+      "size": 558,
+      "sha256": "a57a9e6b5acc707ce5a08d4d6a3385337719c77de60f16c4cc775569d050e84f"
+    },
+    {
+      "path": "test-support/OtaPanelControllerHarness.tsx",
+      "size": 9127,
+      "sha256": "762cbdae836e789c2a76bf11296fd9a99b19e8f6a7af1af365da8879bd59af7a"
+    },
+    {
+      "path": "test-support/stm32-update-fixtures.ts",
+      "size": 3140,
+      "sha256": "eca2eb7f2dd5dbd782ce367ed0c044e0bfd3a6b2f9e471f8267a8f769537c9ec"
+    },
+    {
+      "path": "test-support/Stm32PanelControllerHarness.tsx",
+      "size": 8832,
+      "sha256": "5336464f783cb47b0c5aa0677eaeb1b007c65061c6675a12a47f88ff413695d8"
+    },
+    {
+      "path": "test-support/Stm32UpdateFlowControls.tsx",
+      "size": 8075,
+      "sha256": "9f2eb944e54471522f7741d7573e67e3054e69bdf314e2831aa72c925800ee47"
+    },
+    {
+      "path": "THIRD_PARTY_LICENSES.txt",
+      "size": 869101,
+      "sha256": "3e44594846f72f359d02b4464bd153591335292d1f601b6f452751f4059658b7"
+    },
+    {
+      "path": "THIRD_PARTY_NOTICES.md",
+      "size": 55610,
+      "sha256": "fc3b016873c7fe5565040e42c7d54bb43e3b17da43d0b460d8b9a62ea56c1b07"
+    },
+    {
+      "path": "tsconfig.json",
+      "size": 559,
+      "sha256": "e406d87c9b5edebb901c53ec8e53c7aa35f4c93616a279b18c96f24efaea6385"
+    },
+    {
+      "path": "tsconfig.node.json",
+      "size": 184,
+      "sha256": "c40d0614fda5b8a746a1ba2e3be8e2370140c0167851ac77881cd53bb5647cdd"
+    },
+    {
+      "path": "tsconfig.worker.json",
+      "size": 388,
+      "sha256": "17977a5ef053543dfe84aadf720db4f5a347e27b0989881e92ffde8ac4deaf50"
+    },
+    {
+      "path": "vite.config.ts",
+      "size": 2431,
+      "sha256": "aef39389c615c581500087ab304534a788fad7b4a57d6edeaa1a033c6a35572a"
+    },
+    {
+      "path": "vitest.worker.config.ts",
+      "size": 352,
+      "sha256": "3d382bf625c6c1410700f8f4259239e6cbae825c279051b07da3cca88503f028"
+    },
+    {
+      "path": "worker-configuration.d.ts",
+      "size": 925,
+      "sha256": "84cbca14c482e4f65a91b7a5a215fa12bc23e83436660d2740502f14607cca3a"
+    },
+    {
+      "path": "worker/catalog.ts",
+      "size": 9734,
+      "sha256": "84da735d8bb8f03b7a4c433cf735ab8b8dd2262a35bee769a80c9a2fd16cec63"
+    },
+    {
+      "path": "worker/download.ts",
+      "size": 4342,
+      "sha256": "91bf3de305ab1084e5ed431535d7da88cfb13a282fbddae3807972138ccac15b"
+    },
+    {
+      "path": "worker/environment.ts",
+      "size": 431,
+      "sha256": "1f71cf00d742e51d84ba04b5230e1b4c046ddacbd34c366e89b3d03645548fad"
+    },
+    {
+      "path": "worker/http.ts",
+      "size": 4344,
+      "sha256": "0cf5039ca3481c43efbace96d6682510a7e6785227e6aaae7df93cc0571f998a"
+    },
+    {
+      "path": "worker/index.test.ts",
+      "size": 17203,
+      "sha256": "d1085ea9984e72214b9150dbfde8db9bbfd56c0409d822ace6eaddcac14797c5"
+    },
+    {
+      "path": "worker/index.ts",
+      "size": 2099,
+      "sha256": "e36111a5efa86a161c2bf6ec9c9c23a1e78ace3ff75e65e671224ce09453e228"
+    },
+    {
+      "path": "worker/releaseIdentity.ts",
+      "size": 2199,
+      "sha256": "95597a1ff13ba60f17f5894c71c5447b259ec86a8638b65cb288a67ccd0cdb66"
+    },
+    {
+      "path": "worker/routes.ts",
+      "size": 7870,
+      "sha256": "6ed79843a41df6f68cc0686b717616cd9e4ba4dc32d46bc02c784df66b258910"
+    },
+    {
+      "path": "worker/token.ts",
+      "size": 4230,
+      "sha256": "262f2cfaa6fac576de2b0a2d18ca3776e8b628dfea78fcc7221bb8d64605cbf0"
+    },
+    {
+      "path": "wrangler.jsonc",
+      "size": 1922,
+      "sha256": "ec0f6cae8dda3527472c296264923e45386d75b0143010ec1f1dd8be8f187ed4"
+    }
+  ],
+  "contracts": [
+    {
+      "name": "ulsa-evo-ble",
+      "protocolVersion": 3,
+      "esp32PublicReleaseTag": "esp32-fw-v1.0.0-r9",
+      "esp32SourceSnapshotSha256": "65576e43c92e8179f359efafe1d7b34fadf9b0764845395a567b0bcd0d7bb3c0",
+      "sha256": "e998626f5b03e54c6e427498bb4542394236907890e611b8beeb45de7ae8f512"
+    }
+  ]
+}

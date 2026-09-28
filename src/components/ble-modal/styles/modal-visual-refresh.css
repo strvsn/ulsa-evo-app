@@ -1,0 +1,352 @@
+/* ULSA EVO connection surface */
+
+.ble-modal {
+  --width: min(94vw, 540px);
+  --height: min(84vh, 720px);
+  --max-height: 84vh;
+  --border-radius: 24px;
+  --box-shadow: 0 28px 90px rgba(0, 0, 0, 0.48);
+  color: #f3f8fa;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", sans-serif;
+}
+
+.ble-modal::part(backdrop) {
+  background: rgba(1, 8, 13, 0.68);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.ble-modal::part(content) {
+  background: #0b1822;
+  border: 1px solid rgba(151, 190, 204, 0.2);
+}
+
+.ble-modal.ble-modal-compact {
+  --height: min(54vh, 420px);
+  --max-height: 54vh;
+}
+
+.ble-modal .ble-modal-page {
+  --app-background: var(--ble-modal-gradient, linear-gradient(150deg, #08151e, #10222e));
+  background: var(--ble-modal-gradient, linear-gradient(150deg, #08151e, #10222e));
+}
+
+.ble-modal .ble-modal-page::before {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.025), transparent 36%);
+}
+
+.ble-modal ion-header {
+  background: rgba(6, 17, 25, 0.9);
+  border-bottom-color: rgba(151, 190, 204, 0.14);
+}
+
+.ble-modal ion-toolbar {
+  --color: #f3f8fa;
+  --min-height: 62px;
+  --padding-start: 18px;
+  --padding-end: 16px;
+  --padding-top: 0px;
+  --padding-bottom: 0px;
+}
+
+.ble-modal ion-title {
+  font-size: 17px;
+  font-weight: 760;
+  letter-spacing: -0.01em;
+}
+
+.ble-modal-close {
+  width: 36px;
+  height: 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 2px;
+  padding: 0;
+  border: 1px solid rgba(151, 190, 204, 0.24);
+  border-radius: 50%;
+  background: rgba(151, 190, 204, 0.12);
+  color: #e6f1f4;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.ble-modal-close:active {
+  transform: scale(0.94);
+  background: rgba(151, 190, 204, 0.22);
+}
+
+.ble-modal-close:focus-visible {
+  outline: 2px solid #5eead4;
+  outline-offset: 2px;
+}
+
+.ble-modal ion-content::part(scroll) {
+  padding: 12px 0 22px !important;
+}
+
+.ble-platform-info {
+  justify-content: flex-start;
+  gap: 6px;
+  padding: 6px 18px 4px;
+}
+
+.ble-modal ion-badge {
+  padding: 5px 9px;
+  border-color: rgba(151, 190, 204, 0.16);
+  background: rgba(14, 32, 43, 0.74);
+  box-shadow: none;
+  color: #a9bec8;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+}
+
+.ble-status-section {
+  padding: 12px 18px 6px;
+  align-items: flex-start;
+}
+
+.ble-status-section ion-chip {
+  min-height: 36px;
+  margin: 0;
+  background: rgba(14, 32, 43, 0.84);
+  border-color: rgba(151, 190, 204, 0.2);
+  box-shadow: none;
+}
+
+.ble-status-section ion-chip .ulsa-icon {
+  flex: 0 0 auto;
+}
+
+.ble-modal ion-card {
+  margin: 10px 18px;
+  border-radius: 16px;
+  background: rgba(13, 30, 41, 0.86);
+  border-color: rgba(151, 190, 204, 0.16);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.2);
+}
+
+.ble-modal ion-card-header {
+  padding: 16px 16px 7px;
+}
+
+.ble-modal ion-card-title {
+  color: #f3f8fa;
+  font-size: 15px;
+  font-weight: 740;
+}
+
+.ble-modal ion-card-content,
+.ble-modal ion-item,
+.ble-modal ion-item h2,
+.ble-modal ion-item h3 {
+  color: #eef5f7;
+}
+
+.ble-modal ion-item p,
+.ble-modal ion-label p,
+.ble-instruction {
+  color: #9fb2bd;
+}
+
+.ble-modal ion-item {
+  --min-height: 54px;
+  --border-color: rgba(151, 190, 204, 0.1);
+}
+
+.ble-connect-section {
+  padding: 4px 18px 0;
+}
+
+.ble-connect-section .ble-instruction {
+  margin: 8px 0 14px;
+  font-size: 13px;
+  line-height: 1.65;
+}
+
+.ble-action-buttons {
+  padding-inline: 18px;
+}
+
+.ble-connect-section > ion-button,
+.ble-action-buttons ion-button {
+  min-height: 44px;
+  margin: 12px 0 0;
+  --border-radius: 13px;
+  --background: #dffbf6;
+  --background-hover: #effffc;
+  --background-activated: #c9f3eb;
+  --color: #09272c;
+  --box-shadow: 0 14px 30px rgba(0, 0, 0, 0.22);
+  font-weight: 760;
+  letter-spacing: 0;
+}
+
+.ble-connect-section > ion-button.ble-rescan-button {
+  width: calc(100% - 36px);
+  margin-inline: 18px;
+}
+
+.ble-action-buttons ion-button[color="danger"] {
+  --background: rgba(255, 123, 123, 0.12);
+  --background-hover: rgba(255, 123, 123, 0.18);
+  --background-activated: rgba(255, 123, 123, 0.24);
+  --color: #ff9a9a;
+  --border-color: rgba(255, 123, 123, 0.34);
+  --border-style: solid;
+  --border-width: 1px;
+  --box-shadow: none;
+}
+
+.ble-modal ion-button:focus-visible {
+  outline: 2px solid #5eead4;
+  outline-offset: 2px;
+}
+
+@media (max-width: 560px) {
+  .ble-modal {
+    --width: calc(100vw - 16px);
+    --height: min(72vh, 620px);
+    --max-height: 72vh;
+    --border-radius: 22px;
+  }
+
+  .ble-modal.ble-modal-compact {
+    --height: min(42vh, 380px);
+    --max-height: 42vh;
+  }
+
+  .ble-modal ion-toolbar {
+    --min-height: 58px;
+  }
+
+  .ble-platform-info,
+  .ble-status-section,
+  .ble-connect-section,
+  .ble-action-buttons {
+    padding-inline: 14px;
+  }
+
+  .ble-modal ion-card {
+    margin-inline: 14px;
+  }
+
+  .ble-connect-section > ion-button.ble-rescan-button {
+    width: calc(100% - 28px);
+    margin-inline: 14px;
+  }
+}
+
+.ble-modal-light::part(content) {
+  background: #f6f9fa;
+  border-color: rgba(28, 56, 70, 0.14);
+}
+
+.ble-modal-light .ble-modal-page {
+  --app-background: linear-gradient(150deg, #f5f8fa, #e7eef1);
+  background: linear-gradient(150deg, #f5f8fa, #e7eef1);
+  color: #10212b;
+}
+
+.ble-modal-light ion-header {
+  background: rgba(247, 250, 251, 0.94);
+  border-bottom-color: rgba(28, 56, 70, 0.14);
+}
+
+.ble-modal-light ion-toolbar {
+  --background: rgba(247, 250, 251, 0.94);
+  --color: #10212b;
+}
+
+.ble-modal-light .ble-modal-close {
+  border-color: rgba(28, 56, 70, 0.2);
+  background: rgba(28, 56, 70, 0.08);
+  color: #173c45;
+}
+
+.ble-modal-light .ble-modal-page::before {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.58), rgba(28, 56, 70, 0.04));
+}
+
+.ble-modal-light ion-card:not([color]),
+.ble-modal-light .ble-status-section ion-chip {
+  background: rgba(255, 255, 255, 0.84);
+  border-color: rgba(28, 56, 70, 0.12);
+  --color: #10212b;
+  color: #10212b;
+}
+
+.ble-modal-light ion-card:not([color]) :is(ion-card-title, ion-card-content, ion-item, ion-item h2, ion-item h3) {
+  --color: #10212b;
+  color: #10212b;
+}
+
+.ble-modal-light :is(ion-item p, ion-label p, .ble-instruction, .device-id, .ble-build-info) {
+  color: #526b77;
+}
+
+.ble-modal-light .ble-identify-button {
+  --color: #9a4b00;
+  --color-hover: #7a3c00;
+  --color-activated: #653200;
+  --ripple-color: rgba(154, 75, 0, 0.22);
+  border-color: #9a4b00;
+  color: #9a4b00;
+}
+
+.ble-modal-light .ble-identify-button ion-icon {
+  color: #9a4b00;
+  opacity: 1;
+}
+
+.ble-modal-light .ble-identify-progress path {
+  stroke: #9a4b00;
+  filter: drop-shadow(0 0 3px rgba(154, 75, 0, 0.65));
+}
+
+.ble-modal .ion-delegate-host.ion-page {
+  height: 100%;
+  min-height: 0;
+}
+
+.ble-modal .ble-device-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.ble-modal .ble-device-list-title {
+  margin: 0;
+  color: #dce7ed;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.ble-modal-light .ble-device-list-title {
+  color: #142630;
+}
+
+.ble-modal .ble-device-card {
+  flex: 0 0 auto;
+  width: 100%;
+  margin: 0;
+}
+
+.ble-modal .ble-modal-footer {
+  position: relative;
+  z-index: 2;
+  flex: 0 0 auto;
+  padding: 12px 18px;
+  background: #0b1e28;
+  border-top: 1px solid rgba(151, 190, 204, 0.2);
+}
+
+.ble-modal-light .ble-modal-footer {
+  background: #edf4f6;
+  border-top-color: rgba(58, 84, 96, 0.2);
+}
+
+.ble-modal .ble-modal-footer ion-button {
+  width: 100%;
+  margin: 0;
+}

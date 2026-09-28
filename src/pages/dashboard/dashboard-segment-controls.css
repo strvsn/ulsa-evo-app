@@ -1,0 +1,115 @@
+/* Gauge and line-chart selectors share one filled, contrast-audited control. */
+.gauge-segment,
+.chart-segment {
+  margin-bottom: 0.65rem;
+  padding: 4px;
+  border: 1px solid rgba(151, 190, 204, 0.1);
+  border-radius: 12px;
+  background: rgba(3, 12, 18, 0.52);
+}
+
+.chart-segment {
+  height: 44px;
+  min-height: 44px;
+  padding: 0;
+  border: 0;
+  box-sizing: border-box;
+  box-shadow: inset 0 0 0 1px rgba(151, 190, 204, 0.1);
+}
+
+.gauge-segment ion-segment-button,
+.chart-segment ion-segment-button {
+  --indicator-color: rgba(224, 244, 245, 0.94);
+  --color: #7f98a5;
+  --color-checked: #14383d;
+  min-height: 38px;
+  border-radius: 9px;
+  font-size: 0.82rem;
+  font-weight: 720;
+  letter-spacing: 0.01em;
+}
+
+.dashboard-content .chart-segment ion-segment-button {
+  height: 44px;
+  min-height: 44px;
+  min-block-size: 44px;
+  flex: 0.88 1 0;
+  --padding-start: 4px;
+  --padding-end: 4px;
+}
+
+.dashboard-content .chart-segment ion-segment-button[value='temperature'] {
+  flex-grow: 1.36;
+}
+
+.dashboard-content .chart-segment ion-segment-button[value='temperature'] ion-label {
+  overflow: visible;
+  text-overflow: clip;
+  white-space: nowrap;
+}
+
+.dashboard-content :is(.gauge-segment, .chart-segment) ion-segment-button.md {
+  --indicator-height: calc(100% - 4px);
+  --indicator-box-shadow: none;
+}
+
+.dashboard-content :is(.gauge-segment, .chart-segment)
+ion-segment-button.md.control-button[data-control-selection='on'] {
+  z-index: 0;
+}
+
+.dashboard-content :is(.gauge-segment, .chart-segment)
+ion-segment-button.md::part(indicator) {
+  top: 2px;
+  bottom: 2px;
+  height: auto;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.dashboard-content :is(.gauge-segment, .chart-segment)
+ion-segment-button.md::part(indicator-background) {
+  height: 100%;
+  border-radius: 8px;
+}
+
+.dashboard-content :is(.gauge-segment, .chart-segment)
+ion-segment-button.control-button[data-control-selection='on'] {
+  --control-accent-surface: transparent;
+  --control-accent-border: transparent;
+  --control-accent-shadow: none;
+  background: transparent;
+  border-color: transparent;
+  box-shadow: none;
+}
+
+.dashboard-content :is(.gauge-segment, .chart-segment)
+ion-segment-button:is(.ios, .md).control-button[data-control-selection='on'] {
+  --control-accent-text: #14383d;
+  color: #14383d;
+}
+
+.dashboard-content.light-theme :is(.gauge-segment, .chart-segment) {
+  background: rgba(44, 76, 88, 0.07);
+  border-color: var(--instrument-border);
+}
+
+.dashboard-content.light-theme :is(.gauge-segment, .chart-segment) ion-segment-button {
+  --indicator-color: #174c52;
+  --color: #405f6b;
+  --color-checked: #f4fbfb;
+}
+
+.dashboard-content.light-theme :is(.gauge-segment, .chart-segment)
+ion-segment-button:is(.ios, .md).control-button[data-control-selection='on'] {
+  --control-accent-text: #f4fbfb;
+  color: #f4fbfb;
+}
+
+@media (max-width: 480px) {
+  .gauge-segment ion-segment-button,
+  .chart-segment ion-segment-button {
+    min-height: 36px;
+    font-size: 0.76rem;
+  }
+}

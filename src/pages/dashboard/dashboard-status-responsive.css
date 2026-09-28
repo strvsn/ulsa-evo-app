@@ -1,0 +1,253 @@
+.status-card {
+  margin: 0 var(--section-margin) 1rem var(--section-margin);
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  --inner-border-width: 0;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+.status-content {
+  padding: 1.25rem;
+  --padding-start: 0;
+  --padding-end: 0;
+  --padding-top: 0;
+  --padding-bottom: 0;
+  border: none !important;
+}
+
+.status-content::part(native) {
+  border: none !important;
+  border-top: none !important;
+  border-bottom: none !important;
+}
+
+.status-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+.status-left {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.connection-icon {
+  font-size: 24px;
+  color: rgba(255, 255, 255, 0.9);
+  transition: color 0.3s ease;
+}
+
+.connection-icon.connected {
+  color: #48bb78;
+}
+
+.connection-icon.connecting {
+  color: #f6ad55;
+  animation: pulse 1s infinite;
+}
+
+.connection-icon.disconnected {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.status-text {
+  font-size: 1rem;
+  font-weight: 600;
+  color: white;
+}
+
+.status-badge {
+  padding: 0.375rem 0.875rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.status-badge.connected {
+  background: rgba(72, 187, 120, 0.2);
+  color: #48bb78;
+  border: 1px solid rgba(72, 187, 120, 0.4);
+}
+
+.status-badge.stale {
+  background: rgba(255, 107, 107, 0.2);
+  color: #ff6b6b;
+  border: 1px solid rgba(255, 107, 107, 0.4);
+}
+
+.status-badge.disconnected {
+  background: rgba(255, 255, 255, 0.2);
+  color: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.status-badge.connecting {
+  background: rgba(246, 173, 85, 0.2);
+  color: #f6ad55;
+  border: 1px solid rgba(246, 173, 85, 0.4);
+}
+
+/* ステータスカードをクリック可能に */
+.status-card {
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.status-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+}
+
+.status-card:active {
+  transform: translateY(0);
+}
+
+.status-subtitle {
+  font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.7);
+  padding-left: 2.5rem;
+}
+
+/* レスポンシブ対応 */
+
+/* 小画面（iPhone縦画面）*/
+@media (max-width: 480px) {
+  .header-logo-container {
+    padding-top: calc(var(--dashboard-safe-top) + 0.75rem);
+  }
+
+  .header-logo {
+    width: clamp(144px, 40vw, 180px);
+  }
+
+  .slide-title {
+    font-size: 1.15rem;
+    margin-bottom: 1rem;
+  }
+
+  .gauge-card-main,
+  .chart-card-slide {
+    margin: 0 0.25rem;
+    border-radius: 16px;
+  }
+
+  .gauge-segment ion-segment-button,
+  .chart-segment ion-segment-button {
+    font-size: 0.8rem;
+    min-height: 32px;
+  }
+
+  .carousel-nav {
+    width: 32px;
+    height: 32px;
+  }
+
+  .carousel-nav ion-icon {
+    font-size: 18px;
+  }
+
+  .carousel-nav.prev {
+    left: 0.25rem;
+  }
+
+  .carousel-nav.next {
+    right: 0.25rem;
+  }
+
+  .metric-card {
+    padding: 0.875rem;
+    border-radius: 16px;
+    gap: 0.5rem;
+    min-height: 96px;
+  }
+
+  .metric-value {
+    font-size: 1.5rem;
+  }
+
+  .metric-card-primary {
+    min-height: 96px;
+  }
+
+  .metric-card-primary .metric-label {
+    font-size: 0.9rem;
+  }
+
+  .metric-card-primary .metric-value {
+    font-size: 1.5rem;
+  }
+
+  .metric-card-primary .metric-unit {
+    font-size: 0.8rem;
+  }
+
+  .metric-card-secondary {
+    min-height: 96px;
+  }
+
+  .metric-card-secondary .metric-value {
+    font-size: 1.5rem;
+  }
+
+  .metric-label {
+    font-size: 0.75rem;
+  }
+
+  .metric-unit {
+    font-size: 0.8rem;
+  }
+
+  .status-content {
+    padding: 1rem;
+  }
+
+  .status-text {
+    font-size: 0.875rem;
+  }
+
+  .status-subtitle {
+    font-size: 0.75rem;
+    padding-left: 2rem;
+  }
+
+  .time-scale-btn {
+    padding: 3px 10px;
+    font-size: 11px;
+    min-width: 44px;
+  }
+
+  .chart-scale-indicator {
+    font-size: 10px;
+    padding: 3px 8px;
+  }
+
+  .carousel-wrapper {
+    padding: 0;
+  }
+}
+
+/* タブレット以上 */
+@media (min-width: 768px) {
+  .metrics-grid {
+    grid-template-columns: repeat(3, 1fr);
+    margin: 0 var(--section-margin);
+  }
+  
+  .chart-card,
+  .status-card {
+    margin: 0 var(--section-margin) 1rem var(--section-margin);
+  }
+}

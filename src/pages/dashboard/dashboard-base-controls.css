@@ -1,0 +1,326 @@
+/* レスポンシブCSS変数 */
+:root {
+  --gauge-size: clamp(260px, 80vw, 400px);
+  --swiper-padding: clamp(0.5rem, 3vw, 3rem);
+  --section-margin: clamp(0.75rem, 4vw, 4rem);
+  --chart-height: clamp(280px, 50vh, 400px);
+  --swiper-min-height: auto;
+}
+
+.dashboard-content {
+  --dashboard-safe-top: var(--app-safe-area-top, env(safe-area-inset-top, 0px));
+  --dashboard-safe-bottom: var(--app-safe-area-bottom, env(safe-area-inset-bottom, 0px));
+  --dashboard-safe-left: var(--app-safe-area-left, env(safe-area-inset-left, 0px));
+  --dashboard-safe-right: var(--app-safe-area-right, env(safe-area-inset-right, 0px));
+  --padding-top: 0;
+  --padding-bottom: 0;
+  --padding-start: 0;
+  --padding-end: 0;
+  --offset-top: 0px;
+  --offset-bottom: 0px;
+  --text-color: rgba(255, 255, 255, 0.95);
+  color: var(--text-color);
+  height: 100%;
+  width: 100%;
+  /* Blufy webview対応: 全余白を強制除去 */
+  margin: 0;
+  padding: 0;
+  top: 0;
+  left: 0;
+}
+
+.dashboard-content::part(background),
+.dashboard-content::part(scroll) {
+  background: var(--dashboard-gradient, #6c757d);
+}
+
+.dashboard-content::part(scroll) {
+  min-height: 100vh;
+  min-height: 100svh;
+  min-height: 100dvh;
+  box-sizing: border-box;
+  padding-bottom: 0 !important;
+  overflow-x: hidden;
+}
+
+.dashboard-content.settings-drawer-open::part(scroll) {
+  overflow: hidden;
+  overscroll-behavior: none;
+}
+
+.dashboard-shell {
+  width: 100%;
+  min-height: 100vh;
+  min-height: 100svh;
+  min-height: 100dvh;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  background: var(--dashboard-gradient, #6c757d);
+  padding-bottom: calc(var(--dashboard-safe-bottom) + 1rem);
+  overflow-x: hidden;
+  /* Keep horizontal pointer streams in the app; vertical page scrolling remains native. */
+  touch-action: pan-y;
+  overscroll-behavior-x: contain;
+}
+
+.dashboard-shell > .carousel-wrapper,
+.dashboard-shell > .metrics-fixed,
+.dashboard-shell > .status-card {
+  flex: 0 0 auto;
+}
+
+/* ライトテーマの文字色を反転 */
+.dashboard-content.light-theme {
+  --text-color: rgba(0, 0, 0, 0.85);
+}
+
+.dashboard-content.light-theme .metric-card,
+.dashboard-content.light-theme .gauge-card-main,
+.dashboard-content.light-theme .chart-card-slide,
+.dashboard-content.light-theme .status-card {
+  color: rgba(0, 0, 0, 0.85);
+}
+
+.dashboard-content.light-theme .metric-label,
+.dashboard-content.light-theme .metric-note,
+.dashboard-content.light-theme .metric-value,
+.dashboard-content.light-theme .status-text,
+.dashboard-content.light-theme .status-subtitle {
+  color: rgba(0, 0, 0, 0.85);
+}
+
+/* ライトテーマ: カード背景 */
+.dashboard-content.light-theme .gauge-card-main,
+.dashboard-content.light-theme .chart-card-slide,
+.dashboard-content.light-theme .status-card,
+.dashboard-content.light-theme .metric-card {
+  background: rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+/* ライトテーマ: セグメントボタン */
+.dashboard-content.light-theme .gauge-segment,
+.dashboard-content.light-theme .chart-segment {
+  background: rgba(0, 0, 0, 0.12);
+}
+
+.dashboard-content.light-theme .gauge-segment ion-segment-button,
+.dashboard-content.light-theme .chart-segment ion-segment-button {
+  --indicator-color: #174c52;
+  --color: #607985;
+  --color-checked: #f4fbfb;
+}
+
+/* ライトテーマ: タイムスケールボタン */
+.dashboard-content.light-theme .time-scale-btn {
+  background: rgba(0, 0, 0, 0.08);
+  color: rgba(0, 0, 0, 0.75);
+  border: 1px solid rgba(0, 0, 0, 0.15);
+}
+
+.dashboard-content.light-theme .time-scale-btn.active {
+  background: rgba(0, 0, 0, 0.85);
+  color: white;
+  border-color: rgba(0, 0, 0, 0.85);
+}
+
+/* ライトテーマ: チャートスケールインジケーター */
+.dashboard-content.light-theme .chart-scale-indicator {
+  background: rgba(0, 0, 0, 0.75);
+  color: white;
+}
+
+/* ライトテーマ: ステータスバッジ */
+.dashboard-content.light-theme .status-badge.disconnected {
+  background: rgba(0, 0, 0, 0.1);
+  color: rgba(0, 0, 0, 0.7);
+  border: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+/* ライトテーマ: 接続状態アイコン */
+.dashboard-content.light-theme .connection-icon.disconnected {
+  color: rgba(0, 0, 0, 0.5);
+}
+
+/* ライトテーマ: 風速単位ボタン */
+.dashboard-content.light-theme .unit-switch-button {
+  background: rgba(0, 0, 0, 0.85);
+  color: var(--accent-color);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+}
+
+.dashboard-content.light-theme .unit-switch-button:hover {
+  background: rgba(0, 0, 0, 0.95);
+}
+
+/* ライトテーマ: 最大値ボタン */
+.dashboard-content.light-theme .max-value-button {
+  background: rgba(0, 0, 0, 0.1);
+  border-color: rgba(0, 0, 0, 0.2);
+  color: rgba(0, 0, 0, 0.75);
+}
+
+.dashboard-content.light-theme .max-value-button:hover {
+  background: rgba(0, 0, 0, 0.15);
+  border-color: rgba(0, 0, 0, 0.3);
+}
+
+.dashboard-header {
+  background: transparent;
+}
+
+.dashboard-header::after {
+  display: none;
+}
+
+.header-toolbar {
+  --background: transparent;
+  --border-width: 0;
+  --min-height: auto;
+}
+
+.header-logo-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: calc(var(--dashboard-safe-top) + 64px);
+  box-sizing: border-box;
+  padding:
+    calc(var(--dashboard-safe-top) + 0.75rem)
+    calc(var(--dashboard-safe-right) + 1rem)
+    0.4rem
+    calc(var(--dashboard-safe-left) + 1rem);
+  position: relative;
+}
+
+/* 設定/画面反転/カードログボタン */
+.settings-menu-button,
+.flip-button,
+.card-log-button {
+  position: absolute;
+  top: calc(var(--dashboard-safe-top) + 0.75rem);
+  transform: none;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+  z-index: 10;
+  padding: 0;
+}
+
+.settings-menu-button {
+  left: calc(var(--dashboard-safe-left) + 1rem);
+}
+
+.flip-button {
+  right: calc(var(--dashboard-safe-right) + 1rem);
+}
+
+.card-log-button {
+  right: calc(var(--dashboard-safe-right) + 1rem);
+}
+
+.settings-menu-button ion-icon,
+.flip-button ion-icon,
+.card-log-button ion-icon {
+  font-size: 20px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.settings-menu-button:active,
+.flip-button:active,
+.card-log-button:active {
+  background: rgba(255, 255, 255, 0.3);
+  transform: scale(0.9);
+}
+
+.card-log-button.active {
+  background: rgba(34, 197, 94, 0.28);
+  border-color: rgba(134, 239, 172, 0.55);
+}
+
+.flip-button.active {
+  background: rgba(59, 130, 246, 0.28);
+  border-color: rgba(147, 197, 253, 0.55);
+}
+
+.card-log-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.38;
+}
+
+.card-log-button:disabled:active {
+  transform: none;
+}
+
+/* ライトテーマ: 反転/カードログボタン */
+.dashboard-content.light-theme .settings-menu-button,
+.dashboard-content.light-theme .flip-button,
+.dashboard-content.light-theme .card-log-button {
+  background: rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(0, 0, 0, 0.15);
+}
+
+.dashboard-content.light-theme .settings-menu-button ion-icon,
+.dashboard-content.light-theme .flip-button ion-icon,
+.dashboard-content.light-theme .card-log-button ion-icon {
+  color: rgba(0, 0, 0, 0.6);
+}
+
+.dashboard-content.light-theme .settings-menu-button:active,
+.dashboard-content.light-theme .flip-button:active,
+.dashboard-content.light-theme .card-log-button:active {
+  background: rgba(0, 0, 0, 0.15);
+}
+
+.dashboard-content.light-theme .card-log-button.active {
+  background: rgba(34, 197, 94, 0.22);
+  border-color: rgba(22, 163, 74, 0.4);
+}
+
+.dashboard-content.light-theme .flip-button.active {
+  background: rgba(59, 130, 246, 0.22);
+  border-color: rgba(37, 99, 235, 0.4);
+}
+
+.header-logo {
+  width: clamp(148px, 42vw, 224px);
+  max-width: calc(100vw - 168px);
+  height: auto;
+  object-fit: contain;
+}
+
+@media (max-width: 420px) {
+  .header-logo-container {
+    justify-content: center;
+  }
+
+  .header-logo {
+    width: clamp(144px, 40vw, 180px);
+    max-width: calc(100vw - 168px);
+  }
+}
+
+.header-title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: white;
+  text-align: center;
+  padding-top: 1rem;
+}
+
+/* メモリーモニターラッパー */
+.memory-monitor-wrapper {
+  position: fixed;
+  top: calc(var(--app-safe-area-top, env(safe-area-inset-top, 0px)) + 10px);
+  right: calc(var(--app-safe-area-right, env(safe-area-inset-right, 0px)) + 10px);
+  z-index: 10000;
+}

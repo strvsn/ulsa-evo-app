@@ -1,0 +1,42 @@
+.app-information-copy,
+.app-information-config {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.app-information-list {
+  display: grid;
+  gap: 0.55rem;
+  margin: 0;
+  padding-inline-start: 1.2rem;
+}
+
+.app-information-actions {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0.5rem;
+  width: 100%;
+}
+
+.app-information-actions ion-button {
+  width: 100%;
+  min-width: 0;
+  min-height: 44px;
+  margin: 0;
+  --background: transparent;
+  --background-hover: color-mix(in srgb, var(--drawer-accent) 8%, transparent);
+  --background-activated: color-mix(in srgb, var(--drawer-accent) 14%, transparent);
+  --border-color: var(--drawer-border);
+  --border-style: solid;
+  --border-width: 1px;
+  --box-shadow: none;
+  --color: var(--drawer-text);
+}
+
+.app-information-warning {
+  align-items: flex-start;
+}
+
+.app-information-config code {
+  overflow-wrap: anywhere;
+}

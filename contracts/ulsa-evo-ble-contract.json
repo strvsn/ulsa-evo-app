@@ -1,0 +1,145 @@
+{
+  "schemaVersion": 1,
+  "name": "ulsa-evo-ble",
+  "protocolVersion": 3,
+  "esp32PublicReleaseTag": "esp32-fw-v1.0.0-r9",
+  "esp32SourceSnapshotSha256": "65576e43c92e8179f359efafe1d7b34fadf9b0764845395a567b0bcd0d7bb3c0",
+  "uuids": [
+    {
+      "name": "APPARENT_WIND_DIRECTION",
+      "uuid": "00002a73-0000-1000-8000-00805f9b34fb"
+    },
+    {
+      "name": "APPARENT_WIND_SPEED",
+      "uuid": "00002a72-0000-1000-8000-00805f9b34fb"
+    },
+    {
+      "name": "CAPABILITIES",
+      "uuid": "e147a12a-67ff-4249-930b-c35d372ba00b"
+    },
+    {
+      "name": "CARD_LOG_CONTROL",
+      "uuid": "e147a12a-67ff-4249-930b-c35d372ba008"
+    },
+    {
+      "name": "CARD_LOG_DETAIL",
+      "uuid": "e147a12a-67ff-4249-930b-c35d372ba00c"
+    },
+    {
+      "name": "CARD_LOG_SETTINGS",
+      "uuid": "e147a12a-67ff-4249-930b-c35d372ba00d"
+    },
+    {
+      "name": "CARD_STATUS",
+      "uuid": "e147a12a-67ff-4249-930b-c35d372ba004"
+    },
+    {
+      "name": "CURRENT_TIME",
+      "uuid": "00001805-0000-1000-8000-00805f9b34fb"
+    },
+    {
+      "name": "CURRENT_TIME",
+      "uuid": "00002a2b-0000-1000-8000-00805f9b34fb"
+    },
+    {
+      "name": "DEVICE_HEALTH",
+      "uuid": "e147a12a-67ff-4249-930b-c35d372ba00a"
+    },
+    {
+      "name": "DEVICE_IDENTIFY",
+      "uuid": "e147a12a-67ff-4249-930b-c35d372ba00e"
+    },
+    {
+      "name": "DEVICE_INFORMATION",
+      "uuid": "0000180a-0000-1000-8000-00805f9b34fb"
+    },
+    {
+      "name": "DEVICE_MODE",
+      "uuid": "e147a12a-67ff-4249-930b-c35d372ba006"
+    },
+    {
+      "name": "ENVIRONMENTAL_SENSING",
+      "uuid": "0000181a-0000-1000-8000-00805f9b34fb"
+    },
+    {
+      "name": "FIRMWARE_REVISION",
+      "uuid": "00002a26-0000-1000-8000-00805f9b34fb"
+    },
+    {
+      "name": "HEADING_SPEED",
+      "uuid": "e147a12a-67ff-4249-930b-c35d372ba002"
+    },
+    {
+      "name": "I2C_CONFIG_CONTROL",
+      "uuid": "e147a12a-67ff-4249-930b-c35d372ba005"
+    },
+    {
+      "name": "LED_BRIGHTNESS",
+      "uuid": "e147a12a-67ff-4249-930b-c35d372ba00f"
+    },
+    {
+      "name": "LED_WIND_REACTIVE",
+      "uuid": "e147a12a-67ff-4249-930b-c35d372ba018"
+    },
+    {
+      "name": "LOCAL_TIME_INFORMATION",
+      "uuid": "00002a0f-0000-1000-8000-00805f9b34fb"
+    },
+    {
+      "name": "MANUFACTURER_NAME",
+      "uuid": "00002a29-0000-1000-8000-00805f9b34fb"
+    },
+    {
+      "name": "MODEL_NUMBER",
+      "uuid": "00002a24-0000-1000-8000-00805f9b34fb"
+    },
+    {
+      "name": "OTA_CONTROL",
+      "uuid": "e147a12a-67ff-4249-930b-c35d372ba010"
+    },
+    {
+      "name": "RESET_CONTROL",
+      "uuid": "e147a12a-67ff-4249-930b-c35d372ba013"
+    },
+    {
+      "name": "RTC_TIMEZONE_CONTROL",
+      "uuid": "e147a12a-67ff-4249-930b-c35d372ba019"
+    },
+    {
+      "name": "SAMPLE_METADATA",
+      "uuid": "e147a12a-67ff-4249-930b-c35d372ba009"
+    },
+    {
+      "name": "SENSOR_STATUS",
+      "uuid": "e147a12a-67ff-4249-930b-c35d372ba003"
+    },
+    {
+      "name": "SOFTWARE_REVISION",
+      "uuid": "00002a28-0000-1000-8000-00805f9b34fb"
+    },
+    {
+      "name": "SOUND_SPEED",
+      "uuid": "e147a12a-67ff-4249-930b-c35d372ba001"
+    },
+    {
+      "name": "STM32_FIRMWARE_VERSION",
+      "uuid": "e147a12a-67ff-4249-930b-c35d372ba007"
+    },
+    {
+      "name": "STM32_UPDATE_CONTROL",
+      "uuid": "e147a12a-67ff-4249-930b-c35d372ba016"
+    },
+    {
+      "name": "TEMPERATURE",
+      "uuid": "00002a6e-0000-1000-8000-00805f9b34fb"
+    },
+    {
+      "name": "ULSA_WIND",
+      "uuid": "e147a12a-67ff-4249-930b-c35d372ba000"
+    },
+    {
+      "name": "WIND_AXIS_SPEEDS",
+      "uuid": "e147a12a-67ff-4249-930b-c35d372ba015"
+    }
+  ]
+}

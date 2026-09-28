@@ -1,0 +1,34 @@
+/*
+ * Carousel cards need a shallower elevation than the smaller metric cards.
+ * A wide shadow from a near-full-width slide reads as a horizontal background
+ * seam between the carousel pagination and the metrics section.
+ */
+.gauge-card-main,
+.chart-card-slide {
+  box-sizing: border-box;
+  height: auto;
+  min-height: 0;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.025),
+    0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+.dashboard-content.light-theme :is(.gauge-card-main, .chart-card-slide) {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.72),
+    0 2px 7px rgba(35, 58, 70, 0.07);
+}
+
+.gauge-content,
+.chart-content {
+  box-sizing: border-box;
+  height: auto;
+}
+
+/* Swiper autoHeight follows the active card. This floor is the radial gauge's
+ * real content height (gauge + peak controls), not a shared frame height. It
+ * prevents the transient 0/18px collapse seen while the upside-down surface is
+ * being recreated without adding empty space to the card. */
+.main-swiper {
+  min-height: calc(var(--gauge-size) + 3.25rem);
+}

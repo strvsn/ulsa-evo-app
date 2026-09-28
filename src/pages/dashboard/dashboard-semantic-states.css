@@ -1,0 +1,14 @@
+.metric-empty {
+  color: #78909c;
+}
+
+.dashboard-content.slate-theme :is(.status-card, .log-recording-card, .metric-card, .gauge-card-main, .chart-card-slide) {
+  background: var(--instrument-card-surface);
+  border-color: var(--instrument-border);
+}
+
+.dashboard-content.light-theme :is(.status-card, .log-recording-card, .metric-card, .gauge-card-main, .chart-card-slide) {
+  color: var(--instrument-text);
+  background: var(--instrument-card-surface);
+  border-color: var(--instrument-border);
+}

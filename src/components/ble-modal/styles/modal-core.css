@@ -1,0 +1,329 @@
+/**
+ * BLEモーダルのスタイル
+ * Dashboard と同じグラスUI文法に揃える。
+ */
+
+.ble-modal {
+  --width: min(94vw, 560px);
+  --height: min(88vh, 760px);
+  --max-height: 88vh;
+  --border-radius: 24px;
+  --box-shadow: 0 24px 70px rgba(0, 0, 0, 0.36);
+  --ion-safe-area-top: 0px;
+  --ion-safe-area-bottom: 0px;
+  --ion-safe-area-left: 0px;
+  --ion-safe-area-right: 0px;
+  color: rgba(255, 255, 255, 0.94);
+}
+
+.ble-modal::part(backdrop) {
+  background: rgba(0, 0, 0, 0.46);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.ble-modal::part(content) {
+  overflow: hidden;
+  border-radius: var(--border-radius);
+  background: #1f2428;
+  border: 1px solid rgba(255, 255, 255, 0.26);
+  box-shadow: var(--box-shadow);
+}
+
+.ble-modal .ble-modal-page {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+  background: var(--ble-modal-gradient, linear-gradient(135deg, #6c757d 0%, #495057 100%));
+  color: inherit;
+}
+
+.ble-modal .ble-modal-page::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(0, 0, 0, 0.32)),
+    rgba(17, 20, 24, 0.36);
+}
+
+.ble-modal ion-header,
+.ble-modal ion-toolbar,
+.ble-modal ion-content {
+  position: relative;
+  z-index: 1;
+}
+
+.ble-modal ion-header {
+  flex: 0 0 auto;
+  background: rgba(18, 22, 26, 0.78);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.22);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+.ble-modal ion-toolbar {
+  --background: transparent;
+  --color: rgba(255, 255, 255, 0.96);
+  --min-height: 56px;
+  --padding-start: 16px;
+  --padding-end: 10px;
+  --padding-top: 0px;
+  --padding-bottom: 0px;
+}
+
+.ble-modal ion-title {
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 0;
+}
+
+.ble-modal ion-content,
+.ble-modal-content {
+  --background: transparent;
+  flex: 1 1 auto;
+  height: auto;
+  min-height: 0;
+}
+
+.ble-modal ion-content::part(scroll) {
+  min-height: 0;
+  padding: 10px 0 18px !important;
+}
+
+.ble-platform-info {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 10px 16px 6px;
+}
+
+.ble-modal ion-badge {
+  border-radius: 999px;
+  padding: 4px 9px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.ble-modal ion-badge[color="primary"],
+.ble-modal ion-badge[color="secondary"],
+.ble-modal ion-badge[color="tertiary"],
+.ble-modal ion-badge[color="medium"] {
+  --background: rgba(18, 22, 26, 0.64);
+  --color: rgba(255, 255, 255, 0.9);
+}
+
+.ble-modal ion-badge[color="success"],
+.ble-modal ion-chip[color="success"] {
+  --background: rgba(72, 187, 120, 0.22);
+  --color: rgba(226, 255, 238, 0.96);
+  border-color: rgba(72, 187, 120, 0.42);
+}
+
+.ble-modal ion-badge[color="warning"],
+.ble-modal ion-chip[color="warning"] {
+  --background: rgba(246, 173, 85, 0.24);
+  --color: rgba(255, 245, 218, 0.96);
+  border-color: rgba(246, 173, 85, 0.44);
+}
+
+.ble-modal ion-badge[color="danger"],
+.ble-modal ion-chip[color="danger"] {
+  --background: rgba(255, 107, 107, 0.22);
+  --color: rgba(255, 232, 232, 0.96);
+  border-color: rgba(255, 107, 107, 0.44);
+}
+
+.ble-status-section {
+  padding: 12px 16px 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.ble-status-section ion-chip {
+  min-height: 38px;
+  padding-inline: 8px;
+  border-radius: 999px;
+  --background: rgba(18, 22, 26, 0.66);
+  --color: rgba(255, 255, 255, 0.94);
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+}
+
+.ble-status-section ion-chip ion-spinner {
+  width: 16px;
+  height: 16px;
+}
+
+.ble-modal ion-card {
+  margin: 10px 16px;
+  border-radius: 20px;
+  background: rgba(18, 22, 26, 0.66);
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+  color: inherit;
+  overflow: hidden;
+  --background: transparent;
+  --inner-border-width: 0;
+}
+
+.ble-modal ion-card[color="warning"] {
+  background: rgba(102, 70, 28, 0.68);
+  border-color: rgba(246, 173, 85, 0.34);
+  --background: transparent;
+  --color: rgba(255, 245, 218, 0.96);
+  color: rgba(255, 245, 218, 0.96);
+}
+
+.ble-modal ion-card[color="danger"] {
+  background: rgba(96, 36, 36, 0.68);
+  border-color: rgba(255, 107, 107, 0.34);
+  --background: transparent;
+  --color: rgba(255, 232, 232, 0.96);
+  color: rgba(255, 232, 232, 0.96);
+}
+
+.ble-modal ion-card[color="warning"] ion-card-content,
+.ble-modal ion-card[color="warning"] ion-card-title,
+.ble-modal ion-card[color="warning"] ion-icon,
+.ble-modal ion-card[color="warning"] span,
+.ble-modal ion-card[color="warning"] p {
+  color: rgba(255, 245, 218, 0.96);
+}
+
+.ble-modal ion-card[color="danger"] ion-card-content,
+.ble-modal ion-card[color="danger"] ion-card-title,
+.ble-modal ion-card[color="danger"] ion-icon,
+.ble-modal ion-card[color="danger"] span,
+.ble-modal ion-card[color="danger"] p {
+  color: rgba(255, 232, 232, 0.96);
+}
+
+.ble-modal ion-card-header {
+  padding: 14px 16px 6px;
+}
+
+.ble-modal ion-card-title {
+  font-size: 16px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: rgba(255, 255, 255, 0.96);
+}
+
+.ble-modal ion-card-title ion-icon {
+  font-size: 20px;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.ble-modal ion-card-content {
+  color: inherit;
+}
+
+.ble-modal ion-card-content ion-list {
+  padding: 0;
+  background: transparent;
+}
+
+.ble-modal ion-item {
+  --min-height: 52px;
+  --padding-start: 0;
+  --padding-end: 0;
+  --inner-padding-end: 0;
+  --background: transparent;
+  --color: rgba(255, 255, 255, 0.95);
+  --border-color: rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.ble-modal ion-item h2,
+.ble-modal ion-item h3 {
+  color: rgba(255, 255, 255, 0.96);
+  font-weight: 650;
+}
+
+.ble-modal ion-item p,
+.ble-modal ion-label p {
+  color: rgba(255, 255, 255, 0.68);
+}
+
+.ble-modal ion-input,
+.ble-modal ion-select {
+  min-width: 0;
+  --color: rgba(255, 255, 255, 0.96);
+  --placeholder-color: rgba(255, 255, 255, 0.5);
+  --highlight-color-focused: rgba(255, 255, 255, 0.86);
+}
+
+.ble-modal ion-button {
+  --border-radius: 12px;
+  --box-shadow: none;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.ble-modal ion-button:not([fill]):not([color="danger"]) {
+  --background: rgba(255, 255, 255, 0.9);
+  --background-hover: rgba(255, 255, 255, 1);
+  --background-activated: rgba(255, 255, 255, 0.78);
+  --color: #2f3437;
+}
+
+.ble-modal ion-button[fill="outline"] {
+  --background: rgba(255, 255, 255, 0.12);
+  --background-hover: rgba(255, 255, 255, 0.18);
+  --background-activated: rgba(255, 255, 255, 0.24);
+  --border-color: rgba(255, 255, 255, 0.24);
+  --color: rgba(255, 255, 255, 0.94);
+}
+
+.ble-modal ion-button[fill="clear"] {
+  --color: rgba(255, 255, 255, 0.78);
+}
+
+.ble-error-card {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px !important;
+}
+
+.ble-error-card ion-icon {
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.ble-error-card span {
+  flex: 1;
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+.ble-error-dismiss {
+  flex: 0 0 auto;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: currentColor;
+}
+
+.ble-parse-error-detail,
+.device-id,
+.device-mode-badges + ion-list h3,
+.rtc-time-badges + ion-list h3 {
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}

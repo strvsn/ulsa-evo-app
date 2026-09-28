@@ -1,0 +1,629 @@
+/* ULSA EVO settings instrument panel */
+
+.ble-settings-drawer {
+  --drawer-bg: #091722;
+  --drawer-surface: rgba(15, 33, 44, 0.9);
+  --drawer-surface-raised: rgba(24, 45, 57, 0.94);
+  --drawer-border: rgba(151, 190, 204, 0.16);
+  --drawer-text: #f3f8fa;
+  --drawer-secondary: #9fb2bd;
+  --drawer-copy: #b8c8cf;
+  --drawer-copy-size: 13px;
+  --drawer-copy-weight: 500;
+  --drawer-copy-line-height: 1.55;
+  --drawer-accent: #5eead4;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", sans-serif;
+  color: var(--drawer-text);
+}
+
+.ble-settings-drawer-backdrop {
+  background: rgba(1, 8, 13, 0.66);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.ble-settings-drawer-panel {
+  background:
+    radial-gradient(circle at 0% 0%, rgba(94, 234, 212, 0.1), transparent 32%),
+    linear-gradient(150deg, #08151e, #10222e);
+  border-right-color: rgba(151, 190, 204, 0.2);
+  box-shadow: 28px 0 90px rgba(0, 0, 0, 0.46);
+}
+
+.ble-settings-header {
+  min-height: 78px;
+  padding:
+    calc(var(--app-safe-area-top, env(safe-area-inset-top, 0px)) + 15px)
+    calc(var(--app-safe-area-right, env(safe-area-inset-right, 0px)) + 18px)
+    14px
+    calc(var(--app-safe-area-left, env(safe-area-inset-left, 0px)) + 18px);
+  background: rgba(5, 16, 24, 0.9);
+  border-bottom-color: var(--drawer-border);
+}
+
+.ble-settings-header p,
+.ble-settings-detail-title p {
+  color: #7894a1;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+}
+
+.ble-settings-header h2,
+.ble-settings-detail-title h2 {
+  color: var(--drawer-text);
+  font-size: 19px;
+  font-weight: 760;
+  letter-spacing: -0.015em;
+}
+
+.ble-settings-close {
+  width: 44px;
+  height: 44px;
+  border-radius: 13px;
+  background: rgba(18, 38, 50, 0.88);
+  border-color: var(--drawer-border);
+  color: var(--drawer-secondary);
+}
+
+.ble-settings-close:hover {
+  background: var(--drawer-surface-raised);
+  border-color: rgba(94, 234, 212, 0.28);
+  color: var(--drawer-text);
+}
+
+.ble-settings-nav {
+  padding: 14px 12px;
+  gap: 6px;
+  background: rgba(4, 15, 23, 0.58);
+  border-right-color: var(--drawer-border);
+}
+
+.ble-settings-nav-item {
+  min-height: 62px;
+  border-radius: 12px;
+  padding: 10px 11px;
+  background: transparent;
+  border-color: transparent;
+  color: #b8c8cf;
+  transition: background 140ms ease, border-color 140ms ease, color 140ms ease;
+}
+
+.ble-settings-nav-item:hover {
+  background: rgba(151, 190, 204, 0.07);
+  border-color: var(--drawer-border);
+}
+
+.ble-settings-nav-item :is(ion-icon, .ulsa-icon) {
+  grid-row: 1 / 3;
+  align-self: center;
+  color: #7894a1;
+}
+
+.ble-settings-nav-item span {
+  font-size: 13px;
+  font-weight: 720;
+}
+
+.ble-settings-nav-item small {
+  color: #728b97;
+  font-size: 11px;
+}
+
+.ble-settings-nav-item.active {
+  background: rgba(94, 234, 212, 0.1);
+  border-color: rgba(94, 234, 212, 0.24);
+  color: #e8fffb;
+  box-shadow: inset 3px 0 0 var(--drawer-accent);
+}
+
+.ble-settings-nav-item.active :is(ion-icon, .ulsa-icon),
+.ble-settings-nav-item.active small {
+  color: var(--drawer-accent);
+}
+
+.ble-settings-detail {
+  padding: 20px;
+}
+
+.ble-settings-detail-title {
+  margin-bottom: 14px;
+}
+
+.ble-settings-card {
+  margin-bottom: 12px;
+  padding: 15px;
+  border-radius: 14px;
+  background: var(--drawer-surface);
+  border-color: var(--drawer-border);
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.16);
+}
+
+.ble-settings-card-header {
+  margin-bottom: 12px;
+}
+
+.ble-settings-card-header h3 {
+  color: var(--drawer-text);
+  font-size: 15px;
+  font-weight: 740;
+}
+
+.ble-settings-card-header :is(ion-icon, .ulsa-icon) {
+  color: var(--drawer-accent);
+}
+
+.ble-settings-info-row {
+  grid-template-columns: minmax(100px, 0.34fr) minmax(0, 1fr);
+  gap: 12px;
+  padding: 3px 0;
+}
+
+.ble-settings-info-row dt {
+  color: #7f98a5;
+}
+
+.ble-settings-info-row dd {
+  color: #e8f1f4;
+  font-variant-numeric: tabular-nums;
+}
+
+.ble-settings-advanced {
+  border-top-color: var(--drawer-border);
+}
+
+.ble-settings-advanced summary {
+  color: var(--drawer-secondary);
+}
+
+.ble-settings-advanced-body {
+  background: rgba(3, 13, 20, 0.46);
+  border: 1px solid rgba(151, 190, 204, 0.1);
+}
+
+.ble-settings-action-button {
+  min-height: 38px;
+  border-radius: 10px;
+  padding-inline: 13px;
+}
+
+.ble-settings-action-button.primary,
+.ota-flow-step-button.primary {
+  background: #dffbf6;
+  color: #09272c;
+}
+
+.ble-settings-action-button.outline,
+.ble-settings-action-button.ghost {
+  background: rgba(151, 190, 204, 0.08);
+  border-color: var(--drawer-border);
+  color: #dce8ec;
+}
+
+.ble-settings-action-button.danger {
+  background: rgba(255, 123, 123, 0.1);
+  border-color: rgba(255, 123, 123, 0.3);
+  color: #ff9a9a;
+}
+
+.ble-settings-drawer button.device-setting-save {
+  border: 1px solid #e36a76;
+  background: #c93645;
+  color: #ffffff;
+  box-shadow: 0 6px 16px rgba(201, 54, 69, 0.24);
+}
+
+.ble-settings-drawer ion-button.device-setting-save {
+  --background: #c93645;
+  --background-hover: #d74655;
+  --background-activated: #ad2937;
+  --border-color: #e36a76;
+  --border-style: solid;
+  --border-width: 1px;
+  --box-shadow: 0 6px 16px rgba(201, 54, 69, 0.24);
+  --color: #ffffff;
+}
+
+.ble-settings-drawer-light button.device-setting-save {
+  border-color: #9e1f2d;
+  background: #b42332;
+  color: #ffffff;
+}
+
+.ble-settings-drawer-light ion-button.device-setting-save {
+  --background: #b42332;
+  --background-hover: #c83242;
+  --background-activated: #941a27;
+  --border-color: #9e1f2d;
+  --color: #ffffff;
+}
+
+.card-log-auto-start-control {
+  display: grid;
+  gap: 6px;
+  padding: 0 0 12px;
+  border-bottom: 1px solid var(--drawer-border);
+}
+
+.card-log-auto-start-control h3,
+.card-log-auto-start-control p {
+  margin: 0;
+}
+
+.card-log-auto-start-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  min-width: 0;
+}
+
+.card-log-auto-start-control h3 {
+  color: var(--drawer-text);
+  font-size: 13px;
+  font-weight: 740;
+}
+
+.card-log-auto-start-control p {
+  margin-top: 4px;
+  color: var(--drawer-secondary);
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.card-log-auto-start-heading ion-toggle {
+  flex: 0 0 auto;
+  --track-background: rgba(151, 190, 204, 0.22);
+  --track-background-checked: rgba(94, 234, 212, 0.62);
+  --handle-background: #dfeff2;
+  --handle-background-checked: #f3fffd;
+}
+
+@media (max-width: 480px) {
+  .card-log-auto-start-control {
+    align-items: flex-start;
+  }
+}
+
+.ota-firmware-input,
+.i2c-config-list ion-input,
+.i2c-config-list ion-select,
+.card-log-settings-controls ion-input {
+  border-radius: 10px;
+  background: rgba(4, 16, 24, 0.58);
+  border-color: var(--drawer-border);
+  color: var(--drawer-text);
+}
+
+.i2c-config-list {
+  display: grid;
+  gap: 10px;
+  padding: 0;
+  background: transparent;
+}
+
+.i2c-config-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 82px;
+  align-items: end;
+  gap: 8px;
+  min-width: 0;
+}
+
+.i2c-config-control {
+  display: grid;
+  gap: 5px;
+  min-width: 0;
+  color: var(--drawer-secondary);
+  font-size: 11px;
+  font-weight: 680;
+  line-height: 1.2;
+}
+
+.i2c-config-control :is(ion-input, ion-select) {
+  width: 100%;
+  height: 44px;
+  min-height: 44px;
+  --min-height: 44px;
+  --padding-start: 11px;
+  --padding-end: 11px;
+  border: 1px solid var(--drawer-border);
+  border-radius: 10px;
+  box-sizing: border-box;
+  background: rgba(4, 16, 24, 0.58);
+  color: var(--drawer-text);
+  font-size: 14px;
+  font-weight: 650;
+}
+
+.i2c-config-apply {
+  width: 100%;
+  height: 44px;
+  min-height: 44px;
+  margin: 0;
+  --min-height: 44px;
+  --background: rgba(151, 190, 204, 0.08);
+  --background-hover: rgba(151, 190, 204, 0.14);
+  --background-activated: rgba(151, 190, 204, 0.18);
+  --border-color: var(--drawer-border);
+  --border-style: solid;
+  --border-width: 1px;
+  --box-shadow: none;
+  --color: var(--drawer-text);
+  --padding-start: 8px;
+  --padding-end: 8px;
+  font-size: 12px;
+  font-weight: 740;
+}
+
+.i2c-node-id-help {
+  margin: -2px 0 2px;
+  color: var(--drawer-secondary);
+  font-size: 11px;
+  line-height: 1.45;
+}
+
+.ble-settings-drawer-light .i2c-config-control :is(ion-input, ion-select) {
+  border-color: rgba(28, 56, 70, 0.2);
+  background: rgba(255, 255, 255, 0.82);
+  color: #142630;
+}
+
+.ble-settings-drawer-light .i2c-config-apply {
+  --background: rgba(28, 56, 70, 0.06);
+  --background-hover: rgba(28, 56, 70, 0.1);
+  --background-activated: rgba(28, 56, 70, 0.14);
+  --border-color: rgba(28, 56, 70, 0.2);
+  --color: #263f4b;
+}
+
+.ota-flow-step-button {
+  min-height: 72px;
+  border-radius: 12px;
+  background: rgba(151, 190, 204, 0.06);
+  border-color: var(--drawer-border);
+}
+
+.ota-flow-step-button > .ulsa-icon {
+  justify-self: end;
+  color: var(--drawer-secondary);
+}
+
+.ota-flow-step-button:is(.complete, .primary) > .ulsa-icon {
+  color: currentColor;
+}
+
+.ota-flow-step-button.complete {
+  background: rgba(101, 230, 167, 0.1);
+  border-color: rgba(101, 230, 167, 0.3);
+}
+
+.ota-flow-step-button.primary:disabled {
+  opacity: 1;
+  background: rgba(151, 190, 204, 0.08);
+  border-color: var(--drawer-border);
+  color: #78909b;
+  box-shadow: none;
+}
+
+.ota-flow-step-index {
+  border-radius: 10px;
+  background: rgba(151, 190, 204, 0.1);
+}
+
+.ota-progress-track {
+  background: rgba(3, 13, 20, 0.7);
+  border-color: var(--drawer-border);
+}
+
+.ble-settings-close:focus-visible,
+.ble-settings-nav-item:focus-visible,
+.appearance-theme-option:focus-visible,
+.ble-settings-action-button:focus-visible,
+.ota-flow-step-button:focus-visible {
+  outline: 2px solid var(--drawer-accent);
+  outline-offset: 2px;
+}
+
+.appearance-theme-intro {
+  margin: 0 0 14px;
+  color: var(--drawer-secondary);
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.appearance-theme-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.appearance-theme-option {
+  position: relative;
+  min-width: 0;
+  padding: 8px;
+  border: 1px solid var(--drawer-border);
+  border-radius: 13px;
+  background: rgba(151, 190, 204, 0.055);
+  color: var(--drawer-text);
+  text-align: left;
+  transition: transform 140ms ease, border-color 140ms ease, background 140ms ease;
+}
+
+.appearance-theme-option:hover {
+  transform: translateY(-1px);
+  border-color: rgba(94, 234, 212, 0.32);
+}
+
+.appearance-theme-option.active {
+  background: rgba(94, 234, 212, 0.1);
+  border-color: rgba(94, 234, 212, 0.48);
+  box-shadow: inset 0 0 0 1px rgba(94, 234, 212, 0.1);
+}
+
+.appearance-theme-preview {
+  position: relative;
+  display: block;
+  height: 76px;
+  overflow: hidden;
+  border-radius: 9px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+}
+
+.appearance-theme-preview-header,
+.appearance-theme-preview-card {
+  position: absolute;
+  display: block;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.72);
+}
+
+.appearance-theme-preview-header { inset: 9px 10px auto; height: 5px; }
+.appearance-theme-preview-card.primary { inset: 23px 10px 10px; width: 52%; }
+.appearance-theme-preview-card.secondary { inset: 23px 10px 10px auto; width: 25%; opacity: 0.62; }
+
+.appearance-theme-copy {
+  min-width: 0;
+  display: grid;
+  gap: 3px;
+  padding: 9px 22px 2px 2px;
+}
+
+.appearance-theme-copy strong { font-size: 12px; font-weight: 760; }
+.appearance-theme-copy small { color: var(--drawer-secondary); font-size: 10px; line-height: 1.35; }
+.appearance-theme-check { position: absolute; right: 9px; bottom: 10px; color: transparent; }
+.appearance-theme-option.active .appearance-theme-check { color: var(--drawer-accent); }
+
+@media (max-width: 700px) {
+  .ble-settings-nav {
+    padding:
+      10px
+      8px
+      calc(var(--app-safe-area-bottom, env(safe-area-inset-bottom, 0px)) + 10px)
+      calc(var(--app-safe-area-left, env(safe-area-inset-left, 0px)) + 8px);
+    gap: 7px;
+    background: rgba(4, 15, 23, 0.74);
+    border-right: 1px solid var(--drawer-border);
+    border-bottom: 0;
+  }
+
+  .ble-settings-nav-item {
+    width: 100%;
+    min-width: 0;
+    min-height: 56px;
+    border-radius: 11px;
+    padding: 8px;
+  }
+
+  .ble-settings-nav-item.active {
+    box-shadow: inset 3px 0 0 var(--drawer-accent);
+  }
+
+  .ble-settings-detail {
+    padding:
+      14px
+      calc(var(--app-safe-area-right, env(safe-area-inset-right, 0px)) + 12px)
+      calc(var(--app-safe-area-bottom, env(safe-area-inset-bottom, 0px)) + 16px)
+      12px;
+  }
+
+  .ble-settings-card {
+    padding: 13px;
+    border-radius: 13px;
+  }
+
+  .appearance-theme-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .appearance-theme-option {
+    display: grid;
+    grid-template-columns: clamp(72px, 34%, 92px) minmax(0, 1fr);
+    align-items: center;
+  }
+
+  .appearance-theme-preview { height: 58px; }
+  .appearance-theme-copy { padding: 4px 24px 4px 10px; }
+}
+
+.ble-settings-drawer-light {
+  --drawer-bg: #f4f8fa;
+  --drawer-surface: rgba(255, 255, 255, 0.92);
+  --drawer-surface-raised: #e8f0f3;
+  --drawer-border: rgba(28, 56, 70, 0.14);
+  --drawer-text: #10212b;
+  --drawer-secondary: #526b77;
+  --drawer-copy: #405762;
+  --drawer-accent: #006d69;
+}
+
+/* Explanatory copy uses one typography contract across every settings tab. */
+.ble-settings-drawer :is(
+  .i2c-config-note,
+  .i2c-config-support-message,
+  .i2c-node-id-help,
+  .ble-settings-note,
+  .card-log-settings-message,
+  .browser-log-policy-copy,
+  .browser-log-empty,
+  .app-information-copy,
+  .app-information-config,
+  .app-information-list,
+  .led-wind-reactive-help,
+  .led-wind-reactive-toggle-copy > span,
+  .appearance-theme-intro,
+  .firmware-update-entry > p
+),
+.ble-settings-drawer .ble-settings-card-body > p {
+  color: var(--drawer-copy);
+  font-family: inherit;
+  font-size: var(--drawer-copy-size);
+  font-weight: var(--drawer-copy-weight);
+  line-height: var(--drawer-copy-line-height);
+  letter-spacing: 0;
+}
+
+.ble-settings-drawer-slate:not(.ble-settings-drawer-light) {
+  --drawer-bg: #1d3540;
+  --drawer-surface: rgba(27, 51, 62, 0.88);
+  --drawer-surface-raised: rgba(48, 78, 90, 0.94);
+  --drawer-border: rgba(210, 233, 237, 0.2);
+}
+
+.ble-settings-drawer-slate:not(.ble-settings-drawer-light) .ble-settings-header {
+  background: rgba(27, 51, 62, 0.94);
+}
+
+.ble-settings-drawer-slate:not(.ble-settings-drawer-light) .ble-settings-nav {
+  background: rgba(20, 42, 53, 0.8);
+}
+
+.ble-settings-drawer-slate:not(.ble-settings-drawer-light) .ble-settings-drawer-panel {
+  background:
+    radial-gradient(circle at 0% 0%, rgba(109, 231, 214, 0.16), transparent 34%),
+    linear-gradient(150deg, #1d3540, #294a57);
+}
+
+.ble-settings-drawer-light .ble-settings-drawer-panel {
+  background: linear-gradient(150deg, #f7fafb, #e8f0f3);
+}
+
+.ble-settings-drawer-light .appearance-theme-option {
+  background: rgba(255, 255, 255, 0.68);
+  color: var(--drawer-text);
+}
+
+.ble-settings-drawer-light .appearance-theme-option.active {
+  background: rgba(24, 111, 109, 0.09);
+  border-color: rgba(24, 111, 109, 0.4);
+}
+
+.ble-settings-drawer-light .ble-settings-nav-item.active {
+  background: rgba(24, 111, 109, 0.12);
+  border-color: rgba(24, 111, 109, 0.36);
+  color: #143d43;
+}
+
+.ble-settings-drawer-light .ble-settings-nav-item.active :is(ion-icon, .ulsa-icon),
+.ble-settings-drawer-light .ble-settings-nav-item.active small {
+  color: #186f6d;
+}

@@ -1,0 +1,45 @@
+import type { BLECapabilitiesStatus, DeviceHealthStatus, DeviceInfo, DeviceModeStatus, DeviceResetStatus, DeviceResetTarget, LEDBrightnessStatus, LEDWindReactiveConfig, LEDWindReactiveStatus, Stm32FirmwareVersionStatus, } from '../../types/ble';
+import { UserDevicePanel } from './UserDevicePanel';
+export type DevicePanelProps = {
+    section?: 'firmware' | 'measurement';
+    isUpsideDown: boolean;
+    isConnected: boolean;
+    deviceInfo: DeviceInfo | null;
+    stm32FirmwareVersion: Stm32FirmwareVersionStatus | null;
+    stm32FirmwareVersionLastReadAt: number | null;
+    deviceModeStatus: DeviceModeStatus | null;
+    deviceModeLastReadAt: number | null;
+    deviceModeNotifyActive: boolean;
+    deviceModeSupported: boolean | null;
+    deviceHealthStatus: DeviceHealthStatus | null;
+    deviceHealthLastReadAt: number | null;
+    capabilitiesStatus: BLECapabilitiesStatus | null;
+    capabilitiesLastReadAt: number | null;
+    ledBrightnessStatus: LEDBrightnessStatus | null;
+    ledBrightnessSupported: boolean | null;
+    ledBrightnessBusy: boolean;
+    ledWindReactiveStatus: LEDWindReactiveStatus | null;
+    ledWindReactiveSupported: boolean | null;
+    ledWindReactiveBusy: boolean;
+    deviceResetStatus: DeviceResetStatus | null;
+    deviceResetSupported: boolean | null;
+    deviceResetBusy: boolean;
+    draftLedBrightness: number;
+    onDraftLedBrightnessChange: (value: number) => void;
+    onRefreshStm32FirmwareVersion: () => void;
+    onRefreshFirmwareVersions?: () => void;
+    firmwareInfoBusy?: boolean;
+    firmwareInfoError?: string | null;
+    onRefreshDeviceModeStatus: () => void;
+    onRefreshDeviceHealthStatus: () => void;
+    onRefreshCapabilitiesStatus: () => void;
+    onRefreshLedBrightness: () => void;
+    onSetLedBrightness: (brightness: number) => void;
+    onRefreshLedWindReactive: () => void;
+    onSetLedWindReactive: (config: LEDWindReactiveConfig) => void;
+    onRefreshDeviceResetStatus: () => void;
+    onResetDevice: (target: DeviceResetTarget) => Promise<DeviceResetStatus | null>;
+};
+export const DevicePanel = (props: DevicePanelProps) => props.section
+    ? <UserDevicePanel {...props}/>
+    : <UserDevicePanel {...props}/>;

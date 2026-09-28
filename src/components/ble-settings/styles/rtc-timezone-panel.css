@@ -1,0 +1,133 @@
+.rtc-availability-summary {
+  margin-bottom: 12px;
+  padding: 12px 14px;
+  border: 1px solid var(--drawer-border);
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--drawer-surface-raised) 72%, transparent);
+}
+
+.rtc-availability-summary .ble-settings-status-summary {
+  font-size: 15px;
+  line-height: 1.4;
+}
+
+.rtc-availability-summary .ble-settings-status-item {
+  color: var(--drawer-text);
+  font-weight: 760;
+}
+
+.rtc-availability-summary .ble-settings-status-item[data-tone="attention"] {
+  color: var(--control-pending-text, #ffd18a);
+}
+
+.rtc-timezone-controls {
+  display: grid;
+  gap: 8px;
+  min-width: 0;
+  padding-block: 4px;
+}
+
+.rtc-time-actions {
+  display: grid;
+  grid-template-columns: minmax(86px, 0.72fr) minmax(0, 1.55fr);
+  gap: 8px;
+  width: 100%;
+}
+
+.rtc-time-actions ion-button {
+  width: 100%;
+  min-width: 0;
+  margin: 0;
+}
+
+.rtc-timezone-candidate {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 4px 8px;
+  align-items: center;
+}
+
+.rtc-timezone-candidate > span {
+  color: rgba(255, 255, 255, 0.64);
+  font-size: 12px;
+}
+
+.rtc-timezone-candidate > strong {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  font-size: 13px;
+}
+
+.rtc-timezone-candidate ion-button {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  margin: 0;
+}
+
+.rtc-timezone-search-label {
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.rtc-timezone-search {
+  width: 100%;
+  min-width: 0;
+  min-height: 44px;
+  box-sizing: border-box;
+  padding: 10px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.18);
+  color: rgba(255, 255, 255, 0.94);
+  font: inherit;
+}
+
+.rtc-timezone-search:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.82);
+  outline-offset: 2px;
+}
+
+.rtc-timezone-results {
+  display: grid;
+  max-height: 180px;
+  overflow-y: auto;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 8px;
+}
+
+.rtc-timezone-results button {
+  min-height: 40px;
+  padding: 8px 10px;
+  border: 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(0, 0, 0, 0.14);
+  color: inherit;
+  font: inherit;
+  text-align: start;
+}
+
+.rtc-timezone-results button:last-child { border-bottom: 0; }
+.rtc-timezone-results button:is(:hover, :focus-visible) { background: rgba(255, 255, 255, 0.14); }
+
+.ble-settings-drawer-light .rtc-timezone-candidate > span,
+.ble-settings-drawer-light .rtc-timezone-search-label { color: rgba(15, 35, 46, 0.68); }
+
+.ble-settings-drawer-light .rtc-timezone-search {
+  border-color: rgba(20, 49, 65, 0.2);
+  background: rgba(255, 255, 255, 0.72);
+  color: #132a37;
+  color-scheme: light;
+}
+
+.ble-settings-drawer-light .rtc-timezone-results { border-color: rgba(20, 49, 65, 0.16); }
+.ble-settings-drawer-light .rtc-timezone-results button {
+  border-bottom-color: rgba(20, 49, 65, 0.1);
+  background: rgba(255, 255, 255, 0.52);
+  color: #132a37;
+}
+
+@media (max-width: 520px) {
+  .rtc-timezone-candidate { grid-template-columns: minmax(0, 1fr); }
+  .rtc-timezone-candidate ion-button { grid-column: 1; grid-row: auto; }
+}

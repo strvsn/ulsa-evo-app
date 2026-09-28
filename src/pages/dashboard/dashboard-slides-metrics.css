@@ -1,0 +1,562 @@
+/* カルーセル */
+.carousel-wrapper {
+  position: relative;
+  padding: 0;
+  margin-bottom: 0;
+}
+
+.main-swiper {
+  width: 100%;
+  padding: 0 var(--swiper-padding);
+  min-height: var(--swiper-min-height);
+}
+
+.swiper-slide {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.slide-content {
+  width: 100%;
+  padding: 0;
+  max-width: 100%;
+}
+
+.slide-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: white;
+  text-align: center;
+  margin-bottom: 1.5rem;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* ゲージ表示 */
+.gauge-card-main {
+  margin: 0 1rem;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  --inner-border-width: 0;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+.gauge-content {
+  padding: 0.25rem 0.5rem 0.5rem 0.5rem;
+  --padding-start: 0;
+  --padding-end: 0;
+  border: none !important;
+}
+
+.gauge-content::part(native) {
+  border: none !important;
+  border-top: none !important;
+  border-bottom: none !important;
+}
+
+.gauge-segment {
+  margin-bottom: 1rem;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  padding: 4px;
+}
+
+.dashboard-content .gauge-segment ion-segment-button {
+  --indicator-color: rgba(255, 255, 255, 0.95);
+  --color: rgba(255, 255, 255, 0.65);
+  --color-checked: rgba(0, 0, 0, 0.85);
+  font-weight: 600;
+  font-size: 0.875rem;
+  min-height: 44px;
+  border-radius: 8px;
+}
+
+.gauge-container-main {
+  width: 100%;
+  max-width: var(--gauge-size);
+  height: var(--gauge-size);
+  aspect-ratio: 1 / 1;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: transparent;
+  position: relative;
+}
+
+/* ゲージ設定は目盛りと重ねず、チャート直下の計測コントロールへまとめる */
+.gauge-control-bar {
+  width: min(100%, var(--gauge-size));
+  margin: 0 auto 0.25rem;
+  padding: 4px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 12px;
+  background: rgba(4, 14, 21, 0.42);
+}
+
+.gauge-control-bar.single {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.gauge-control-button {
+  min-width: 0;
+  min-height: 44px;
+  padding: 7px 10px;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 9px;
+  border: 1px solid transparent;
+  border-radius: 9px;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.9);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: background 140ms ease, border-color 140ms ease, transform 140ms ease;
+}
+
+.gauge-control-button span {
+  color: rgba(255, 255, 255, 0.56);
+  font-size: 11px;
+  font-weight: 650;
+}
+
+.gauge-control-button strong {
+  min-width: 0;
+  font-size: 13px;
+  font-weight: 760;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.gauge-control-button:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.16);
+}
+
+.gauge-control-button:active {
+  transform: scale(0.98);
+}
+
+/* 旧ゲージスタイル削除 */
+.gauge-display {
+  display: none;
+}
+
+.gauge-card {
+  display: none;
+}
+
+.gauge-icon-container {
+  display: none;
+}
+
+.temperature-gauge .gauge-icon-container {
+  display: none;
+}
+
+.humidity-gauge .gauge-icon-container {
+  display: none;
+}
+
+.pressure-gauge .gauge-icon-container {
+  display: none;
+}
+
+.gauge-icon {
+  display: none;
+}
+
+.gauge-label {
+  display: none;
+}
+
+.gauge-value {
+  display: none;
+}
+
+.gauge-unit {
+  display: none;
+}
+
+.gauge-bar {
+  display: none;
+}
+
+.gauge-fill {
+  display: none;
+}
+
+.temperature-fill {
+  display: none;
+}
+
+.humidity-fill {
+  display: none;
+}
+
+.pressure-fill {
+  display: none;
+}
+
+.carousel-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.9);
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.16s ease, border-color 0.16s ease,
+    box-shadow 0.16s ease, filter 0.12s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.carousel-nav:hover {
+  background: white;
+  transform: translateY(-50%) scale(1.1);
+}
+
+/* The shared control press scale must not replace the translate used for
+ * vertical centering. A touch should darken the button, not move it down. */
+.carousel-nav.control-button:active:not(:disabled) {
+  transform: translateY(-50%);
+  filter: brightness(0.94);
+}
+
+.carousel-nav.prev {
+  left: 0.5rem;
+}
+
+.carousel-nav.next {
+  right: 0.5rem;
+}
+
+.carousel-nav ion-icon {
+  font-size: 24px;
+  color: #667eea;
+}
+
+.swiper-pagination {
+  bottom: 0 !important;
+}
+
+/* カルーセルインジケーター（外部配置） */
+.carousel-pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  padding: 0.35rem 0 0.4rem;
+}
+
+.swiper-pagination-bullet {
+  width: 44px;
+  height: 44px;
+  position: relative;
+  background: transparent;
+  opacity: 1;
+}
+
+.swiper-pagination-bullet::before {
+  content: '';
+  position: absolute;
+  inset: 50% auto auto 50%;
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.5);
+  transform: translate(-50%, -50%);
+}
+
+.swiper-pagination-bullet-active {
+  width: 44px;
+  background: transparent;
+}
+
+.swiper-pagination-bullet-active::before {
+  width: 24px;
+  background: white;
+}
+
+/* 計測値表示（固定） */
+.metrics-fixed {
+  padding: 0 0 1rem 0;
+}
+
+/* メトリクスグリッド */
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(148px, 1fr));
+  grid-auto-rows: auto;
+  gap: 0.75rem;
+  padding: 0;
+  margin: 0 var(--section-margin);
+}
+
+.metric-card {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 20px;
+  min-height: 112px;
+  padding: 1rem 1.1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 0.55rem;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+.metric-card-text {
+  justify-content: space-between;
+}
+
+.metric-info {
+  flex: 1;
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.metric-label-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 0.25rem;
+}
+
+.metric-label {
+  font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.8);
+  font-weight: 500;
+}
+
+.metric-note {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.65);
+}
+
+.metric-value {
+  display: flex;
+  align-items: baseline;
+  min-width: 0;
+  white-space: nowrap;
+  font-size: 2rem;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
+  color: white;
+  line-height: 1;
+}
+
+.metric-card-primary {
+  min-height: 112px;
+}
+
+.metric-card-primary .metric-label {
+  font-size: 0.875rem;
+  font-weight: 700;
+}
+
+.metric-card-primary .metric-value {
+  font-size: 2rem;
+  font-weight: 800;
+}
+
+.metric-card-primary .metric-unit {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.metric-card-secondary {
+  min-height: 112px;
+}
+
+.metric-card-secondary .metric-value {
+  font-size: 2rem;
+}
+
+.metric-number,
+.metric-empty {
+  display: inline-block;
+  min-width: 5.3ch;
+  text-align: right;
+}
+
+.metric-unit {
+  font-size: 1rem;
+  font-weight: 400;
+  margin-left: 0.25rem;
+  opacity: 0.9;
+}
+
+.metric-empty {
+  opacity: 0.65;
+}
+
+/* チャートカード（スライド用） */
+.chart-card-slide {
+  margin: 0 1rem;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  --inner-border-width: 0;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+.chart-content {
+  padding: 0.25rem 0.5rem 0.5rem 0.5rem;
+  --padding-start: 0;
+  --padding-end: 0;
+  border: none !important;
+}
+
+.chart-content::part(native) {
+  border: none !important;
+  border-top: none !important;
+  border-bottom: none !important;
+}
+
+.chart-segment {
+  margin-bottom: 1rem;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  padding: 4px;
+}
+
+.dashboard-content .chart-segment ion-segment-button {
+  --indicator-color: rgba(255, 255, 255, 0.95);
+  --color: rgba(255, 255, 255, 0.65);
+  --color-checked: rgba(0, 0, 0, 0.85);
+  font-weight: 600;
+  font-size: 0.875rem;
+  min-height: 44px;
+  border-radius: 10px;
+}
+
+.chart-container-slide {
+  width: 100%;
+  height: var(--chart-height);
+  background: transparent;
+  border-radius: 12px;
+  padding: 0;
+  margin: 0;
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.chart-interaction-surface {
+  touch-action: none;
+}
+
+/* スケールインジケーター */
+.chart-scale-indicator {
+  position: absolute;
+  top: 8px;
+  right: 12px;
+  background: rgba(0, 0, 0, 0.6);
+  color: white;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 11px;
+  z-index: 10;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  cursor: pointer;
+  pointer-events: auto;
+}
+.chart-scale-indicator:active {
+  transform: scale(0.95);
+  background: rgba(0, 0, 0, 0.8);
+}
+
+/* Pulse index display toggles */
+
+/* タイムスケールボタングループ */
+.time-scale-buttons {
+  display: flex;
+  min-height: 44px;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  padding: 0;
+  flex-wrap: nowrap;
+  flex-shrink: 0;
+}
+
+.time-scale-btn {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 8px;
+  padding: 4px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 45px;
+  min-height: 44px;
+}
+
+.time-scale-btn:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: translateY(-1px);
+}
+
+.time-scale-btn:active {
+  transform: translateY(0);
+}
+
+.time-scale-btn.active {
+  background: rgba(255, 255, 255, 0.9);
+  color: #333;
+  border-color: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* 元のチャートカードスタイル（削除） */
+.chart-card {
+  display: none;
+}
+
+.chart-header {
+  display: none;
+}
+
+.chart-title {
+  display: none;
+}
+
+.chart-container {
+  display: none;
+}
+
+/* 長押し画像共有の対象領域 */
+.slide-image-share-target {
+  -webkit-touch-callout: none;
+  user-select: none;
+}

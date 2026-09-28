@@ -1,0 +1,539 @@
+.wind-rose-content {
+  display: grid;
+  grid-template-rows: auto auto;
+  gap: 0.25rem;
+  min-height: 0;
+  padding: 0.35rem 0.65rem 0.45rem;
+}
+
+.wind-rose-card {
+  position: relative;
+  min-height: 0;
+}
+
+.wind-rose-gnss-wait-reason {
+  position: absolute;
+  z-index: 5;
+  inset-block-start: 0.55rem;
+  inset-inline: 3.8rem;
+  min-height: 1.65rem;
+  padding: 0.3rem 0.5rem;
+  display: grid;
+  place-items: center;
+  border: 1px solid color-mix(in srgb, var(--instrument-border) 75%, transparent);
+  border-radius: 999px;
+  color: var(--instrument-text-secondary);
+  background: color-mix(in srgb, var(--instrument-card-surface) 88%, transparent);
+  backdrop-filter: blur(10px);
+  font-size: clamp(0.57rem, 2.1vw, 0.68rem);
+  font-weight: 700;
+  line-height: 1.15;
+  text-align: center;
+  pointer-events: none;
+}
+
+.wind-rose-stage {
+  /* Compass labels sit outside the 0.44-radius wind circle. Keep the gauge
+   * height/radius unchanged and provide a wider backing canvas so E/W and
+   * rotated diagonal labels are never clipped at the card edges. */
+  width: calc(100% + 1.3rem);
+  height: var(--gauge-size);
+  max-width: calc(var(--gauge-size) + 3.5rem);
+  max-height: var(--gauge-size);
+  aspect-ratio: auto;
+  /* This item is intentionally wider than its grid track. Horizontal auto
+   * margins win over justify-self and collapse to zero for negative free
+   * space, which anchored the overflow to the left and shifted the gauge
+   * right. Let grid alignment distribute the overflow symmetrically. */
+  margin: 0;
+  justify-self: center;
+  min-height: var(--gauge-size);
+  align-self: center;
+  position: relative;
+}
+
+.wind-rose-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.wind-rose-unit-hit-target {
+  position: absolute;
+  z-index: 4;
+  left: 50%;
+  /* Match the canvas unit row: center + half the speed-row separation,
+   * followed by the unit gap. Both terms scale with the gauge size. */
+  top: calc(50% + max(19.5px, 7%) + max(19px, 6%) + 20px);
+  width: min(58%, 200px);
+  min-width: 120px;
+  height: 64px;
+  padding: 0;
+  transform: translate(-50%, -50%);
+  border: 0;
+  border-radius: 10px;
+  color: transparent;
+  background: transparent;
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.wind-rose-primary-metric-hit-target {
+  position: absolute;
+  z-index: 2;
+  left: 50%;
+  top: 42%;
+  width: min(46%, 164px);
+  min-width: 88px;
+  height: 44px;
+  transform: translate(-50%, -50%);
+  border: 0;
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  color: transparent;
+  cursor: pointer;
+}
+
+/* The shared press-scale rule must not replace the centering transform of
+ * these transparent overlay controls, or the target jumps away mid-tap. */
+.control-button.wind-rose-unit-hit-target:active:not(:disabled),
+.control-button.wind-rose-primary-metric-hit-target:active:not(:disabled) {
+  transform: translate(-50%, -50%);
+}
+
+.wind-rose-primary-metric-hit-target:focus-visible {
+  outline: 2px solid var(--ion-color-primary, #42d9d0);
+  outline-offset: 3px;
+  border-radius: 10px;
+}
+
+.wind-rose-unit-hit-target:focus-visible {
+  outline: 2px solid #59dfff;
+  outline-offset: 2px;
+}
+
+.wind-rose-peak-holds {
+  justify-self: center;
+  width: min(100%, var(--gauge-size));
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.42rem;
+  padding: 0.05rem 0.2rem 0;
+}
+
+.wind-rose-peak-hold-slot {
+  position: relative;
+  min-width: 0;
+}
+
+.wind-rose-peak-hold-capture {
+  width: 100%;
+  min-width: 0;
+  min-height: 54px;
+  padding: 0.24rem 0.2rem 0.22rem;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  align-items: center;
+  gap: 0.15rem;
+  border: 1px solid var(--wind-rose-peak-muted-border);
+  border-radius: 11px;
+  color: var(--wind-rose-peak-muted-text);
+  background: var(--wind-rose-peak-muted-background);
+  font: inherit;
+  cursor: pointer;
+  transition: color 150ms ease, border-color 150ms ease, background 150ms ease, opacity 150ms ease;
+}
+
+.wind-rose-peak-hold-slot:not(.active) .wind-rose-peak-hold-capture {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.wind-rose-peak-hold-slot.active .wind-rose-peak-hold-capture {
+  border-color: var(--wind-rose-peak-active-border);
+  color: var(--wind-rose-peak-active-text);
+  background: var(--wind-rose-peak-active-background);
+}
+
+.wind-rose-peak-hold-title {
+  min-width: 0;
+  display: block;
+  text-align: center;
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.075em;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.wind-rose-peak-hold-readout {
+  min-width: 0;
+  display: grid;
+  grid-template-rows: auto auto;
+  align-content: center;
+  gap: 0.05rem;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", sans-serif;
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+}
+
+.wind-rose-peak-hold-direction {
+  display: grid;
+  grid-template-columns: auto;
+  align-items: baseline;
+  justify-content: center;
+  gap: 0.16rem;
+  font-size: 0.66rem;
+  font-weight: 720;
+  line-height: 1;
+}
+
+.wind-rose-peak-hold-slot.has-reference .wind-rose-peak-hold-capture {
+  min-height: 64px;
+  padding-inline: 0.12rem;
+}
+
+.wind-rose-peak-hold-slot.has-reference .wind-rose-peak-hold-direction {
+  grid-template-columns: minmax(0, 1fr);
+  justify-items: center;
+  gap: 0.12rem;
+}
+
+.wind-rose-peak-hold-reference {
+  padding: 0.08rem 0.16rem;
+  border: 1px solid currentColor;
+  border-radius: 999px;
+  font-size: 0.625rem;
+  font-weight: 780;
+  letter-spacing: 0.015em;
+  line-height: 1;
+  opacity: 0.84;
+  white-space: nowrap;
+}
+
+.wind-rose-peak-hold-slot.has-reference .wind-rose-peak-hold-reference {
+  max-width: 100%;
+  padding: 0.07rem 0.12rem;
+  font-size: 0.56rem;
+  box-sizing: border-box;
+}
+
+.wind-rose-peak-hold-speed {
+  min-width: 0;
+  display: inline-flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 0.13rem;
+  font-size: 0.63rem;
+  font-weight: 720;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.wind-rose-peak-hold-unit {
+  font-size: 0.625rem;
+  font-weight: 650;
+  letter-spacing: -0.015em;
+}
+
+.wind-rose-peak-hold-clear {
+  position: absolute;
+  z-index: 2;
+  inset-block-start: -0.35rem;
+  inset-inline-end: -0.35rem;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 50%;
+  color: var(--wind-rose-peak-active-text);
+  background: transparent;
+  box-shadow: none;
+  cursor: pointer;
+}
+
+.wind-rose-peak-hold-clear::before {
+  content: '';
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  border: 1px solid rgba(247, 251, 252, 0.64);
+  border-radius: 50%;
+  background: rgba(7, 19, 28, 0.98);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
+}
+
+.wind-rose-peak-hold-clear :is(.ulsa-icon, svg) {
+  position: relative;
+  z-index: 1;
+  color: #f7fbfc;
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.5));
+}
+
+.wind-rose-peak-hold-capture:focus-visible,
+.wind-rose-peak-hold-clear:focus-visible {
+  outline: 2px solid #59dfff;
+  outline-offset: 2px;
+}
+
+.wind-rose-peak-hold-capture:disabled {
+  cursor: default;
+  opacity: 0.38;
+}
+
+.wind-rose-peak-hold-slot.active .wind-rose-peak-hold-capture:disabled {
+  opacity: 1;
+}
+
+.wind-rose-primary-controls {
+  justify-self: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  min-width: 0;
+}
+
+.wind-rose-mode-toggle {
+  justify-self: center;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  min-height: 32px;
+  padding: 0.3rem 0.5rem;
+  border: 1px solid rgba(184, 200, 205, 0.3);
+  border-radius: 999px;
+  color: var(--instrument-text-secondary, rgba(224, 239, 242, 0.72));
+  background: transparent;
+  font: inherit;
+  font-size: 0.68rem;
+  font-weight: 720;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+}
+
+.wind-rose-mode-toggle strong {
+  min-width: 1.55rem;
+  padding: 0.11rem 0.22rem;
+  border-radius: 999px;
+  color: var(--instrument-text-secondary, rgba(224, 239, 242, 0.74));
+  background: rgba(255, 255, 255, 0.08);
+  font-size: 0.58rem;
+  font-weight: 820;
+  text-align: center;
+}
+
+.wind-rose-mode-toggle.active {
+  border-color: #59dfff;
+  color: #8ceaff;
+}
+
+.wind-rose-mode-toggle.active strong {
+  color: #0a2028;
+  background: #59dfff;
+}
+
+.wind-rose-mode-toggle:focus-visible {
+  outline: 2px solid #59dfff;
+  outline-offset: 2px;
+}
+
+.wind-rose-mode-toggle:disabled {
+  cursor: default;
+  opacity: 0.42;
+}
+
+.wind-rose-corner-action {
+  position: absolute;
+  z-index: 5;
+  inset-block-start: 0.7rem;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 1px solid rgba(184, 205, 213, 0.24);
+  border-radius: 13px;
+  color: var(--instrument-text-secondary, rgba(224, 239, 242, 0.62));
+  background: rgba(5, 19, 27, 0.62);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.14);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  cursor: pointer;
+  transition: color 150ms ease, border-color 150ms ease, background 150ms ease, box-shadow 150ms ease, opacity 150ms ease;
+}
+
+.wind-rose-corner-action-left {
+  inset-inline-start: 0.7rem;
+}
+
+.wind-rose-corner-action-right {
+  inset-inline-end: 0.7rem;
+}
+
+.wind-rose-corner-action:focus-visible {
+  outline: 2px solid #59dfff;
+  outline-offset: 2px;
+}
+
+.wind-rose-corner-action:disabled {
+  cursor: default;
+  opacity: 0.36;
+}
+
+.wind-rose-compass-action.active {
+  border-color: rgba(138, 174, 255, 0.72);
+  color: #b9ceff;
+  background: rgba(62, 92, 158, 0.28);
+  box-shadow: 0 0 16px rgba(126, 168, 255, 0.2);
+}
+
+.wind-rose-compass-action.gnss {
+  border-color: rgba(97, 227, 190, 0.72);
+  color: #94f1d5;
+  background: rgba(37, 122, 98, 0.25);
+  box-shadow: 0 0 16px rgba(97, 227, 190, 0.2);
+}
+
+.wind-rose-compass-action.gnss[data-control-tone='warning'] {
+  border-color: rgba(255, 181, 71, 0.72);
+  color: #ffd18b;
+  background: rgba(133, 87, 25, 0.25);
+  box-shadow: 0 0 16px rgba(255, 181, 71, 0.18);
+}
+
+.wind-rose-compass-action.gnss[data-control-tone='danger'] {
+  border-color: rgba(255, 98, 113, 0.72);
+  color: #ffb1ba;
+  background: rgba(140, 42, 53, 0.25);
+  box-shadow: 0 0 16px rgba(255, 98, 113, 0.18);
+}
+
+.wind-rose-pip-action.active {
+  border-color: rgba(97, 227, 190, 0.7);
+  color: #94f1d5;
+  background: rgba(37, 122, 98, 0.25);
+  box-shadow: 0 0 16px rgba(97, 227, 190, 0.18);
+}
+
+.wind-rose-pip-error {
+  justify-self: center;
+  max-width: min(82vw, 300px);
+  color: #ffb35b;
+  font-size: 0.61rem;
+  font-weight: 700;
+  line-height: 1.3;
+  text-align: center;
+}
+
+.wind-rose-tilt-levels {
+  justify-self: center;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.22rem;
+  padding: 0.18rem;
+  border: 1px solid rgba(184, 200, 205, 0.26);
+  border-radius: 999px;
+  background: rgba(5, 20, 28, 0.14);
+}
+
+.wind-rose-tilt-level {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.2rem;
+  min-height: 26px;
+  padding: 0.18rem 0.4rem;
+  border: 0;
+  border-radius: 999px;
+  color: var(--instrument-text-secondary, rgba(224, 239, 242, 0.72));
+  background: transparent;
+  font: inherit;
+  font-size: 0.58rem;
+  font-weight: 720;
+  cursor: pointer;
+}
+
+.wind-rose-tilt-level strong {
+  font-size: 0.63rem;
+  font-weight: 820;
+}
+
+.wind-rose-tilt-level.active {
+  color: #0a2028;
+  background: #59dfff;
+}
+
+.wind-rose-tilt-level:focus-visible {
+  outline: 2px solid #59dfff;
+  outline-offset: 2px;
+}
+
+.dashboard-content.light-theme .wind-rose-mode-toggle {
+  border-color: rgba(27, 67, 82, 0.4);
+  color: #244550;
+  background: rgba(255, 255, 255, 0.56);
+}
+
+.dashboard-content.light-theme .wind-rose-peak-hold-clear {
+  color: #102a34;
+  background: transparent;
+  box-shadow: none;
+}
+
+.dashboard-content.light-theme .wind-rose-peak-hold-clear::before {
+  border-color: rgba(16, 42, 52, 0.58);
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: 0 2px 7px rgba(42, 56, 63, 0.2);
+}
+
+.dashboard-content.light-theme .wind-rose-peak-hold-clear :is(.ulsa-icon, svg) {
+  color: #102a34;
+  filter: none;
+}
+
+.dashboard-content.light-theme .wind-rose-mode-toggle strong {
+  color: #244550;
+  background: rgba(29, 81, 98, 0.16);
+}
+
+.dashboard-content.light-theme .wind-rose-tilt-levels {
+  border-color: rgba(27, 67, 82, 0.3);
+  background: rgba(255, 255, 255, 0.44);
+}
+
+.dashboard-content.light-theme .wind-rose-tilt-level {
+  color: #244550;
+}
+
+.dashboard-content.light-theme .wind-rose-tilt-level.active {
+  color: #ffffff;
+  background: #087aa2;
+}
+
+.dashboard-content.light-theme .wind-rose-corner-action {
+  border-color: rgba(31, 73, 89, 0.24);
+  color: #48646f;
+  background: rgba(255, 255, 255, 0.82);
+  box-shadow: 0 3px 12px rgba(33, 64, 76, 0.1);
+}
+
+.dashboard-content.light-theme .wind-rose-compass-action.active {
+  border-color: #3d68b1;
+  color: #2d5ba9;
+  background: rgba(79, 119, 190, 0.14);
+}
+
+.dashboard-content.light-theme .wind-rose-pip-action.active {
+  border-color: #168168;
+  color: #0d7058;
+  background: rgba(30, 148, 116, 0.12);
+}
+
+.dashboard-content.light-theme .wind-rose-pip-error {
+  color: #a34f00;
+}

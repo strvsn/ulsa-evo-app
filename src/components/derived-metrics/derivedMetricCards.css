@@ -1,0 +1,230 @@
+.metric-card-removable {
+  position: relative;
+}
+
+.metric-detail {
+  color: var(--instrument-text-secondary);
+  font-size: 0.61rem;
+  font-weight: 650;
+  line-height: 1.25;
+  white-space: nowrap;
+}
+
+.metric-card-remove {
+  position: absolute;
+  top: 0.05rem;
+  right: 0.05rem;
+  z-index: 1;
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--instrument-text-secondary);
+  cursor: pointer;
+}
+
+.metric-card-remove::before {
+  content: '';
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  border: 1px solid rgba(247, 251, 252, 0.64);
+  border-radius: 50%;
+  background: rgba(7, 19, 28, 0.98);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
+}
+
+.metric-card-remove :is(.ulsa-icon, svg) {
+  position: relative;
+  z-index: 1;
+  color: #f7fbfc;
+}
+
+.metric-card-remove:hover::before {
+  border-color: rgba(255, 123, 123, 0.72);
+  background: rgba(83, 25, 32, 0.98);
+}
+
+.metric-card-remove:focus-visible,
+.derived-metric-add-card:focus-visible,
+.derived-metric-picker-close:focus-visible,
+.derived-metric-option:focus-visible {
+  outline: 2px solid var(--instrument-accent);
+  outline-offset: 2px;
+}
+
+.derived-metric-add-card {
+  min-height: 104px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  padding: 0.9rem 1rem;
+  border: 1px dashed var(--instrument-border-strong);
+  border-radius: 16px;
+  background: transparent;
+  color: var(--instrument-text-secondary);
+  font: inherit;
+  font-size: 0.72rem;
+  font-weight: 650;
+  cursor: pointer;
+}
+
+.derived-metric-add-card:hover {
+  border-color: rgba(94, 234, 212, 0.54);
+  background: rgba(94, 234, 212, 0.06);
+  color: var(--instrument-accent);
+}
+
+.derived-metric-add-card:active {
+  transform: scale(0.98);
+}
+
+.derived-metric-picker {
+  margin-top: 0.65rem;
+  padding: 0.85rem;
+  border: 1px solid var(--instrument-border);
+  border-radius: 16px;
+  background: rgba(8, 22, 31, 0.68);
+  box-shadow: var(--instrument-card-shadow);
+}
+
+.derived-metric-picker-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.7rem;
+}
+
+.derived-metric-picker-heading p {
+  margin: 0;
+  color: var(--instrument-text);
+  font-size: 0.82rem;
+  font-weight: 720;
+}
+
+.derived-metric-picker-heading span {
+  display: block;
+  margin-top: 0.15rem;
+  color: var(--instrument-text-secondary);
+  font-size: 0.68rem;
+}
+
+.derived-metric-picker-close {
+  width: 30px;
+  height: 30px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  padding: 0;
+  border: 1px solid var(--instrument-border);
+  border-radius: 50%;
+  background: transparent;
+  color: var(--instrument-text-secondary);
+  cursor: pointer;
+}
+
+.derived-metric-option-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.5rem;
+}
+
+.derived-metric-option {
+  min-width: 0;
+  min-height: 65px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.65rem 0.7rem;
+  border: 1px solid var(--instrument-border);
+  border-radius: 11px;
+  background: rgba(151, 190, 204, 0.05);
+  color: var(--instrument-text-secondary);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.derived-metric-option:hover:not([aria-disabled="true"]) {
+  border-color: rgba(94, 234, 212, 0.44);
+  background: rgba(94, 234, 212, 0.08);
+  color: var(--instrument-text);
+}
+
+.derived-metric-option[aria-disabled="true"] {
+  border-color: rgba(101, 230, 167, 0.28);
+  background: rgba(101, 230, 167, 0.08);
+  color: var(--instrument-live);
+  cursor: default;
+}
+
+.derived-metric-option-copy {
+  min-width: 0;
+}
+
+.derived-metric-option strong,
+.derived-metric-option small {
+  display: block;
+}
+
+.derived-metric-option strong {
+  color: currentColor;
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.derived-metric-option small {
+  margin-top: 0.18rem;
+  color: var(--instrument-text-secondary);
+  font-size: 0.61rem;
+  line-height: 1.35;
+}
+
+.dashboard-content.light-theme .derived-metric-picker {
+  background: rgba(255, 255, 255, 0.78);
+  border-color: var(--instrument-border);
+}
+
+.dashboard-content.light-theme .metric-card-remove {
+  color: #102a34;
+  background: transparent;
+}
+
+.dashboard-content.light-theme .metric-card-remove::before {
+  border-color: rgba(16, 42, 52, 0.58);
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: 0 2px 7px rgba(42, 56, 63, 0.2);
+}
+
+.dashboard-content.light-theme .metric-card-remove :is(.ulsa-icon, svg) {
+  color: #102a34;
+}
+
+.dashboard-content.light-theme .metric-card-remove:hover::before {
+  border-color: rgba(139, 38, 38, 0.58);
+  background: rgba(194, 57, 57, 0.08);
+}
+
+.dashboard-content.light-theme .derived-metric-option {
+  background: rgba(33, 76, 88, 0.045);
+}
+
+@media (max-width: 560px) {
+  .derived-metric-add-card {
+    min-height: 88px;
+    border-radius: 14px;
+  }
+
+  .derived-metric-option-list {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

@@ -1,0 +1,465 @@
+
+.device-mode-badges,
+.rtc-time-badges,
+.i2c-config-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.i2c-config-list ion-item {
+  --min-height: 58px;
+}
+
+.i2c-config-list ion-button {
+  min-width: 56px;
+}
+
+.i2c-config-note,
+.i2c-config-support-message,
+.rtc-time-note,
+.ble-instruction {
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.i2c-config-note {
+  margin: 10px 0 0;
+}
+
+.i2c-config-support-message {
+  margin: 0 0 10px;
+}
+
+.i2c-config-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.rtc-time-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.device-id {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.58);
+}
+
+.ble-action-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 14px 16px;
+  margin-top: 4px;
+}
+
+.ble-action-buttons ion-button:not([color="danger"]),
+.ble-connect-section > ion-button {
+  --background: rgba(255, 255, 255, 0.94);
+  --background-hover: rgba(255, 255, 255, 1);
+  --background-activated: rgba(255, 255, 255, 0.86);
+  --color: #2f3437;
+}
+
+.ble-action-buttons ion-button[color="danger"] {
+  --background: rgba(255, 107, 107, 0.92);
+  --background-hover: rgba(255, 107, 107, 1);
+  --background-activated: rgba(255, 107, 107, 0.8);
+  --color: #fff;
+}
+
+.ble-connect-section {
+  padding: 20px 16px 18px;
+  text-align: center;
+}
+
+.ble-instruction {
+  margin: 0 0 16px;
+}
+
+.ble-connect-section ion-button ion-spinner {
+  width: 20px;
+  height: 20px;
+}
+
+.ble-connect-section ion-card {
+  margin-inline: 0;
+  text-align: left;
+}
+
+.ble-device-entry {
+  border-radius: 12px;
+  margin-bottom: 6px;
+  background: rgba(255, 255, 255, 0.04);
+  overflow: hidden;
+}
+
+.ble-connect-section .ble-device-item {
+  --background: transparent;
+}
+
+.ble-device-tower-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--instrument-text-secondary);
+}
+
+.ble-device-signal-slot {
+  display: inline-flex;
+  align-items: center;
+  margin-inline-start: 8px;
+}
+
+.ble-device-actions {
+  display: grid;
+  grid-template-columns: minmax(0, 1.55fr) minmax(104px, 0.9fr);
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 0 8px 8px;
+}
+
+.ble-device-connect-button {
+  width: 100%;
+  height: 44px;
+  min-height: 44px;
+  margin: 0;
+  border: 1px solid rgba(151, 190, 204, 0.34);
+  border-radius: 10px;
+  background: rgba(151, 190, 204, 0.1);
+  color: inherit;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.ble-identify-button {
+  display: inline-flex;
+  position: relative;
+  width: 100%;
+  min-width: 0;
+  height: 44px;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  margin: 0;
+  padding: 0 7px;
+  border: 1px solid rgba(255, 232, 140, 0.68);
+  border-radius: 10px;
+  background: rgba(255, 232, 140, 0.08);
+  color: rgba(255, 232, 140, 0.96);
+  font: inherit;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1.15;
+  text-align: center;
+  white-space: normal;
+  cursor: pointer;
+}
+
+.ble-identify-button:disabled[data-identify-active='true'] {
+  opacity: 1;
+  cursor: wait;
+}
+
+.ble-identify-progress {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.ble-identify-progress path {
+  fill: none;
+  stroke: #ffe88c;
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-dasharray: 100;
+  stroke-dashoffset: 100;
+  vector-effect: non-scaling-stroke;
+  filter: drop-shadow(0 0 4px rgba(255, 232, 140, 0.95));
+  animation-name: ble-identify-border-progress;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
+}
+
+@keyframes ble-identify-border-progress {
+  to { stroke-dashoffset: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ble-identify-progress path {
+    animation: none;
+    stroke-dashoffset: 0;
+    filter: none;
+  }
+}
+
+.ble-identify-button ion-icon {
+  flex: 0 0 auto;
+  font-size: 18px;
+}
+
+.ble-identify-button ion-spinner {
+  width: 20px;
+  height: 20px;
+}
+
+.ble-build-info {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px 16px;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.ble-build-hash {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  background: rgba(255, 255, 255, 0.14);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  padding: 1px 6px;
+  border-radius: 6px;
+}
+
+.ble-modal-light {
+  color: rgba(0, 0, 0, 0.85);
+}
+
+.ble-modal-light::part(content) {
+  background: #f6f8fb;
+  border-color: rgba(0, 0, 0, 0.12);
+}
+
+.ble-modal-light .ble-modal-page::before {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.58), rgba(0, 0, 0, 0.06)),
+    rgba(255, 255, 255, 0.42);
+}
+
+.ble-modal-light ion-header,
+.ble-modal-light ion-card,
+.ble-modal-light .ble-status-section ion-chip {
+  background: rgba(255, 255, 255, 0.82);
+  border-color: rgba(0, 0, 0, 0.1);
+}
+
+.ble-modal-light ion-badge[color="primary"],
+.ble-modal-light ion-badge[color="secondary"],
+.ble-modal-light ion-badge[color="tertiary"],
+.ble-modal-light ion-badge[color="medium"] {
+  --background: rgba(0, 0, 0, 0.08);
+  --color: rgba(0, 0, 0, 0.7);
+  border-color: rgba(0, 0, 0, 0.12);
+}
+
+.ble-modal-light ion-badge[color="success"],
+.ble-modal-light ion-chip[color="success"] {
+  --background: rgba(34, 197, 94, 0.16);
+  --color: rgba(15, 118, 61, 0.96);
+  border-color: rgba(34, 197, 94, 0.28);
+}
+
+.ble-modal-light ion-badge[color="warning"],
+.ble-modal-light ion-chip[color="warning"] {
+  --background: rgba(245, 158, 11, 0.18);
+  --color: rgba(146, 64, 14, 0.96);
+  border-color: rgba(245, 158, 11, 0.32);
+}
+
+.ble-modal-light ion-badge[color="danger"],
+.ble-modal-light ion-chip[color="danger"] {
+  --background: rgba(239, 68, 68, 0.16);
+  --color: rgba(153, 27, 27, 0.96);
+  border-color: rgba(239, 68, 68, 0.28);
+}
+
+.ble-modal-light ion-card[color="warning"] {
+  background: rgba(245, 158, 11, 0.14);
+  border-color: rgba(245, 158, 11, 0.28);
+  --color: rgba(146, 64, 14, 0.96);
+  color: rgba(146, 64, 14, 0.96);
+}
+
+.ble-modal-light ion-card[color="danger"] {
+  background: rgba(239, 68, 68, 0.14);
+  border-color: rgba(239, 68, 68, 0.28);
+  --color: rgba(153, 27, 27, 0.96);
+  color: rgba(153, 27, 27, 0.96);
+}
+
+.ble-modal-light ion-card[color="warning"] ion-card-content,
+.ble-modal-light ion-card[color="warning"] ion-card-title,
+.ble-modal-light ion-card[color="warning"] ion-icon,
+.ble-modal-light ion-card[color="warning"] span,
+.ble-modal-light ion-card[color="warning"] p {
+  color: rgba(146, 64, 14, 0.96);
+}
+
+.ble-modal-light ion-card[color="danger"] ion-card-content,
+.ble-modal-light ion-card[color="danger"] ion-card-title,
+.ble-modal-light ion-card[color="danger"] ion-icon,
+.ble-modal-light ion-card[color="danger"] span,
+.ble-modal-light ion-card[color="danger"] p {
+  color: rgba(153, 27, 27, 0.96);
+}
+
+.ble-modal-light ion-toolbar,
+.ble-modal-light ion-card-title,
+.ble-modal-light ion-card-title ion-icon,
+.ble-modal-light ion-item,
+.ble-modal-light ion-item h2,
+.ble-modal-light ion-item h3 {
+  --color: rgba(0, 0, 0, 0.86);
+  color: rgba(0, 0, 0, 0.86);
+}
+
+.ble-modal-light ion-button[fill="outline"] {
+  --background: rgba(0, 0, 0, 0.07);
+  --background-hover: rgba(0, 0, 0, 0.1);
+  --background-activated: rgba(0, 0, 0, 0.14);
+  --border-color: rgba(0, 0, 0, 0.12);
+  --color: rgba(0, 0, 0, 0.78);
+}
+
+.ble-modal-light ion-button:not([fill]):not([color="danger"]),
+.ble-modal-light .ble-action-buttons ion-button:not([color="danger"]),
+.ble-modal-light .ble-connect-section > ion-button {
+  --background: rgba(0, 0, 0, 0.84);
+  --background-hover: rgba(0, 0, 0, 0.92);
+  --background-activated: rgba(0, 0, 0, 0.72);
+  --color: rgba(255, 255, 255, 0.96);
+}
+
+.ble-modal-light ion-item p,
+.ble-modal-light ion-label p,
+.ble-modal-light .i2c-config-note,
+.ble-modal-light .i2c-config-support-message,
+.ble-modal-light .rtc-time-note,
+.ble-modal-light .ble-instruction,
+.ble-modal-light .device-id,
+.ble-modal-light .ble-build-info {
+  color: rgba(0, 0, 0, 0.58);
+}
+
+.ble-modal-light ion-input,
+.ble-modal-light ion-select {
+  --color: rgba(0, 0, 0, 0.86);
+  --placeholder-color: rgba(0, 0, 0, 0.42);
+  --highlight-color-focused: rgba(0, 0, 0, 0.72);
+}
+
+.ble-modal-light .ble-build-hash {
+  background: rgba(0, 0, 0, 0.07);
+  border-color: rgba(0, 0, 0, 0.1);
+}
+
+.ble-restore-alert {
+  --backdrop-opacity: 0.5;
+}
+
+.ble-restore-alert .alert-wrapper {
+  border-radius: 22px;
+  background: linear-gradient(135deg, rgba(108, 117, 125, 0.96), rgba(73, 80, 87, 0.96));
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.36);
+  color: rgba(255, 255, 255, 0.94);
+  overflow: hidden;
+}
+
+.ble-restore-alert .alert-head {
+  padding: 20px 20px 8px;
+}
+
+.ble-restore-alert .alert-title {
+  color: rgba(255, 255, 255, 0.96);
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.ble-restore-alert .alert-message {
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 14px;
+  line-height: 1.5;
+  padding: 0 20px 18px;
+}
+
+.ble-restore-alert .alert-button-group {
+  border-top: 1px solid rgba(255, 255, 255, 0.16);
+  padding: 8px;
+}
+
+.ble-restore-alert .alert-button {
+  border-radius: 12px;
+  color: rgba(255, 255, 255, 0.86);
+  font-weight: 700;
+  text-transform: none;
+}
+
+.ble-restore-alert .alert-button-role-destructive {
+  color: #ffe8e8;
+  background: rgba(255, 107, 107, 0.18);
+}
+
+.ble-restore-alert-light .alert-wrapper {
+  background: linear-gradient(135deg, rgba(245, 247, 250, 0.98), rgba(195, 207, 226, 0.98));
+  border-color: rgba(0, 0, 0, 0.12);
+  color: rgba(0, 0, 0, 0.84);
+}
+
+.ble-restore-alert-light .alert-title {
+  color: rgba(0, 0, 0, 0.86);
+}
+
+.ble-restore-alert-light .alert-message {
+  color: rgba(0, 0, 0, 0.6);
+}
+
+.ble-restore-alert-light .alert-button-group {
+  border-top-color: rgba(0, 0, 0, 0.12);
+}
+
+.ble-restore-alert-light .alert-button {
+  color: rgba(0, 0, 0, 0.76);
+}
+
+.ble-restore-alert-light .alert-button-role-destructive {
+  color: #991b1b;
+  background: rgba(239, 68, 68, 0.14);
+}
+
+@media (max-width: 480px) {
+  .ble-modal {
+    --width: 94vw;
+    --height: 86vh;
+    --max-height: 86vh;
+    --border-radius: 22px;
+  }
+
+  .ble-modal ion-card {
+    margin-inline: 12px;
+    border-radius: 18px;
+  }
+
+  .ble-modal ion-content::part(scroll) {
+    padding-bottom: 14px !important;
+  }
+
+  .ble-connect-section,
+  .ble-action-buttons {
+    padding-inline: 12px;
+  }
+}

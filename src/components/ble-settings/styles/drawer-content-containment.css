@@ -1,0 +1,236 @@
+/*
+ * Right-pane containment contract.
+ *
+ * The navigation remains vertical on phones, so the settings content is much
+ * narrower than the viewport. Keep every current and future panel constrained
+ * by that actual column instead of relying on viewport-width assumptions.
+ */
+.ble-settings-detail,
+.ble-settings-detail :where(
+  .ble-settings-card,
+  .ble-settings-card-body,
+  .ble-settings-info-grid,
+  .ble-settings-advanced,
+  .ble-settings-advanced-body,
+  .ble-settings-inline-actions,
+  .ota-flow,
+  .log-recording-mode-panel,
+  .card-log-settings-controls,
+  .i2c-config-list,
+  .led-brightness-level-selector,
+  .led-wind-reactive-control,
+  .led-wind-reactive-theme-selector
+) {
+  min-inline-size: 0;
+  max-inline-size: 100%;
+  box-sizing: border-box;
+}
+
+.ble-settings-detail :where(
+  button,
+  ion-button,
+  ion-item,
+  ion-input,
+  ion-select,
+  ion-range,
+  ion-segment,
+  ion-list,
+  details
+) {
+  min-inline-size: 0;
+  max-inline-size: 100%;
+  box-sizing: border-box;
+}
+
+.ble-settings-detail :where(
+  .ble-settings-card-header,
+  .ble-settings-card-actions,
+  .ble-settings-inline-actions,
+  .card-log-auto-start-control,
+  .card-log-auto-start-actions,
+  .card-log-settings-header,
+  .card-log-settings-actions,
+  .i2c-config-actions
+) > * {
+  min-inline-size: 0;
+  max-inline-size: 100%;
+}
+
+.ble-settings-detail :where(
+  p,
+  dt,
+  dd,
+  h3,
+  label,
+  small,
+  strong,
+  .ota-flow-step-title,
+  .ota-flow-step-detail,
+  .ble-build-hash,
+  .device-id,
+  .card-log-settings-message
+) {
+  overflow-wrap: anywhere;
+}
+
+.ble-settings-detail :where(.ble-settings-action-button, ion-button) {
+  white-space: normal;
+}
+
+.ble-settings-detail ion-button.i2c-config-apply {
+  white-space: nowrap;
+}
+
+.ble-settings-message > span {
+  min-width: 0;
+  flex: 1 1 auto;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.ble-settings-message > :where(ion-icon, ion-button, button) {
+  flex: 0 0 auto;
+}
+
+/*
+ * Interactive-size contract.
+ *
+ * This file is intentionally loaded after the drawer's visual layers. Keep
+ * compact styling in those layers, while making the actual host hit area at
+ * least 44px on touch devices without transparent overlays that can collide
+ * with neighbouring controls.
+ */
+.ble-settings-detail .ble-settings-action-button,
+.ble-settings-detail .ble-settings-action-button.ghost,
+.ble-settings-detail ion-button[size="small"] {
+  min-block-size: var(--control-size-m44, 44px);
+}
+
+/*
+ * Compact, content-width action rows use the same 44px touch target without
+ * inheriting Ionic's extra 4px block margins or the roomier CTA typography.
+ * Full-width actions (for example initial setup, firmware preparation and
+ * public information links) live outside these explicitly-scoped rows.
+ */
+.ble-settings-detail :is(
+  .ble-settings-inline-actions,
+  .i2c-config-actions,
+  .rtc-time-actions
+) {
+  align-items: center;
+  gap: 4px 6px;
+}
+
+.ble-settings-detail :is(
+  .ble-settings-inline-actions,
+  .i2c-config-actions,
+  .rtc-time-actions
+) > .control-button {
+  flex: 0 0 auto;
+  inline-size: fit-content;
+  min-inline-size: var(--control-size-i44, 44px);
+  min-block-size: var(--control-size-m44, 44px);
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.2;
+}
+
+.ble-settings-detail :is(
+  .ble-settings-inline-actions,
+  .i2c-config-actions,
+  .rtc-time-actions
+) > ion-button.control-button {
+  --padding-start: 9px;
+  --padding-end: 9px;
+}
+
+.ble-settings-detail :is(
+  .ble-settings-inline-actions,
+  .i2c-config-actions,
+  .rtc-time-actions
+) > .ble-settings-action-button {
+  gap: 5px;
+  padding-inline: 10px;
+}
+
+.ble-settings-detail :is(
+  .ble-settings-inline-actions,
+  .i2c-config-actions,
+  .rtc-time-actions
+) > .control-button :is(ion-icon, .ulsa-icon) {
+  flex: 0 0 auto;
+  inline-size: 17px;
+  block-size: 17px;
+  font-size: 17px;
+}
+
+.ble-settings-detail ion-button[size="small"] {
+  --min-height: var(--control-size-m44, 44px);
+}
+
+.ble-settings-detail .ble-settings-advanced > summary {
+  min-block-size: var(--control-size-m44, 44px);
+  box-sizing: border-box;
+  padding-block: 10px;
+}
+
+.ble-settings-detail .ble-settings-advanced > summary:focus-visible {
+  outline: var(--control-focus-width, 2px) solid var(--control-focus-color, #5eead4);
+  outline-offset: var(--control-focus-offset, 2px);
+  border-radius: var(--control-radius-compact, 9px);
+}
+
+.ble-settings-detail .card-log-settings-controls ion-segment-button,
+.ble-settings-detail .card-log-settings-controls ion-input,
+.ble-settings-detail .card-log-settings-controls ion-select {
+  min-block-size: var(--control-size-m44, 44px);
+}
+
+.ble-settings-detail .card-log-auto-start-actions ion-toggle,
+.ble-settings-detail .led-wind-reactive-toggle {
+  min-inline-size: var(--control-size-m44, 44px);
+  min-block-size: var(--control-size-m44, 44px);
+}
+
+.ble-settings-detail .led-brightness-slider-shell,
+.ble-settings-detail .led-brightness-slider {
+  min-block-size: var(--control-size-m44, 44px);
+}
+
+.ble-settings-detail .led-brightness-slider-shell {
+  display: flex;
+  align-items: center;
+}
+
+@media (max-width: 700px) {
+  .card-log-auto-start-control {
+    flex-wrap: wrap;
+  }
+
+  .card-log-auto-start-actions {
+    width: 100%;
+    box-sizing: border-box;
+    padding-inline-end: 16px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+
+  .card-log-settings-controls ion-segment-button {
+    min-inline-size: 0;
+  }
+
+  .i2c-config-list ion-item {
+    --inner-padding-end: 0;
+  }
+}
+
+@media (max-width: 420px) {
+  .ble-settings-card-header,
+  .ble-settings-info-row {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .ble-settings-card-header {
+    display: grid;
+  }
+}

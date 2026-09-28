@@ -1,0 +1,74 @@
+.led-brightness-level-selector {
+  display: grid;
+  gap: 10px;
+  padding: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.13);
+}
+
+.led-brightness-level-readout,
+.led-brightness-level-axis {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.led-brightness-level-readout {
+  color: rgba(255, 255, 255, 0.62);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.led-brightness-level-readout strong {
+  color: rgba(255, 255, 255, 0.94);
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.led-brightness-slider-shell {
+  padding: 4px 0;
+}
+
+.led-brightness-slider {
+  width: 100%;
+  --bar-height: 6px;
+  --bar-border-radius: 3px;
+  --bar-background: rgba(255, 255, 255, 0.16);
+  --bar-background-active: #5eead4;
+  --knob-size: 20px;
+  --knob-background: #5eead4;
+  --knob-border-radius: 50%;
+  --knob-box-shadow: 0 0 0 4px rgba(94, 234, 212, 0.16), 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.led-brightness-level-axis {
+  color: rgba(255, 255, 255, 0.46);
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.ble-settings-drawer-light .led-brightness-level-selector {
+  border-color: rgba(18, 22, 26, 0.14);
+  background: rgba(18, 22, 26, 0.06);
+}
+
+.ble-settings-drawer-light .led-brightness-level-readout {
+  color: rgba(18, 22, 26, 0.6);
+}
+
+.ble-settings-drawer-light .led-brightness-level-readout strong {
+  color: rgba(18, 22, 26, 0.9);
+}
+
+.ble-settings-drawer-light .led-brightness-slider {
+  --bar-background: rgba(18, 22, 26, 0.13);
+  --bar-background-active: #0f766e;
+  --knob-background: #0f766e;
+  --knob-box-shadow: 0 0 0 4px rgba(15, 118, 110, 0.14), 0 2px 8px rgba(18, 22, 26, 0.2);
+}
+
+.ble-settings-drawer-light .led-brightness-level-axis {
+  color: rgba(18, 22, 26, 0.48);
+}

@@ -1,0 +1,639 @@
+.ble-settings-drawer {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  height: 100dvh;
+  max-height: 100dvh;
+  z-index: 4200;
+  pointer-events: auto;
+  color: rgba(255, 255, 255, 0.94);
+  overflow: hidden;
+  box-sizing: border-box;
+  contain: layout style paint;
+}
+
+.ble-settings-drawer-backdrop {
+  position: absolute;
+  inset: 0;
+  border: 0;
+  padding: 0;
+  background: rgba(0, 0, 0, 0.42);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  touch-action: none;
+  animation: var(--ble-settings-backdrop-animation, ble-settings-backdrop-in 180ms ease-out both);
+}
+
+.ble-settings-drawer-panel {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: min(94vw, 840px);
+  height: 100%;
+  height: 100dvh;
+  min-height: 0;
+  max-height: 100dvh;
+  max-width: 100vw;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(0, 0, 0, 0.28)),
+    var(--ble-modal-gradient, linear-gradient(135deg, #6c757d 0%, #495057 100%));
+  border-right: 1px solid rgba(255, 255, 255, 0.24);
+  box-shadow: 22px 0 70px rgba(0, 0, 0, 0.34);
+  overflow: hidden;
+  will-change: transform;
+  touch-action: pan-y;
+  animation: var(--ble-settings-panel-animation, ble-settings-slide-in 220ms cubic-bezier(0.2, 0.8, 0.2, 1) both);
+}
+
+.ble-settings-drawer-interactive .ble-settings-drawer-backdrop {
+  opacity: var(--ble-settings-interaction-progress, 1);
+  animation: none;
+  transition: opacity var(--ble-settings-interaction-duration, 0ms) linear;
+}
+
+.ble-settings-drawer-interactive {
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.ble-settings-drawer-interactive .ble-settings-drawer-panel {
+  transform: translate3d(calc(-100% + var(--ble-settings-interaction-offset, 0px)), 0, 0);
+  animation: none;
+  transition: transform var(--ble-settings-interaction-duration, 0ms) cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes ble-settings-backdrop-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes ble-settings-slide-in {
+  from {
+    transform: translateX(-102%);
+  }
+
+  to {
+    transform: translateX(0);
+  }
+}
+
+.ble-settings-header {
+  flex: 0 0 auto;
+  box-sizing: border-box;
+  min-height: 72px;
+  padding: calc(env(safe-area-inset-top, 0px) + 14px) 18px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  background: rgba(18, 22, 26, 0.58);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.16);
+}
+
+.ble-settings-header p,
+.ble-settings-detail-title p {
+  margin: 0 0 3px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.58);
+}
+
+.ble-settings-header h2,
+.ble-settings-detail-title h2 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 750;
+  letter-spacing: 0;
+  color: rgba(255, 255, 255, 0.96);
+}
+
+.ble-settings-close {
+  width: 42px;
+  height: 42px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.ble-settings-close ion-icon {
+  font-size: 22px;
+}
+
+.ble-settings-layout {
+  min-width: 0;
+  min-height: 0;
+  flex: 1;
+  display: grid;
+  grid-template-columns: 204px minmax(0, 1fr);
+  overflow: hidden;
+}
+
+.ble-settings-nav {
+  min-width: 0;
+  min-height: 0;
+  padding: 14px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  background: rgba(18, 22, 26, 0.3);
+  border-right: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+.ble-settings-nav-item {
+  min-height: 68px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+  padding: 10px;
+  display: grid;
+  grid-template-columns: 22px minmax(0, 1fr);
+  grid-template-rows: auto auto;
+  column-gap: 8px;
+  text-align: left;
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.88);
+}
+
+.ble-settings-nav-item ion-icon {
+  grid-row: 1 / 3;
+  align-self: center;
+  font-size: 20px;
+}
+
+.ble-settings-nav-item span {
+  font-size: 14px;
+  font-weight: 750;
+}
+
+.ble-settings-nav-item small {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: rgba(255, 255, 255, 0.58);
+}
+
+.ble-settings-nav-item.active {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.34);
+}
+
+.ble-settings-detail {
+  min-width: 0;
+  min-height: 0;
+  padding: 18px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  scroll-padding-block: 14px calc(var(--app-safe-area-bottom, env(safe-area-inset-bottom, 0px)) + 16px);
+}
+
+.ble-settings-detail-title {
+  margin-bottom: 12px;
+}
+
+.ble-settings-card {
+  min-width: 0;
+  max-width: 100%;
+  margin: 0 0 12px;
+  padding: 14px;
+  border-radius: 8px;
+  background: rgba(18, 22, 26, 0.56);
+  border: 1px solid rgba(255, 255, 255, 0.17);
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.ble-settings-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.ble-settings-card-header h3 {
+  margin: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 16px;
+  font-weight: 750;
+  color: rgba(255, 255, 255, 0.96);
+}
+
+.ble-settings-card-header ion-icon {
+  font-size: 19px;
+}
+
+.ble-settings-card-actions {
+  flex-shrink: 0;
+}
+
+.ble-settings-card-body {
+  min-width: 0;
+  max-width: 100%;
+  display: grid;
+  gap: 10px;
+}
+
+.ble-settings-card-body > * {
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.ble-settings-info-grid {
+  margin: 0;
+  display: grid;
+  gap: 8px;
+}
+
+.ble-settings-info-row {
+  display: grid;
+  grid-template-columns: minmax(92px, 0.38fr) minmax(0, 1fr);
+  gap: 10px;
+  align-items: baseline;
+}
+
+.ble-settings-info-row dt {
+  color: rgba(255, 255, 255, 0.58);
+  font-size: 12px;
+}
+
+.ble-settings-info-row dd {
+  margin: 0;
+  min-width: 0;
+  color: rgba(255, 255, 255, 0.92);
+  font-size: 13px;
+  overflow-wrap: anywhere;
+}
+
+.ble-settings-advanced {
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  padding-top: 8px;
+}
+
+.ble-settings-advanced summary {
+  width: fit-content;
+  cursor: pointer;
+  color: rgba(255, 255, 255, 0.68);
+  font-size: 12px;
+  font-weight: 750;
+}
+
+.ble-settings-advanced-body {
+  min-width: 0;
+  margin-top: 8px;
+  padding: 10px;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.16);
+  overflow: hidden;
+}
+
+.ble-settings-inline-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.ota-session-copy-actions {
+  margin-top: -2px;
+}
+
+.ota-firmware-input {
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
+  padding: 11px 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(0, 0, 0, 0.18);
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 13px;
+}
+
+.ota-firmware-input::part(text),
+.ota-firmware-input::part(placeholder) {
+  white-space: normal;
+  overflow-wrap: anywhere;
+  text-overflow: clip;
+}
+
+.ota-flow {
+  min-width: 0;
+  max-width: 100%;
+  display: grid;
+  gap: 10px;
+}
+
+.ota-flow-step-button {
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  min-height: 76px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 8px;
+  padding: 12px;
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr) 22px;
+  gap: 12px;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.94);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  box-sizing: border-box;
+}
+
+.ota-flow-step-button.primary {
+  background: rgba(255, 255, 255, 0.92);
+  color: #2f3437;
+}
+
+.ota-flow-step-button.complete {
+  border-color: rgba(72, 187, 120, 0.44);
+  background: rgba(72, 187, 120, 0.18);
+}
+
+.ota-flow-step-button:disabled {
+  opacity: 0.52;
+  cursor: not-allowed;
+}
+
+.ota-flow-step-index {
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.16);
+  font-size: 15px;
+  font-weight: 800;
+}
+
+.ota-flow-step-main {
+  min-width: 0;
+  display: grid;
+  gap: 3px;
+}
+
+.ota-flow-step-title {
+  font-size: 15px;
+  font-weight: 800;
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+}
+
+.ota-flow-step-detail {
+  min-width: 0;
+  color: rgba(255, 255, 255, 0.66);
+  font-size: 12px;
+  font-weight: 650;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+
+.ota-flow-step-button > ion-icon {
+  justify-self: end;
+  min-width: 0;
+  font-size: 20px;
+}
+
+.ota-flow-step-button.primary .ota-flow-step-detail {
+  color: rgba(47, 52, 55, 0.68);
+}
+
+.ota-progress-track {
+  width: 100%;
+  height: 8px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.16);
+}
+
+.ota-progress-track span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, rgba(78, 204, 163, 0.72), rgba(78, 204, 163, 0.96));
+  transition: width 180ms ease;
+}
+
+.log-recording-mode-panel {
+  display: grid;
+  gap: 10px;
+}
+
+.log-recording-mode-panel ion-segment {
+  width: 100%;
+  min-height: 38px;
+  padding: 3px;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.log-recording-mode-panel ion-segment-button {
+  min-width: 0;
+  min-height: 32px;
+  --border-radius: 6px;
+  --color: rgba(255, 255, 255, 0.66);
+  --color-checked: rgba(16, 24, 32, 0.92);
+  --indicator-color: rgba(255, 255, 255, 0.92);
+  font-size: 12px;
+  letter-spacing: 0;
+}
+
+.ble-settings-action-button {
+  min-height: 34px;
+  border: 0;
+  border-radius: 8px;
+  padding: 0 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 750;
+  cursor: pointer;
+}
+
+.ble-settings-action-button.primary {
+  background: rgba(255, 255, 255, 0.92);
+  color: #2f3437;
+}
+
+.ble-settings-action-button.outline {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.ble-settings-action-button.danger {
+  background: rgba(220, 53, 69, 0.88);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  color: rgba(255, 255, 255, 0.96);
+}
+
+.ble-settings-action-button.ghost {
+  min-height: 30px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.ble-settings-action-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.ble-settings-status-line {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.ble-settings-message {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px;
+  border-radius: 8px;
+  font-size: 13px;
+}
+
+.ble-settings-message.warning {
+  background: rgba(246, 173, 85, 0.18);
+}
+
+.ble-settings-message.danger {
+  background: rgba(255, 107, 107, 0.18);
+}
+
+.ble-settings-drawer ion-button {
+  --border-radius: 8px;
+  --box-shadow: none;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.ble-settings-drawer ion-button[fill="outline"] {
+  --background: rgba(255, 255, 255, 0.1);
+  --background-hover: rgba(255, 255, 255, 0.16);
+  --background-activated: rgba(255, 255, 255, 0.22);
+  --border-color: rgba(255, 255, 255, 0.22);
+  --color: rgba(255, 255, 255, 0.92);
+}
+
+.ble-settings-drawer ion-button[fill="clear"] {
+  --color: rgba(255, 255, 255, 0.72);
+}
+
+.ble-settings-drawer ion-list {
+  background: transparent;
+}
+
+.ble-settings-drawer ion-item {
+  --background: transparent;
+  --color: rgba(255, 255, 255, 0.94);
+  --border-color: rgba(255, 255, 255, 0.12);
+  --inner-padding-end: 0;
+}
+
+.ble-settings-drawer ion-input,
+.ble-settings-drawer ion-select {
+  --color: rgba(255, 255, 255, 0.94);
+  --placeholder-color: rgba(255, 255, 255, 0.52);
+  --highlight-color-focused: rgba(255, 255, 255, 0.82);
+}
+
+.ble-settings-drawer ion-segment {
+  --background: rgba(18, 22, 26, 0.42);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 8px;
+}
+
+.ble-settings-drawer ion-range {
+  --bar-background: rgba(255, 255, 255, 0.2);
+  --bar-background-active: rgba(255, 255, 255, 0.82);
+  --knob-background: rgba(255, 255, 255, 0.96);
+  --pin-background: rgba(18, 22, 26, 0.92);
+  --pin-color: rgba(255, 255, 255, 0.96);
+}
+
+@media (max-width: 700px) {
+  .ble-settings-drawer-panel {
+    width: 100vw;
+  }
+
+  .ble-settings-layout {
+    grid-template-columns: clamp(108px, 30vw, 144px) minmax(0, 1fr);
+    grid-template-rows: minmax(0, 1fr);
+  }
+
+  .ble-settings-nav {
+    padding:
+      10px
+      8px
+      calc(var(--app-safe-area-bottom, env(safe-area-inset-bottom, 0px)) + 10px)
+      calc(var(--app-safe-area-left, env(safe-area-inset-left, 0px)) + 8px);
+    flex-direction: column;
+    overflow-x: hidden;
+    overflow-y: auto;
+    border-right: 1px solid rgba(255, 255, 255, 0.14);
+    border-bottom: 0;
+  }
+
+  .ble-settings-nav-item {
+    width: 100%;
+    min-width: 0;
+    min-height: 58px;
+  }
+
+  .ble-settings-detail {
+    padding:
+      14px
+      calc(var(--app-safe-area-right, env(safe-area-inset-right, 0px)) + 12px)
+      calc(var(--app-safe-area-bottom, env(safe-area-inset-bottom, 0px)) + 16px)
+      12px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ble-settings-drawer-backdrop,
+  .ble-settings-drawer-panel {
+    animation-duration: 60ms;
+  }
+}
+
+@media (max-width: 420px) {
+  .ble-settings-card-header {
+    display: grid;
+  }
+}
+
+@media (max-width: 360px) {
+  .ble-settings-layout {
+    grid-template-columns: 96px minmax(0, 1fr);
+  }
+}

@@ -1,0 +1,101 @@
+.control-button {
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+.control-button[data-control-size='I44'] {
+  min-inline-size: var(--control-size-i44);
+  min-block-size: var(--control-size-i44);
+}
+
+.control-button[data-control-size='C36'] {
+  min-inline-size: var(--control-size-i44);
+  min-block-size: var(--control-size-i44);
+  --min-height: var(--control-size-c36);
+  --padding-start: 10px;
+  --padding-end: 10px;
+}
+
+.control-button[data-control-size='M44'] {
+  min-block-size: var(--control-size-m44);
+  --min-height: var(--control-size-m44);
+  --padding-start: 12px;
+  --padding-end: 12px;
+}
+
+/*
+ * Larger controls deliberately stay separate from their visual skin.  This
+ * keeps page-specific cards and rows expressive while making their touch
+ * geometry, focus treatment, and state semantics deterministic.
+ */
+.control-button[data-control-size='L48'] {
+  min-inline-size: var(--control-size-l48);
+  min-block-size: var(--control-size-l48);
+  --min-height: var(--control-size-l48);
+  --padding-start: 14px;
+  --padding-end: 14px;
+}
+
+.control-button[data-control-size='R56'] {
+  min-block-size: var(--control-size-r56);
+  --min-height: var(--control-size-r56);
+  border-radius: var(--control-radius-row);
+}
+
+.control-button[data-control-size='S80'] {
+  min-block-size: var(--control-size-s80);
+  border-radius: var(--control-radius-surface);
+}
+
+.control-button:focus-visible {
+  outline: var(--control-focus-width) solid var(--control-focus-color);
+  outline-offset: var(--control-focus-offset);
+}
+
+.control-button:active:not(:disabled) {
+  transform: scale(var(--control-press-scale));
+}
+
+.control-button:disabled,
+.control-button[data-control-interaction='disabled'] {
+  cursor: not-allowed;
+  opacity: var(--control-disabled-opacity);
+}
+
+.control-button[data-control-selection='on'][data-control-tone='accent'] {
+  border-color: var(--control-accent-border, rgba(94, 234, 212, 0.48));
+  color: var(--control-accent-text, var(--instrument-accent, #59dfff));
+  background: var(--control-accent-surface, rgba(94, 234, 212, 0.16));
+  box-shadow: var(--control-accent-shadow, 0 0 16px rgba(94, 234, 212, 0.18));
+}
+
+.control-button[data-control-selection='on'][data-control-tone='success'] {
+  border-color: var(--control-success-border, rgba(101, 230, 167, 0.48));
+  color: var(--control-success-text, var(--instrument-live, #65e6a7));
+  background: var(--control-success-surface, rgba(101, 230, 167, 0.16));
+  box-shadow: var(--control-success-shadow, 0 0 16px rgba(101, 230, 167, 0.18));
+}
+
+.control-button[data-control-selection='on'][data-control-tone='warning'] {
+  border-color: var(--control-pending-border);
+  color: var(--control-pending-text);
+  background: var(--control-pending-surface);
+}
+
+.control-button[data-control-selection='on'][data-control-tone='danger'] {
+  border-color: var(--control-error-border);
+  color: var(--control-error-text);
+  background: var(--control-error-surface);
+}
+
+.control-button[data-control-variant='destructive'] {
+  border-color: var(--control-destructive-border);
+  color: var(--control-destructive-text);
+  background: var(--control-destructive-surface);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .control-button:not(:disabled):hover {
+    filter: brightness(1.04);
+  }
+}

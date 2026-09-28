@@ -1,0 +1,682 @@
+/*
+ * ULSA EVO visual refresh.
+ * Loaded last so the instrument design can replace the legacy glass theme
+ * without changing BLE, chart, logging, or orientation behavior.
+ */
+
+.dashboard-content {
+  --instrument-bg: rgba(12, 27, 38, 0.88);
+  --instrument-bg-strong: rgba(7, 19, 28, 0.94);
+  --instrument-bg-raised: rgba(25, 46, 59, 0.9);
+  --instrument-border: rgba(151, 190, 204, 0.16);
+  --instrument-border-strong: rgba(151, 213, 219, 0.28);
+  --instrument-text: #f3f8fa;
+  --instrument-text-secondary: #9fb2bd;
+  --instrument-accent: #5eead4;
+  --instrument-live: #65e6a7;
+  --instrument-waiting: #f2c66d;
+  --instrument-error: #ff7b7b;
+  --instrument-card-shadow: 0 12px 32px rgba(0, 0, 0, 0.16);
+  --instrument-card-surface:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.028), transparent 36%),
+    var(--instrument-bg);
+  --dashboard-card-gap: 0.65rem;
+  --section-margin: clamp(1rem, 4vw, 2rem);
+  --swiper-padding: clamp(0.75rem, 3vw, 2rem);
+  --gauge-size: clamp(250px, 55vw, 390px);
+  --chart-height: clamp(290px, 48vh, 410px);
+  color: var(--instrument-text);
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", sans-serif;
+}
+
+.dashboard-content::part(background),
+.dashboard-content::part(scroll),
+.dashboard-shell {
+  background: var(--dashboard-gradient, #071019);
+}
+
+.dashboard-shell {
+  position: relative;
+  isolation: isolate;
+  padding-bottom: calc(var(--dashboard-safe-bottom) + 1.25rem);
+}
+
+.dashboard-shell::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    linear-gradient(rgba(255, 255, 255, 0.018) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.018) 1px, transparent 1px);
+  background-size: 44px 44px;
+  mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.42), transparent 62%);
+}
+
+.header-logo-container {
+  width: min(100%, 1180px);
+  min-height: calc(var(--dashboard-safe-top) + 78px);
+  margin: 0 auto;
+  padding:
+    calc(var(--dashboard-safe-top) + 0.85rem)
+    calc(var(--dashboard-safe-right) + 1rem)
+    0.75rem
+    calc(var(--dashboard-safe-left) + 1rem);
+}
+
+.header-brand-lockup {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+}
+
+.header-brand-link {
+  display: block;
+  border-radius: 10px;
+  color: inherit;
+  text-decoration: none;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.header-brand-link:focus-visible {
+  outline: 2px solid var(--instrument-accent, #59dfff);
+  outline-offset: 5px;
+}
+
+.header-logo {
+  width: clamp(136px, 23vw, 198px);
+  max-width: calc(100vw - 188px);
+  display: block;
+  /* Avoid a WKWebView first-paint filter buffer; both logo assets provide contrast. */
+}
+
+.settings-menu-button,
+.flip-button,
+.card-log-button {
+  top: calc(var(--dashboard-safe-top) + 0.95rem);
+  width: 44px;
+  height: 44px;
+  border-radius: 13px;
+  background: rgba(14, 31, 42, 0.78);
+  border-color: var(--instrument-border);
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.18);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+.settings-menu-button {
+  left: calc(var(--dashboard-safe-left) + 1rem);
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+.flip-button {
+  right: calc(var(--dashboard-safe-right) + 1rem);
+}
+
+.card-log-button {
+  right: calc(var(--dashboard-safe-right) + 1rem);
+}
+
+.settings-menu-button :is(ion-icon, .ulsa-icon),
+.flip-button :is(ion-icon, .ulsa-icon),
+.card-log-button :is(ion-icon, .ulsa-icon) {
+  color: var(--instrument-text-secondary);
+  font-size: 21px;
+}
+
+.settings-menu-button :is(ion-icon, .ulsa-icon) {
+  width: 28px;
+  height: 28px;
+  font-size: 28px;
+}
+
+.settings-menu-button:hover,
+.flip-button:hover,
+.card-log-button:hover {
+  background: var(--instrument-bg-raised);
+  border-color: var(--instrument-border-strong);
+}
+
+.settings-menu-button:hover,
+.settings-menu-button:active {
+  border-color: transparent;
+  background: transparent;
+  box-shadow: none;
+}
+
+.settings-menu-button:focus-visible,
+.flip-button:focus-visible,
+.card-log-button:focus-visible,
+.carousel-nav:focus-visible,
+.time-scale-btn:focus-visible:focus-visible,
+.chart-scale-indicator:focus-visible,
+.unit-switch-button:focus-visible,
+.max-value-button:focus-visible {
+  outline: 2px solid var(--instrument-accent);
+  outline-offset: 2px;
+}
+
+.flip-button.active {
+  background: rgba(94, 234, 212, 0.16);
+  border-color: rgba(94, 234, 212, 0.48);
+}
+
+.flip-button.active :is(ion-icon, .ulsa-icon) {
+  color: var(--instrument-accent);
+}
+
+.card-log-button.active {
+  background: rgba(101, 230, 167, 0.16);
+  border-color: rgba(101, 230, 167, 0.48);
+}
+
+.card-log-button.active :is(ion-icon, .ulsa-icon) {
+  color: var(--instrument-live);
+}
+
+.status-card {
+  width: calc(min(100%, 1180px) - var(--section-margin) * 2);
+  margin: 0 auto var(--dashboard-card-gap);
+  border-radius: 16px;
+  background: var(--instrument-card-surface);
+  border-color: var(--instrument-border);
+  box-shadow: var(--instrument-card-shadow);
+}
+
+.status-card:hover {
+  transform: translateY(-1px);
+  border-color: var(--instrument-border-strong);
+  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.24);
+}
+
+.status-content {
+  min-height: 60px;
+  padding: 0.65rem 1rem;
+  display: grid;
+  grid-template-columns: 1.32rem minmax(0, 1fr) auto;
+  grid-template-rows: auto auto;
+  align-items: center;
+  column-gap: 0.55rem;
+  row-gap: 0.18rem;
+}
+
+.status-row {
+  display: contents;
+}
+
+.status-left {
+  display: contents;
+}
+
+.connection-icon {
+  grid-column: 1;
+  grid-row: 1;
+  align-self: center;
+  font-size: 21px;
+}
+
+.connection-icon.connected {
+  color: var(--instrument-live);
+}
+
+.connection-icon.connecting {
+  color: var(--instrument-waiting);
+}
+
+.connection-icon.disconnected {
+  color: #78909d;
+}
+
+.status-text {
+  grid-column: 2;
+  grid-row: 1;
+  color: var(--instrument-text);
+  font-size: 0.9rem;
+  font-weight: 720;
+  line-height: 1.2;
+}
+
+.status-badge {
+  grid-column: 3;
+  grid-row: 1 / 3;
+  min-block-size: var(--control-visual-action, 40px);
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 0.8rem;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  font-size: 0.67rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.status-badge.connected {
+  color: var(--instrument-live);
+  background: rgba(101, 230, 167, 0.1);
+  border-color: rgba(101, 230, 167, 0.3);
+}
+
+.status-badge.connecting {
+  color: var(--instrument-waiting);
+  background: rgba(242, 198, 109, 0.1);
+  border-color: rgba(242, 198, 109, 0.3);
+}
+
+.status-badge.stale {
+  color: var(--instrument-error);
+  background: rgba(255, 123, 123, 0.1);
+  border-color: rgba(255, 123, 123, 0.32);
+}
+
+.status-badge.disconnected {
+  color: #b7c5cc;
+  background: rgba(151, 190, 204, 0.08);
+  border-color: var(--instrument-border);
+}
+
+.status-subtitle {
+  grid-column: 2;
+  grid-row: 2;
+  padding-left: 0;
+  color: var(--instrument-text-secondary);
+  font-size: 0.74rem;
+}
+
+.carousel-wrapper {
+  width: min(100%, 1180px);
+  margin: 0 auto;
+  /* Status and log cards already provide the shared 0.65rem sibling gap. */
+  padding-top: 0;
+}
+
+.main-swiper {
+  box-sizing: border-box;
+  padding-inline: 0;
+  overflow: hidden;
+}
+
+.main-swiper .slide-content {
+  box-sizing: border-box;
+  padding-inline: var(--section-margin);
+}
+
+.gauge-card-main,
+.chart-card-slide {
+  margin: 0;
+  border-radius: 22px;
+  background: var(--instrument-card-surface);
+  border-color: var(--instrument-border);
+  box-shadow: var(--instrument-card-shadow);
+}
+
+.gauge-content,
+.chart-content {
+  padding: 0.55rem 0.65rem 0.7rem;
+}
+
+.carousel-nav {
+  width: 44px;
+  height: 44px;
+  background: rgba(13, 30, 41, 0.94);
+  border: 1px solid var(--instrument-border-strong);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.28);
+}
+
+.carousel-nav :is(ion-icon, .ulsa-icon) {
+  color: var(--instrument-accent);
+  font-size: 22px;
+}
+
+.carousel-nav.prev {
+  left: 0.25rem;
+}
+
+.carousel-nav.next {
+  right: 0.25rem;
+}
+
+.carousel-wrapper.chart-slide-active .carousel-nav.prev {
+  top: auto;
+  bottom: calc(44px + 1.45rem);
+  transform: none;
+}
+
+.carousel-wrapper.chart-slide-active .carousel-nav.prev:hover {
+  transform: scale(1.06);
+}
+
+.carousel-wrapper.chart-slide-active .carousel-nav.prev.control-button:active:not(:disabled) {
+  transform: none;
+}
+
+.carousel-pagination {
+  position: relative !important;
+  inset: auto !important;
+  z-index: 1;
+  flex: 0 0 auto;
+  padding: 0.35rem 0 0.4rem;
+}
+
+.swiper-pagination-bullet {
+  width: 44px;
+  height: 44px;
+  background: transparent;
+}
+
+.swiper-pagination-bullet-active {
+  width: 44px;
+  background: transparent;
+  box-shadow: none;
+}
+
+.swiper-pagination-bullet::before {
+  width: 6px;
+  height: 6px;
+  background: #6f8793;
+}
+
+.swiper-pagination-bullet-active::before {
+  width: 22px;
+  background: var(--instrument-accent);
+  box-shadow: 0 0 14px rgba(94, 234, 212, 0.28);
+}
+
+.gauge-control-bar {
+  background: rgba(3, 12, 18, 0.44);
+  border-color: var(--instrument-border);
+}
+
+.gauge-control-button {
+  color: var(--instrument-text);
+}
+
+.gauge-control-button span {
+  color: var(--instrument-text-secondary);
+}
+
+.unit-switch-button {
+  background: rgba(94, 234, 212, 0.09);
+  border-color: rgba(94, 234, 212, 0.18);
+}
+
+.chart-scale-indicator {
+  top: 8px;
+  right: 10px;
+  background: rgba(4, 14, 21, 0.84);
+  border-color: var(--instrument-border);
+  color: #c8d7dc;
+}
+
+.time-scale-btn {
+  background: rgba(17, 36, 48, 0.86);
+  border-color: var(--instrument-border);
+  color: var(--instrument-text-secondary);
+}
+
+.metric-card-uniform-type {
+  --metric-label-size: 0.75rem;
+  --metric-value-size: clamp(1.55rem, 3vw, 2rem);
+  --metric-unit-size: 0.78rem;
+  --metric-label-weight: 650;
+  --metric-value-weight: 760;
+  /* Fixed numeric slot keeps the unit and decimal edge stationary while live
+   * values change. Five-and-a-half tabular cells cover 25 m/s, 90.00 km/h,
+  * 2500 cm/s, temperature, sound speed, and the derived speed readings. */
+  --metric-number-slot: 5.5ch;
+  --metric-value-end-padding: 0.05rem;
+}
+
+.wind-direction-card {
+  --metric-number-slot: 3.5ch;
+}
+
+.heading-speed-card {
+  --metric-number-slot: 6.35ch;
+}
+
+.metric-card {
+  min-height: 104px;
+  padding: 0.9rem 1rem;
+  gap: 0.45rem;
+  border-radius: 16px;
+  background: var(--instrument-card-surface);
+  border-color: var(--instrument-border);
+  box-shadow: var(--instrument-card-shadow);
+}
+
+.metric-card-primary,
+.metric-card-secondary {
+  min-height: 104px;
+}
+
+.wind-speed-card {
+  border-color: rgba(103, 232, 249, 0.3);
+  background:
+    linear-gradient(145deg, rgba(103, 232, 249, 0.08), transparent 58%),
+    rgba(13, 29, 40, 0.9);
+}
+
+.wind-direction-card {
+  border-color: rgba(246, 199, 106, 0.24);
+}
+
+.metric-label,
+.metric-card-primary .metric-label,
+.metric-card-secondary .metric-label {
+  color: var(--instrument-text-secondary);
+  font-size: var(--metric-label-size);
+  font-weight: var(--metric-label-weight);
+  line-height: 1.2;
+}
+
+.metric-note {
+  color: var(--instrument-text-secondary);
+  font-size: 0.62rem;
+  font-weight: var(--metric-label-weight);
+}
+
+.metric-value,
+.metric-card-primary .metric-value,
+.metric-card-secondary .metric-value {
+  inline-size: 100%;
+  justify-content: flex-end;
+  box-sizing: border-box;
+  padding-inline-end: var(--metric-value-end-padding);
+  color: var(--instrument-text);
+  font-size: var(--metric-value-size);
+  font-weight: var(--metric-value-weight);
+  line-height: 1;
+  letter-spacing: -0.035em;
+}
+
+.metric-number,
+.metric-empty {
+  display: inline-block;
+  flex: 0 0 var(--metric-number-slot);
+  inline-size: var(--metric-number-slot);
+  min-inline-size: var(--metric-number-slot);
+  text-align: right;
+  font-variant-numeric: tabular-nums lining-nums;
+  font-feature-settings: "tnum" 1, "lnum" 1;
+}
+
+.metric-unit,
+.metric-card-primary .metric-unit,
+.metric-card-secondary .metric-unit {
+  flex: 0 0 auto;
+  margin-left: 0.3rem;
+  color: var(--instrument-text-secondary);
+  font-size: var(--metric-unit-size);
+  font-weight: var(--metric-label-weight);
+  letter-spacing: 0;
+}
+
+@media (max-width: 560px) {
+  .dashboard-content {
+    --section-margin: 1rem;
+    --swiper-padding: 0.75rem;
+    --gauge-size: clamp(245px, 76vw, 330px);
+    --chart-height: clamp(270px, 44vh, 410px);
+  }
+
+  .header-logo-container {
+    min-height: calc(var(--dashboard-safe-top) + 72px);
+    padding-top: calc(var(--dashboard-safe-top) + 0.75rem);
+  }
+
+  .header-logo {
+    width: clamp(126px, 36vw, 154px);
+    max-width: calc(100vw - 184px);
+  }
+
+  .settings-menu-button,
+  .flip-button,
+  .card-log-button {
+    top: calc(var(--dashboard-safe-top) + 0.8rem);
+    width: 44px;
+    height: 44px;
+  }
+
+  .status-card {
+    width: calc(100% - 2rem);
+    margin-bottom: var(--dashboard-card-gap);
+  }
+
+  .status-content {
+    min-height: 56px;
+    padding: 0.55rem 0.8rem;
+  }
+
+  .status-subtitle {
+    padding-left: 0;
+  }
+
+  .carousel-wrapper {
+    padding-top: 0;
+  }
+
+  .gauge-card-main,
+  .chart-card-slide {
+    border-radius: 18px;
+  }
+
+  .carousel-nav {
+    width: 38px;
+    height: 38px;
+  }
+
+  .metric-card-uniform-type {
+    --metric-value-size: 1.45rem;
+  }
+
+  .metric-card,
+  .metric-card-primary,
+  .metric-card-secondary {
+    min-height: 88px;
+    padding: 0.75rem 0.8rem;
+    border-radius: 14px;
+  }
+
+}
+
+.dashboard-content.slate-theme {
+  --instrument-bg: rgba(24, 45, 56, 0.72);
+  --instrument-bg-strong: rgba(20, 39, 50, 0.84);
+  --instrument-bg-raised: rgba(48, 76, 88, 0.9);
+  --instrument-border: rgba(215, 235, 238, 0.2);
+  --instrument-border-strong: rgba(167, 235, 229, 0.34);
+  --instrument-card-shadow: 0 12px 32px rgba(5, 18, 26, 0.16);
+}
+
+.dashboard-content.light-theme {
+  --instrument-bg: rgba(255, 255, 255, 0.84);
+  --instrument-bg-strong: rgba(255, 255, 255, 0.94);
+  --instrument-bg-raised: rgba(230, 238, 242, 0.94);
+  --instrument-border: rgba(28, 56, 70, 0.14);
+  --instrument-border-strong: rgba(28, 96, 106, 0.28);
+  --instrument-text: #10212b;
+  --instrument-text-secondary: #526b77;
+  --instrument-accent: #006d69;
+  --instrument-live: #137a4a;
+  --instrument-waiting: #805000;
+  --instrument-error: #b42318;
+  --instrument-card-shadow: 0 12px 32px rgba(35, 58, 70, 0.12);
+}
+
+.dashboard-content.light-theme .dashboard-shell::before {
+  background-image:
+    linear-gradient(rgba(25, 62, 75, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(25, 62, 75, 0.04) 1px, transparent 1px);
+}
+
+.dashboard-content.light-theme :is(.settings-menu-button, .flip-button, .card-log-button, .carousel-nav) {
+  background: rgba(255, 255, 255, 0.78);
+  border-color: var(--instrument-border);
+  box-shadow: 0 12px 28px rgba(35, 58, 70, 0.12);
+}
+
+.dashboard-content.light-theme .settings-menu-button,
+.dashboard-content.light-theme .settings-menu-button:hover,
+.dashboard-content.light-theme .settings-menu-button:active {
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.dashboard-content.light-theme :is(.settings-menu-button, .flip-button, .card-log-button, .carousel-nav) .ulsa-icon {
+  color: #35505d;
+}
+
+.dashboard-content.light-theme .gauge-control-bar {
+  background: rgba(44, 76, 88, 0.06);
+  border-color: var(--instrument-border);
+}
+
+.dashboard-content.light-theme .gauge-control-button {
+  color: var(--instrument-text);
+}
+
+.dashboard-content.light-theme .unit-switch-button {
+  background: rgba(24, 111, 109, 0.08);
+  border-color: rgba(24, 111, 109, 0.18);
+  box-shadow: none;
+}
+
+.dashboard-content.light-theme .unit-switch-button:hover {
+  background: rgba(24, 111, 109, 0.12);
+}
+
+.dashboard-content.light-theme .max-value-button {
+  background: transparent;
+  border-color: transparent;
+  color: var(--instrument-text);
+}
+
+.dashboard-content.light-theme :is(.chart-scale-indicator, .time-scale-btn) {
+  background: rgba(255, 255, 255, 0.76);
+  border-color: var(--instrument-border);
+  color: #526b77;
+}
+
+.dashboard-content.light-theme .metric-label,
+.dashboard-content.light-theme .metric-note,
+.dashboard-content.light-theme .metric-unit,
+.dashboard-content.light-theme .status-subtitle {
+  color: var(--instrument-text-secondary);
+}
+
+.dashboard-content.light-theme :is(.metric-value, .status-text) {
+  color: var(--instrument-text);
+}

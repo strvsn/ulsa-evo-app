@@ -1,0 +1,60 @@
+.ble-settings-status-summary {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 0;
+  min-width: 0;
+  color: var(--drawer-secondary);
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.ble-settings-status-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  max-width: 100%;
+  color: inherit;
+  font-weight: 650;
+  overflow-wrap: anywhere;
+}
+
+.ble-settings-status-item + .ble-settings-status-item::before {
+  content: '\00b7';
+  flex: 0 0 auto;
+  margin: 0 8px;
+  color: color-mix(in srgb, var(--drawer-secondary) 58%, transparent);
+  font-weight: 500;
+}
+
+.ble-settings-status-item[data-tone="attention"],
+.ble-settings-status-item[data-tone="critical"] {
+  color: var(--drawer-text);
+  font-weight: 740;
+}
+
+.ble-settings-status-item :is(ion-icon, ion-spinner, .ulsa-icon) {
+  flex: 0 0 auto;
+  width: 16px;
+  height: 16px;
+  color: var(--drawer-accent);
+}
+
+.ble-settings-connection-summary {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-width: 0;
+  color: var(--drawer-text);
+  font-size: 13px;
+  font-weight: 720;
+  line-height: 1.4;
+}
+
+.ble-settings-connection-summary :is(ion-spinner, .ulsa-icon) {
+  flex: 0 0 auto;
+  width: 18px;
+  height: 18px;
+  color: var(--drawer-accent);
+}

@@ -1,0 +1,57 @@
+.ble-signal-strength {
+  display: inline-flex;
+  align-items: flex-end;
+  justify-content: center;
+  width: 21px;
+  height: 20px;
+  gap: 2px;
+  color: currentColor;
+  vertical-align: middle;
+}
+
+.ble-signal-strength-bar {
+  width: 3px;
+  border-radius: 1.5px 1.5px 0.75px 0.75px;
+  background: currentColor;
+  opacity: 0.2;
+  transition: opacity 180ms ease;
+}
+
+.ble-signal-strength-bar:nth-child(1) {
+  height: 5px;
+}
+
+.ble-signal-strength-bar:nth-child(2) {
+  height: 9px;
+}
+
+.ble-signal-strength-bar:nth-child(3) {
+  height: 13px;
+}
+
+.ble-signal-strength-bar:nth-child(4) {
+  height: 17px;
+}
+
+.ble-signal-strength-bar[data-active='true'] {
+  opacity: 0.9;
+}
+
+.connection-signal-strength {
+  grid-column: 1;
+  grid-row: 1;
+  align-self: center;
+  color: var(--instrument-text-secondary);
+}
+
+.ble-device-signal {
+  flex: 0 0 auto;
+  margin-inline: 0.2rem 0.55rem;
+  color: inherit;
+}
+
+.connected-device-signal {
+  flex: 0 0 auto;
+  margin-inline-start: 0.7rem;
+  color: inherit;
+}

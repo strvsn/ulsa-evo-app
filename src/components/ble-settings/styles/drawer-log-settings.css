@@ -1,0 +1,319 @@
+/* Drawer-only log and update form styles. Keep these out of the lazy BLE modal chunk. */
+.ble-settings-drawer .card-log-settings-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.ble-settings-drawer .log-interval-target-segment {
+  --background: color-mix(in srgb, var(--drawer-surface-raised) 72%, transparent);
+  width: 100%;
+  margin-bottom: 12px;
+  border: 1px solid var(--drawer-border);
+  border-radius: 12px;
+}
+
+.ble-settings-drawer .log-interval-target-segment ion-segment-button.md {
+  min-width: 0;
+}
+
+.ble-settings-drawer .card-log-settings-header ion-label h3,
+.ble-settings-drawer .card-log-settings-header ion-label p {
+  margin: 0;
+}
+
+.ble-settings-drawer .card-log-settings-header ion-label h3 {
+  color: var(--drawer-text);
+}
+
+.ble-settings-drawer .card-log-settings-header ion-label p {
+  color: var(--drawer-secondary);
+}
+
+.ble-settings-drawer .card-log-settings-controls {
+  display: grid;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.ble-settings-drawer .card-log-settings-controls ion-segment {
+  --background: color-mix(in srgb, var(--drawer-surface-raised) 72%, transparent);
+  border: 1px solid var(--drawer-border);
+  border-radius: 12px;
+}
+
+.ble-settings-drawer .card-log-settings-controls ion-input,
+.ble-settings-drawer .card-log-settings-controls ion-select {
+  --background: color-mix(in srgb, var(--drawer-surface-raised) 72%, transparent);
+  --color: var(--drawer-text);
+  --placeholder-color: var(--drawer-secondary);
+  border: 1px solid var(--drawer-border);
+  border-radius: 12px;
+}
+
+.ble-settings-drawer .card-log-settings-field :is(ion-input, ion-select) {
+  height: 44px;
+  min-height: 44px;
+  --min-height: 44px;
+  --padding-start: 11px;
+  --padding-end: 11px;
+  border-radius: 10px;
+  box-sizing: border-box;
+  font-size: 14px;
+  font-weight: 650;
+}
+
+.ble-settings-drawer .card-log-settings-controls ion-input {
+  padding-inline: 10px !important;
+}
+
+.ble-settings-drawer .card-log-settings-preview {
+  min-height: 20px;
+  color: var(--drawer-text);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.ble-settings-drawer .card-log-settings-message {
+  margin: 0;
+  color: var(--drawer-secondary);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.ble-settings-drawer .browser-log-storage-panel {
+  display: grid;
+  gap: 12px;
+}
+
+.ble-settings-drawer .browser-log-supplemental-note {
+  margin: 0;
+  padding: 10px 12px;
+  border-inline-start: 3px solid var(--drawer-accent);
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--drawer-accent) 8%, var(--drawer-surface-raised));
+  color: var(--drawer-copy);
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.ble-settings-drawer .browser-log-capacity {
+  display: grid;
+  gap: 8px;
+  padding: 12px;
+  border: 1px solid var(--drawer-border);
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--drawer-surface-raised) 72%, transparent);
+}
+
+.browser-log-capacity-heading,
+.browser-log-capacity-values {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  color: var(--drawer-copy);
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.browser-log-capacity-heading strong,
+.browser-log-capacity-values strong {
+  color: var(--drawer-text);
+  font-weight: 740;
+}
+
+.browser-log-capacity-track {
+  position: relative;
+  width: 100%;
+  height: 12px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--drawer-secondary) 22%, transparent);
+}
+
+.browser-log-capacity-used {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: max(2px, var(--browser-log-capacity-percent));
+  max-width: 100%;
+  border-radius: inherit;
+  background: var(--drawer-accent);
+}
+
+.ble-settings-drawer .browser-log-policy-copy,
+.ble-settings-drawer .browser-log-status,
+.ble-settings-drawer .browser-log-alert,
+.ble-settings-drawer .browser-log-empty,
+.ble-settings-drawer .browser-log-prepared p {
+  margin: 0;
+  color: var(--drawer-secondary);
+  font-size: 12px;
+  line-height: 1.55;
+}
+
+.ble-settings-drawer .browser-log-alert {
+  color: var(--ion-color-danger, #eb445a);
+  font-weight: 700;
+}
+
+.ble-settings-drawer .browser-log-status {
+  color: var(--drawer-text);
+}
+
+.ble-settings-drawer .browser-log-prepared,
+.ble-settings-drawer .browser-log-session-item {
+  border: 1px solid var(--drawer-border);
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--drawer-surface-raised) 72%, transparent);
+  padding: 12px;
+}
+
+.ble-settings-drawer .browser-log-session-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.ble-settings-drawer .browser-log-select-all {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: var(--drawer-secondary);
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.ble-settings-drawer .browser-log-select-all input,
+.ble-settings-drawer .browser-log-session-table input[type='checkbox'] {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--drawer-accent);
+}
+
+.ble-settings-drawer .browser-log-session-table-wrap {
+  margin-top: 8px;
+  overflow-x: auto;
+  border: 1px solid var(--drawer-border);
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--drawer-surface-raised) 72%, transparent);
+}
+
+.ble-settings-drawer .browser-log-session-table {
+  width: 100%;
+  min-width: 560px;
+  border-collapse: collapse;
+  color: var(--drawer-secondary);
+  font-size: 11px;
+  line-height: 1.35;
+}
+
+.ble-settings-drawer .browser-log-session-table th,
+.ble-settings-drawer .browser-log-session-table td {
+  padding: 8px 7px;
+  border-bottom: 1px solid color-mix(in srgb, var(--drawer-border) 72%, transparent);
+  text-align: left;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+.ble-settings-drawer .browser-log-session-table th {
+  color: var(--drawer-secondary);
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.ble-settings-drawer .browser-log-session-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.ble-settings-drawer .browser-log-session-table td:first-child,
+.ble-settings-drawer .browser-log-session-table th:first-child {
+  width: 34px;
+  padding-inline: 9px 3px;
+  text-align: center;
+}
+
+.ble-settings-drawer .browser-log-session-table td:nth-child(2) {
+  color: var(--drawer-text);
+  font-weight: 700;
+}
+
+.ble-settings-drawer .browser-log-session-table td:nth-child(3) {
+  color: var(--drawer-secondary);
+}
+
+.ble-settings-drawer .browser-log-session-table td:nth-child(4) {
+  color: var(--drawer-secondary);
+}
+
+.ble-settings-drawer .browser-log-session-table .browser-log-session-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 5px;
+}
+
+.ble-settings-drawer .browser-log-session-table .control-button {
+  min-width: 0;
+  padding-inline: 9px;
+  white-space: nowrap;
+}
+
+.ble-settings-drawer .browser-log-session-list {
+  display: grid;
+  gap: 10px;
+}
+
+.ble-settings-drawer .browser-log-session-item {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+}
+
+.ble-settings-drawer .browser-log-session-item h4,
+.ble-settings-drawer .browser-log-session-item p {
+  margin: 0;
+}
+
+.ble-settings-drawer .browser-log-session-item h4 {
+  color: var(--drawer-text);
+  font-size: 13px;
+}
+
+.ble-settings-drawer .browser-log-session-item p {
+  margin-top: 4px;
+  color: var(--drawer-secondary);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.ble-settings-drawer .browser-log-session-actions {
+  display: grid;
+  gap: 8px;
+  min-width: 168px;
+}
+
+.ble-settings-drawer .browser-log-delete-all {
+  width: 100%;
+}
+
+@media (max-width: 540px) {
+  .ble-settings-drawer .browser-log-session-toolbar {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .ble-settings-drawer .browser-log-session-item {
+    grid-template-columns: 1fr;
+  }
+
+  .ble-settings-drawer .browser-log-session-actions {
+    min-width: 0;
+  }
+}
