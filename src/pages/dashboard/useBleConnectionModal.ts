@@ -54,6 +54,8 @@ export const useBleConnectionModal = ({
   const handleConnectToBleDevice = useCallback((device: BLEDeviceInfo) => {
     setDismissAfterConnection(true);
     stopContinuousNativeScan();
+    // The connection owner reserves this selection synchronously and awaits
+    // native scan shutdown; do not add a second asynchronous selection here.
     void connectToDevice(device);
   }, [connectToDevice, stopContinuousNativeScan]);
 

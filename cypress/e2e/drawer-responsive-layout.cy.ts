@@ -4,6 +4,26 @@ import {
   getVisibleContentScrollWidth,
 } from '../support/drawer-layout-geometry';
 
+describe('single wind reference without extra settings', () => {
+  it('does not add a wind mounting mode to native appearance settings', () => {
+    cy.viewport(393, 852);
+    cy.visit('/cypress/drawer-layout-harness.html?mode=ios&theme=light', {
+      onBeforeLoad(win) {
+        Object.assign(win, { CapacitorCustomPlatform: { name: 'ios' } });
+        win.localStorage.setItem('ulsa-evo.wind-sensor-mount-degrees.v1', '180');
+      },
+    });
+    cy.get('html[data-drawer-layout-harness="ready"]').should('exist');
+    cy.get('.ble-settings-nav-item').contains('表示').click();
+    cy.contains('画面テーマ').should('be.visible');
+    cy.get('.appearance-theme-option').should('have.length', 3);
+    cy.contains('風速計の取付方向').should('not.exist');
+    cy.contains('画面上端に合わせる').should('not.exist');
+    cy.get('.wind-sensor-mount-options').should('not.exist');
+    cy.window().its('localStorage').invoke('getItem', 'ulsa-evo.wind-sensor-mount-degrees.v1').should('eq', '180');
+  });
+});
+
 const viewports = [
   { width: 320, height: 568 },
   { width: 375, height: 667 },

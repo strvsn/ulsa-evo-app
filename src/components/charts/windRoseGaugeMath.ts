@@ -65,8 +65,8 @@ export const snapWindRoseDirection = (value: number): number =>
   normalizeDegrees(Math.round(normalizeDegrees(value) / BAR_STEP_DEGREES) * BAR_STEP_DEGREES);
 
 /**
- * Converts the ULSA-relative wind angle to a bearing from geographic north.
- * The contract assumes ULSA 0° is physically aligned with the iPhone's top.
+ * Converts a wind angle already mapped into the phone hardware frame to true north.
+ * The caller maps screen-relative ULSA wind before adding hardware-top heading.
  */
 export const applyTrueHeading = (ulsaDirection: number, trueHeading: number): number =>
   normalizeDegrees(ulsaDirection + trueHeading);

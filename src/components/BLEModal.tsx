@@ -58,8 +58,9 @@ const BLEModal: React.FC<BLEModalProps> = ({
   const isConnected = connectionState === 'connected';
   const isContinuingNativeSearch = isContinuousNativeScanActive && !isConnected;
   const isBusy = isScanning || isConnecting;
-  const canIdentifyDevice = identifyingDeviceId === null;
-  const canSelectDetectedDevice = !isBusy;
+  const isNativeDeviceListScan = platformInfo?.adapterType === 'Capacitor';
+  const canIdentifyDevice = identifyingDeviceId === null && !isConnecting;
+  const canSelectDetectedDevice = !isConnecting && (!isScanning || isNativeDeviceListScan);
 
   const getStatusText = () => isContinuingNativeSearch
     ? 'ULSAを捜索中...'
@@ -177,7 +178,9 @@ const BLEModal: React.FC<BLEModalProps> = ({
               {platformInfo?.adapterType === 'WebBluetooth'
                 ? 'ボタンを押すと、ブラウザのデバイス選択画面が表示されます'
                 : isContinuingNativeSearch
-                  ? 'ULSA EVOを継続して捜索しています。電源を入れると一覧に表示されます'
+                  ? availableDevices.length > 0
+                    ? 'ULSA EVOを継続して捜索しています。検出したULSAには検索中でも接続できます'
+                    : 'ULSA EVOを継続して捜索しています。電源を入れると一覧に表示されます'
                   : 'ボタンを押すと、デバイスを検索します。検出後、接続するULSAを一覧から選択してください'}
             </p>
             {availableDevices.length > 0 && (

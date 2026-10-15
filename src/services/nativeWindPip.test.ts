@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 const pluginMock = vi.hoisted(() => ({
   isSupported: vi.fn(),
@@ -24,6 +24,8 @@ import {
   startNativeWindPip,
   subscribeToNativeWindPipRestore,
   updateNativeWindPip,
+  stopNativeWindPip,
+  subscribeToNativeWindPipState,
   type WindPipSnapshot,
 } from './nativeWindPip';
 
@@ -44,6 +46,7 @@ const snapshot: WindPipSnapshot = {
 };
 
 describe('nativeWindPip', () => {
+  afterEach(() => { window.__ULSA_NATIVE_RUNTIME = { isIOSAppOnMac: false }; });
   beforeEach(() => {
     vi.clearAllMocks();
     capacitorMock.isNativePlatform.mockReturnValue(true);
@@ -98,5 +101,18 @@ describe('nativeWindPip', () => {
     capacitorMock.isNativePlatform.mockReturnValue(false);
     await expect(subscribeToNativeWindPipRestore(vi.fn())).resolves.toBeNull();
     expect(pluginMock.addListener).not.toHaveBeenCalled();
+  });
+
+  it('disables every PiP bridge call on Mac even if AVKit would report support', async () => {
+    window.__ULSA_NATIVE_RUNTIME = { isIOSAppOnMac: true };
+    pluginMock.isSupported.mockResolvedValue({ supported: true, possible: true, active: false });
+    expect(isNativeWindPipAvailable()).toBe(false);
+    await expect(getNativeWindPipSupport()).resolves.toEqual({ supported: false, possible: false, active: false });
+    await expect(startNativeWindPip(snapshot)).rejects.toThrow();
+    await expect(updateNativeWindPip(snapshot)).resolves.toBeNull();
+    await expect(stopNativeWindPip()).resolves.toBeNull();
+    await expect(subscribeToNativeWindPipState(vi.fn())).resolves.toBeNull();
+    await expect(subscribeToNativeWindPipRestore(vi.fn())).resolves.toBeNull();
+    for (const operation of Object.values(pluginMock)) expect(operation).not.toHaveBeenCalled();
   });
 });

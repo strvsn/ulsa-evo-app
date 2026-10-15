@@ -2,6 +2,7 @@ import { Redirect, Route } from 'react-router-dom';
 import { IonApp, IonRouterOutlet, setupIonicReact } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
 import Dashboard from './pages/Dashboard';
+import { useUniversalAppLinks } from './hooks/useUniversalAppLinks';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -37,9 +38,15 @@ import './theme/control-tokens.css';
 
 setupIonicReact();
 
+const UniversalAppLinks: React.FC = () => {
+  useUniversalAppLinks();
+  return null;
+};
+
 const App: React.FC = () => (
   <IonApp>
     <IonReactRouter>
+      <UniversalAppLinks />
       <IonRouterOutlet>
         <Route exact path="/dashboard">
           <Dashboard />

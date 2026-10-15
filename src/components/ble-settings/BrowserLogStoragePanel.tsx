@@ -8,6 +8,7 @@ import type {
   BrowserLogStatus,
 } from '../../services/browserLog';
 import { getControlOperationalState, NativeControlButton } from '../controls';
+import { isNativeMacLogSaveAvailable } from '../../services/nativeLogArchive';
 import { InfoGrid, SectionCard } from './primitives';
 
 type DeleteRequest =
@@ -73,6 +74,7 @@ export const BrowserLogStoragePanel = ({
   onDeleteSession,
   onDeleteAll,
 }: BrowserLogStoragePanelProps) => {
+  const nativeMacSave = isNativeMacLogSaveAvailable();
   const [deleteRequest, setDeleteRequest] = useState<DeleteRequest>(null);
   const [focusRecovery, setFocusRecovery] = useState<FocusRecovery>(null);
   const [pendingAutoDownload, setPendingAutoDownload] = useState<PendingAutoDownload>(null);
@@ -183,6 +185,12 @@ export const BrowserLogStoragePanel = ({
   return (
     <SectionCard title="アプリ内ログ" icon={save}>
       <div className="browser-log-storage-panel">
+        <p className="browser-log-supplemental-note">
+          記録したログはアプリ内部に保存されます。通常のファイルとして使うにはZIPを書き出してください。
+          {nativeMacSave
+            ? 'Macでは保存ダイアログで保存先を選びます。「保存完了」と表示された後、表示された保存先でZIPを確認できます。'
+            : 'ブラウザーのダウンロード要求や共有画面への引き渡しは、保存先での保存完了とは異なります。'}
+        </p>
         <p className="browser-log-supplemental-note" role="note">
           アプリ内ログは補助記録です。バックグラウンド、画面ロック、BLE切断、OSによるアプリ終了では欠測する場合があります。長時間または確実な記録にはカード内保存を使用してください。
         </p>
@@ -276,7 +284,7 @@ export const BrowserLogStoragePanel = ({
                 operationalState={getControlOperationalState({ busy: exportBusy })}
               >
                 <IonIcon icon={shareSocial} />
-                共有/保存
+                {nativeMacSave ? 'MacにZIPを保存' : '共有/保存'}
               </NativeControlButton>
               <NativeControlButton
                 className="ble-settings-action-button outline"
@@ -387,7 +395,7 @@ export const BrowserLogStoragePanel = ({
                             })}
                           >
                             <IonIcon icon={save} />
-                            ダウンロード
+                            {nativeMacSave ? 'ZIPを保存' : 'ダウンロード'}
                           </NativeControlButton>
                           <NativeControlButton
                             className="ble-settings-action-button outline"

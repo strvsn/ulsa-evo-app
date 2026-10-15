@@ -98,6 +98,7 @@ ULSA EVO App software is distributed under the project MIT License. Dependencies
 | `@babel/traverse` | `7.29.8` | MIT | development |
 | `@babel/types` | `7.29.8` | MIT | development |
 | `@capacitor-community/bluetooth-le` | `8.1.3` | MIT | runtime |
+| `@capacitor/app` | `8.1.1` | MIT | runtime |
 | `@capacitor/cli` | `8.3.0` | MIT | development |
 | `@capacitor/core` | `8.3.0` | MIT | runtime |
 | `@capacitor/ios` | `8.3.0` | MIT | runtime |

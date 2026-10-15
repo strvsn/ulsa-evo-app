@@ -8,10 +8,11 @@ export type RuntimeAppInfo = {
   build: string;
   source: 'ios-bundle' | 'web-package' | 'fallback';
   error: string | null;
+  isIOSAppOnMac: boolean | null;
 };
 
 interface NativeAppInfoPlugin {
-  getInfo(): Promise<{ name?: string; version?: string; build?: string }>;
+  getInfo(): Promise<{ name?: string; version?: string; build?: string; isIOSAppOnMac?: boolean }>;
 }
 
 const UlsaAppInfo = registerPlugin<NativeAppInfoPlugin>('UlsaAppInfo');
@@ -22,6 +23,7 @@ const webFallback = (error: string | null = null): RuntimeAppInfo => ({
   build: BUILD_COMMIT_HASH,
   source: error ? 'fallback' : 'web-package',
   error,
+  isIOSAppOnMac: null,
 });
 
 export const getRuntimeAppInfo = async (): Promise<RuntimeAppInfo> => {
@@ -42,6 +44,7 @@ export const getRuntimeAppInfo = async (): Promise<RuntimeAppInfo> => {
       build,
       source: 'ios-bundle',
       error: null,
+      isIOSAppOnMac: typeof info.isIOSAppOnMac === 'boolean' ? info.isIOSAppOnMac : null,
     };
   } catch (error) {
     return webFallback(

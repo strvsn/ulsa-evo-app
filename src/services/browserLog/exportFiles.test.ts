@@ -8,6 +8,11 @@ const storeMocks = vi.hoisted(() => ({
   chunks: new Map<string, BrowserLogChunkRecord[]>(),
   streamCalls: [] as string[],
 }));
+const macSave = vi.hoisted(() => ({ available: false, save: vi.fn() }));
+vi.mock('../nativeLogArchive', () => ({
+  isNativeMacLogSaveAvailable: () => macSave.available,
+  saveNativeMacLogArchive: macSave.save,
+}));
 
 vi.mock('./store', () => ({
   listAllBrowserLogSegments: vi.fn(async () => storeMocks.segments),
@@ -76,6 +81,8 @@ describe('browser log ZIP export', () => {
     storeMocks.segments = [];
     storeMocks.chunks.clear();
     storeMocks.streamCalls.length = 0;
+    macSave.available = false;
+    macSave.save.mockReset();
   });
 
   it('packs every supplied CSV into one ZIP archive without a final ArrayBuffer copy', async () => {
@@ -92,6 +99,23 @@ describe('browser log ZIP export', () => {
     ]);
     expect(strFromU8(entries['ulsa_ble_20260720T010000Z_01.csv'])).toContain('first');
     expect(strFromU8(entries['ulsa_ble_20260720T020000Z_01.csv'])).toContain('second');
+  });
+
+  it('uses only the Mac save picker and reports its confirmed path', async () => {
+    macSave.available = true;
+    const archive = await createBrowserLogArchive(files);
+    macSave.save.mockResolvedValue({ saved: true, filename: archive.name, path: '/save-fixture/logs.zip', bytes: archive.size });
+    const anchorClick = vi.spyOn(HTMLAnchorElement.prototype, 'click');
+    await expect(deliverBrowserLogArchive(archive)).resolves.toMatchObject({ method: 'saved', path: '/save-fixture/logs.zip' });
+    expect(anchorClick).not.toHaveBeenCalled();
+  });
+
+  it('never falls back to a fake browser download after a Mac save failure', async () => {
+    macSave.available = true;
+    macSave.save.mockRejectedValue(new Error('SAVE_FAILED'));
+    const anchorClick = vi.spyOn(HTMLAnchorElement.prototype, 'click');
+    await expect(deliverBrowserLogArchive(await createBrowserLogArchive(files))).rejects.toThrow('SAVE_FAILED');
+    expect(anchorClick).not.toHaveBeenCalled();
   });
 
   it('streams stored chunks one segment at a time and preserves complete CSV data', async () => {
@@ -248,7 +272,7 @@ describe('browser log ZIP export', () => {
     });
     const archive = await createBrowserLogArchive(files);
 
-    await expect(deliverBrowserLogArchive(archive)).resolves.toBe('share');
+    await expect(deliverBrowserLogArchive(archive)).resolves.toMatchObject({ method: 'share', filename: archive.name });
     expect(share).toHaveBeenCalledTimes(1);
     expect((share.mock.calls[0]?.[0].files as File[])[0]).toBe(archive);
   });
@@ -264,7 +288,7 @@ describe('browser log ZIP export', () => {
     Object.defineProperty(navigator, 'share', { configurable: true, value: share });
     const archive = await createBrowserLogArchive(files);
 
-    await expect(deliverBrowserLogArchive(archive)).resolves.toBe('download');
+    await expect(deliverBrowserLogArchive(archive)).resolves.toMatchObject({ method: 'download', filename: archive.name });
     expect(createObjectURL).toHaveBeenCalledWith(archive);
   });
 });

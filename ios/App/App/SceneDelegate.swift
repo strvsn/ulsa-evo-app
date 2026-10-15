@@ -12,6 +12,13 @@ final class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard scene is UIWindowScene else { return }
         // Main.storyboard creates ULSAEvoBridgeViewController and assigns this
         // window before this callback. Do not create a second Capacitor bridge.
+        // A cold-start Universal Link arrives here, before scene(_:continue:).
+        // Capacitor retains its URL so App.getLaunchUrl() can read it once ready.
+        if let activity = connectionOptions.userActivities.first(where: {
+            $0.activityType == NSUserActivityTypeBrowsingWeb
+        }) {
+            self.scene(scene, continue: activity)
+        }
     }
 
     func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {

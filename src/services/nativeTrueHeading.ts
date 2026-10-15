@@ -1,4 +1,5 @@
-import { Capacitor, registerPlugin, type PluginListenerHandle } from '@capacitor/core';
+import { registerPlugin, type PluginListenerHandle } from '@capacitor/core';
+import { isNativeIosDevice } from './nativeRuntime';
 
 export type TrueHeadingUpdate = {
   trueHeading: number | null;
@@ -38,11 +39,7 @@ interface NativeTrueHeadingPlugin {
 const UlsaTrueHeading = registerPlugin<NativeTrueHeadingPlugin>('UlsaTrueHeading');
 
 export const isNativeTrueHeadingAvailable = (): boolean => {
-  try {
-    return Capacitor.isNativePlatform() && Capacitor.getPlatform() === 'ios';
-  } catch {
-    return false;
-  }
+  return isNativeIosDevice();
 };
 
 export const startTrueHeading = async (

@@ -6,6 +6,13 @@ const rendererSource = readFileSync('ios/App/App/ULSAWindPiPRenderer.swift', 'ut
 const infoPlist = readFileSync('ios/App/App/Info.plist', 'utf8');
 
 describe('native Wind PiP background lifecycle', () => {
+  it('rejects Mac start before rendering or audio preparation and never advertises Mac support', () => {
+    const start = pluginSource.split('@objc func start(', 2)[1].split('private func startPictureInPictureWhenReady', 1)[0];
+    expect(start.indexOf('guard !ProcessInfo.processInfo.isiOSAppOnMac')).toBeLessThan(start.indexOf('self.parseSnapshot'));
+    expect(start.indexOf('guard !ProcessInfo.processInfo.isiOSAppOnMac')).toBeLessThan(start.indexOf('self.ensurePrepared()'));
+    expect(pluginSource).toContain('return ["supported": false, "possible": false, "active": false, "phase": "unavailable"]');
+    expect(pluginSource).toContain('guard !ProcessInfo.processInfo.isiOSAppOnMac,');
+  });
   it('bounds PiP start and releases the audio session on every terminal path', () => {
     expect(pluginSource).toContain('private var audioSessionActive = false');
     expect(pluginSource).toContain('private let startLifecycleTimeout: TimeInterval = 5');

@@ -51,6 +51,7 @@ export default defineConfig(({ mode }) => ({
       'src/components/controls/controlMigration.test.ts',
       'src/services/ble/{WebBLEAdapter,CapacitorBLEAdapter,bleDataParser}.test.ts',
       'src/hooks/{useBLE,useSensorData}.test.tsx',
+      'src/hooks/useUniversalAppLinks.test.tsx',
     ] : ['src/**/*.test.{ts,tsx}'],
   },
   server: devHttps ? { https: devHttps } : undefined,

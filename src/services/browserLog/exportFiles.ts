@@ -2,6 +2,7 @@ import { strToU8, Zip, ZipDeflate } from 'fflate';
 import { formatBrowserLogFilenameTimestamp } from './csv';
 import { listAllBrowserLogSegments, streamBrowserLogChunks } from './store';
 import { BROWSER_LOG_MAX_STORED_BYTES, BrowserLogStorageError } from './policy';
+import { isNativeMacLogSaveAvailable, saveNativeMacLogArchive } from '../nativeLogArchive';
 import type {
   BrowserLogExportFile,
   BrowserLogExportScope,
@@ -11,7 +12,8 @@ import type {
   BrowserLogSegmentRecord,
 } from './types';
 
-export type BrowserLogExportMethod = 'share' | 'download';
+export type BrowserLogExportMethod = 'share' | 'download' | 'saved';
+export type BrowserLogDeliveryResult = { method: BrowserLogExportMethod; filename: string; path?: string };
 
 const ZIP_OUTPUT_PART_BYTES = 1024 * 1024;
 // ZIP/DOS entry dates are encoded with local Date getters by fflate.
@@ -303,7 +305,11 @@ const downloadFile = (file: File): void => {
 /** Call directly from the second user click so Web Share keeps transient activation. */
 export const deliverBrowserLogArchive = async (
   archive: File,
-): Promise<BrowserLogExportMethod> => {
+): Promise<BrowserLogDeliveryResult> => {
+  if (isNativeMacLogSaveAvailable()) {
+    const result = await saveNativeMacLogArchive(archive);
+    return { method: 'saved', filename: result.filename, path: result.path };
+  }
   if (canShareFiles([archive])) {
     try {
       const sharePromise = navigator.share({
@@ -311,16 +317,16 @@ export const deliverBrowserLogArchive = async (
         title: 'ULSA EVO BLE logs archive',
       });
       await sharePromise;
-      return 'share';
+      return { method: 'share', filename: archive.name };
     } catch (error) {
       if (error instanceof DOMException && error.name === 'AbortError') throw error;
       // If transient user activation was lost while the ZIP was generated,
       // keep the one-click flow usable with the browser's normal download.
       downloadFile(archive);
-      return 'download';
+      return { method: 'download', filename: archive.name };
     }
   }
 
   downloadFile(archive);
-  return 'download';
+  return { method: 'download', filename: archive.name };
 };

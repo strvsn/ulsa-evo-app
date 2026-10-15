@@ -1,4 +1,5 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { readFileSync } from 'node:fs';
 
 const capacitorMock = vi.hoisted(() => ({
   isNativePlatform: vi.fn(),
@@ -24,6 +25,34 @@ import {
 } from './nativeTrueHeading';
 
 describe('nativeTrueHeading', () => {
+  afterEach(() => { window.__ULSA_NATIVE_RUNTIME = { isIOSAppOnMac: false }; });
+
+  it('never starts heading or navigation on Mac even when Capacitor reports iOS', async () => {
+    capacitorMock.isNativePlatform.mockReturnValue(true);
+    capacitorMock.getPlatform.mockReturnValue('ios');
+    window.__ULSA_NATIVE_RUNTIME = { isIOSAppOnMac: true };
+    expect(isNativeTrueHeadingAvailable()).toBe(false);
+    await expect(startTrueHeading({ navigationMode: true })).resolves.toMatchObject({
+      authorization: 'unsupported', available: false,
+    });
+    await stopTrueHeading();
+    await expect(subscribeToTrueNavigation(vi.fn())).resolves.toBeNull();
+    await expect(subscribeToTrueHeading(vi.fn())).resolves.toBeNull();
+    expect(pluginMock.start).not.toHaveBeenCalled();
+    expect(pluginMock.stop).not.toHaveBeenCalled();
+    expect(pluginMock.addListener).not.toHaveBeenCalled();
+  });
+  it('keeps the measured heading on the fixed hardware-top axis, not physical display posture', () => {
+    const nativeSource = readFileSync('ios/App/App/ULSATrueHeadingPlugin.swift', 'utf8');
+    expect(nativeSource).toContain('locationManager.headingOrientation = .portrait');
+    expect(nativeSource).not.toContain('UIDevice.current.orientation');
+    expect(nativeSource).not.toContain('orientationDidChangeNotification');
+    const screenSource = readFileSync('ios/App/App/ULSAEvoBridgeViewController.swift', 'utf8');
+    expect(screenSource).toContain('view.window?.windowScene?.interfaceOrientation ?? .portrait');
+    expect(screenSource).toContain('case .landscapeLeft: return 270');
+    expect(screenSource).toContain('case .landscapeRight: return 90');
+  });
+
   beforeEach(() => {
     capacitorMock.isNativePlatform.mockReset();
     capacitorMock.getPlatform.mockReset();

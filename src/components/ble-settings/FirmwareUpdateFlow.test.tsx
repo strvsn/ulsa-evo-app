@@ -1,4 +1,6 @@
 import { useState, type ReactNode } from 'react';
+import { Capacitor } from '@capacitor/core';
+import { isNativeIosDevice } from '../../services/nativeRuntime';
 import { readFileSync } from 'node:fs';
 import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
@@ -112,7 +114,60 @@ beforeEach(() => {
     token: 'initial-token', ip: '192.168.4.1', contractVersion: 1, sessionOrigin: 'initial_setup',
     firmwareProfile: 'initial', targetProfile: 'demo', purpose: 'esp32_ota', remainingSeconds: 60 });
 });
-afterEach(() => { vi.clearAllMocks(); vi.unstubAllEnvs(); vi.unstubAllGlobals(); });
+afterEach(() => {
+  vi.clearAllMocks(); vi.restoreAllMocks(); vi.unstubAllEnvs(); vi.unstubAllGlobals();
+  window.__ULSA_NATIVE_RUNTIME = { isIOSAppOnMac: false };
+});
+
+const nativeMac = () => {
+  vi.spyOn(Capacitor, 'isNativePlatform').mockReturnValue(true);
+  vi.spyOn(Capacitor, 'getPlatform').mockReturnValue('ios');
+  window.__ULSA_NATIVE_RUNTIME = { isIOSAppOnMac: true };
+  mocks.native.mockImplementation(isNativeIosDevice);
+};
+
+describe('Mac native manual Wi-Fi update workflow', () => {
+  it('keeps STM32 native HTTP and requires user confirmation before upload and write', async () => {
+    nativeMac();
+    render(<Panel />);
+    await prepare();
+    const confirm = await screen.findByRole('button', { name: '接続を確認' });
+    expect(screen.getByText(controlStatus.ssid)).toBeInTheDocument();
+    expect(mocks.downloadStm.mock.invocationCallOrder[0]).toBeLessThan(mocks.control.mock.invocationCallOrder[0]);
+    expect(mocks.join).not.toHaveBeenCalled();
+    expect(mocks.readStm).not.toHaveBeenCalled();
+    expect(mocks.uploadStm).not.toHaveBeenCalled();
+    fireEvent(window, new Event('focus'));
+    expect(mocks.readStm).not.toHaveBeenCalled();
+    await act(async () => { fireEvent.click(confirm); });
+    const write = await screen.findByRole('button', { name: '更新を開始' });
+    expect(mocks.readStm).toHaveBeenNthCalledWith(1, expect.objectContaining({ token: controlStatus.token }), undefined, STM32_STATUS_REQUEST_TIMEOUT_MS);
+    expect(mocks.probe).toHaveBeenCalledOnce();
+    expect(mocks.write).not.toHaveBeenCalled();
+    await act(async () => { fireEvent.click(write); });
+    await screen.findByText('更新が完了しました');
+    expect(mocks.write).toHaveBeenCalledOnce();
+    expect(mocks.remove).not.toHaveBeenCalled();
+  });
+
+  it('keeps ESP32 manual Wi-Fi and never transfers firmware before explicit confirmation', async () => {
+    nativeMac();
+    render(<Panel target="esp32" />);
+    await prepare();
+    const confirm = await screen.findByRole('button', { name: '接続を確認' });
+    expect(screen.getByText(controlStatus.ssid)).toBeInTheDocument();
+    expect(mocks.join).not.toHaveBeenCalled();
+    expect(mocks.readEsp).not.toHaveBeenCalled();
+    expect(mocks.uploadEsp).not.toHaveBeenCalled();
+    await act(async () => { fireEvent.click(confirm); });
+    const write = await screen.findByRole('button', { name: '更新を開始' });
+    expect(mocks.uploadEsp).not.toHaveBeenCalled();
+    await act(async () => { fireEvent.click(write); });
+    await screen.findByText('更新が完了しました');
+    expect(mocks.uploadEsp).toHaveBeenCalledOnce();
+    expect(mocks.remove).not.toHaveBeenCalled();
+  });
+});
 
 const webBrowser = (permissions?: { query: ReturnType<typeof vi.fn> }, android = false) => {
   vi.stubGlobal('isSecureContext', true);

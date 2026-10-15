@@ -13,6 +13,11 @@ class ULSASoftApPlugin: CAPPlugin, CAPBridgedPlugin {
     ]
 
     @objc func connect(_ call: CAPPluginCall) {
+        guard !ProcessInfo.processInfo.isiOSAppOnMac else {
+            resolveInputFailure(call, ssid: call.getString("ssid") ?? "", reason: "unsupported",
+                                message: "MacではWi-Fiメニューから更新用ネットワークへ接続してください。")
+            return
+        }
         guard #available(iOS 11.0, *) else {
             call.unavailable("NEHotspotConfiguration requires iOS 11 or later.")
             return
@@ -61,6 +66,10 @@ class ULSASoftApPlugin: CAPPlugin, CAPBridgedPlugin {
     }
 
     @objc func removeConfiguration(_ call: CAPPluginCall) {
+        guard !ProcessInfo.processInfo.isiOSAppOnMac else {
+            call.resolve(["ssid": call.getString("ssid") ?? "", "removed": false])
+            return
+        }
         guard #available(iOS 11.0, *) else {
             call.unavailable("NEHotspotConfiguration requires iOS 11 or later.")
             return

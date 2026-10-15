@@ -1,3 +1,4 @@
+import { Capacitor } from '@capacitor/core';
 import { BleClient } from '@capacitor-community/bluetooth-le';
 import type { SensorData, DeviceInfo, CardStatus, CardLogControlStatus, CardLogDetailStatus, CardLogSettingsStatus, CardLogSettingsWriteRequest, DeviceModeStatus, DeviceResetStatus, DeviceResetTarget, I2cConfigStatus, I2cConfigWriteRequest, Stm32FirmwareVersionStatus, SampleMetadataStatus, DeviceHealthStatus, BLECapabilitiesStatus, LEDBrightnessStatus, LEDWindReactiveConfig, LEDWindReactiveStatus, OtaControlOp, OtaControlStatus, Stm32UpdateControlOp, Stm32UpdateControlSessionBinding, Stm32UpdateControlStatus, RtcTimezoneStatus, RtcTimezoneWriteRequest } from '../../types/ble';
 import type { IBLEAdapter, BLEConnectionState, BLEDevice as AppBLEDevice, BLEParseErrorStats, NotificationStartResult, SensorFieldName, SensorNotificationEvent, SensorStatusCallback, } from './IBLEAdapter';
@@ -28,7 +29,7 @@ export class CapacitorBLEAdapter implements IBLEAdapter {
     private parseErrorCount = 0;
     private lastParseError: string | null = null;
     private scanner = new CapacitorBleScanner();
-    private deviceIdentify = new CapacitorBleDeviceIdentify(() => this.connectedDeviceId);
+    private deviceIdentify = new CapacitorBleDeviceIdentify(() => this.connectedDeviceId, () => this.scanner.stop());
     async initialize(): Promise<void> {
         await BleClient.initialize();
     }
@@ -69,7 +70,7 @@ export class CapacitorBLEAdapter implements IBLEAdapter {
         this.disconnectCallback = onDisconnect ?? null;
         try {
             await this.deviceIdentify.waitForIdle();
-            await BleClient.connect(deviceId, (disconnectedId) => {
+            const onNativeDisconnect = (disconnectedId: string) => {
                 if (disconnectedId === deviceId) {
                     this.connectionState = 'disconnected';
                     this.connectedDeviceId = null;
@@ -77,7 +78,13 @@ export class CapacitorBLEAdapter implements IBLEAdapter {
                     this.deviceModeNotificationActive = false;
                     this.disconnectCallback?.();
                 }
-            });
+            };
+            if (Capacitor.getPlatform() === 'ios') {
+                await BleClient.connect(deviceId, onNativeDisconnect, { skipDescriptorDiscovery: true });
+            }
+            else {
+                await BleClient.connect(deviceId, onNativeDisconnect);
+            }
             this.connectionState = 'connected';
             this.connectedDeviceId = deviceId;
         }

@@ -27,6 +27,8 @@ const bleClientMock = vi.hoisted(() => ({
     writeWithoutResponse: vi.fn(),
     isEnabled: vi.fn(),
 }));
+const capacitorMock = vi.hoisted(() => ({ getPlatform: vi.fn() }));
+vi.mock('@capacitor/core', () => ({ Capacitor: capacitorMock }));
 vi.mock('@capacitor-community/bluetooth-le', () => ({
     BleClient: bleClientMock,
     numbersToDataView: (numbers: number[]) => new DataView(Uint8Array.from(numbers).buffer),
@@ -104,6 +106,7 @@ describe('CapacitorBLEAdapter', () => {
         vi.clearAllMocks();
         vi.unstubAllEnvs();
         capacitorDisconnectCallback = null;
+        capacitorMock.getPlatform.mockReturnValue('ios');
         bleClientMock.initialize.mockResolvedValue(undefined);
         bleClientMock.stopLEScan.mockResolvedValue(undefined);
         bleClientMock.connect.mockImplementation(async (_deviceId: string, onDisconnect?: DisconnectCallback) => {
@@ -117,6 +120,85 @@ describe('CapacitorBLEAdapter', () => {
         bleClientMock.write.mockResolvedValue(undefined);
         bleClientMock.writeWithoutResponse.mockResolvedValue(undefined);
         bleClientMock.isEnabled.mockResolvedValue(true);
+    });
+    it.each(['ios', 'android', 'web'])('limits descriptor skipping to iOS normal connections (%s)', async (platform) => {
+        capacitorMock.getPlatform.mockReturnValue(platform);
+        const callbacks = mockRequiredNotificationsOnly();
+        const adapter = new CapacitorBLEAdapter();
+        const onDisconnect = vi.fn();
+        const onData = vi.fn();
+        await adapter.connect('device-a', onDisconnect);
+        if (platform === 'ios') {
+            expect(bleClientMock.connect).toHaveBeenCalledWith('device-a', expect.any(Function), { skipDescriptorDiscovery: true });
+        }
+        else {
+            expect(bleClientMock.connect).toHaveBeenCalledWith('device-a', expect.any(Function));
+            expect(bleClientMock.connect.mock.calls[0]).toHaveLength(2);
+        }
+        const result = await adapter.startSensorNotifications(onData);
+        expect(result.required).toEqual({ windDirection: true, windSpeed: true, temperature: true });
+        callbacks.get(CHARACTERISTIC_UUIDS.APPARENT_WIND_DIRECTION)?.(uint16LE(4200));
+        callbacks.get(CHARACTERISTIC_UUIDS.APPARENT_WIND_SPEED)?.(uint16LE(123));
+        callbacks.get(CHARACTERISTIC_UUIDS.TEMPERATURE)?.(int16LE(2450));
+        expect(onData).toHaveBeenCalledTimes(3);
+        capacitorDisconnectCallback?.('another-device');
+        expect(onDisconnect).not.toHaveBeenCalled();
+        expect(adapter.getConnectionState()).toBe('connected');
+        capacitorDisconnectCallback?.('device-a');
+        expect(onDisconnect).toHaveBeenCalledOnce();
+        expect(adapter.getConnectionState()).toBe('disconnected');
+    });
+    it.each(['android', 'web'])('does not alter temporary identify connection options on %s', async (platform) => {
+        capacitorMock.getPlatform.mockReturnValue(platform);
+        vi.useFakeTimers();
+        try {
+            const adapter = new CapacitorBLEAdapter();
+            const identify = adapter.identifyDevice('device-a');
+            await vi.advanceTimersByTimeAsync(200);
+            await identify;
+            expect(bleClientMock.connect).toHaveBeenCalledWith('device-a');
+            expect(bleClientMock.connect.mock.calls[0]).toHaveLength(1);
+            expect(bleClientMock.disconnect).toHaveBeenCalledWith('device-a');
+            expect(adapter.getConnectionState()).toBe('disconnected');
+        }
+        finally {
+            vi.useRealTimers();
+        }
+    });
+    it('keeps iOS connection failures disconnected without starting notifications', async () => {
+        bleClientMock.connect.mockRejectedValueOnce(new Error('Connection timeout'));
+        const adapter = new CapacitorBLEAdapter();
+        await expect(adapter.connect('device-a')).rejects.toThrow('Connection timeout');
+        expect(bleClientMock.connect).toHaveBeenCalledWith('device-a', expect.any(Function), { skipDescriptorDiscovery: true });
+        expect(adapter.getConnectionState()).toBe('disconnected');
+        expect(bleClientMock.startNotifications).not.toHaveBeenCalled();
+    });
+    it('restarts iOS standard notifications after disconnect and rejects callbacks from the old session', async () => {
+        const firstCallbacks = mockRequiredNotificationsOnly();
+        const adapter = new CapacitorBLEAdapter();
+        const onData = vi.fn();
+        await adapter.connect('device-a');
+        await adapter.startSensorNotifications(onData);
+        firstCallbacks.get(CHARACTERISTIC_UUIDS.APPARENT_WIND_DIRECTION)?.(uint16LE(4200));
+        expect(onData).toHaveBeenCalledOnce();
+        await adapter.disconnect();
+        const secondCallbacks = mockRequiredNotificationsOnly();
+        await adapter.connect('device-a');
+        const result = await adapter.startSensorNotifications(onData);
+        expect(result.required).toEqual({ windDirection: true, windSpeed: true, temperature: true });
+        firstCallbacks.get(CHARACTERISTIC_UUIDS.APPARENT_WIND_DIRECTION)?.(uint16LE(8400));
+        expect(onData).toHaveBeenCalledOnce();
+        secondCallbacks.get(CHARACTERISTIC_UUIDS.APPARENT_WIND_DIRECTION)?.(uint16LE(9000));
+        expect(onData).toHaveBeenCalledTimes(2);
+        expect(onData).toHaveBeenLastCalledWith(expect.objectContaining({
+            changedField: 'windDirection', latestSnapshot: expect.objectContaining({ windDirection: 90 }),
+        }));
+        expect(bleClientMock.connect.mock.calls).toEqual([
+            ['device-a', expect.any(Function), { skipDescriptorDiscovery: true }],
+            ['device-a', expect.any(Function), { skipDescriptorDiscovery: true }]
+        ]);
+        await adapter.disconnect();
+        expect(adapter.getConnectionState()).toBe('disconnected');
     });
     it('does not auto-select the first device when multiple Capacitor scan results exist', async () => {
         vi.useFakeTimers();
@@ -207,7 +289,7 @@ describe('CapacitorBLEAdapter', () => {
         });
         vi.useRealTimers();
     });
-    it('writes the Device Identify command through a temporary connection', async () => {
+    it('writes the Device Identify command through an iOS temporary connection without descriptor discovery', async () => {
         vi.useFakeTimers();
         try {
             const adapter = new CapacitorBLEAdapter();
@@ -215,7 +297,7 @@ describe('CapacitorBLEAdapter', () => {
             await vi.advanceTimersByTimeAsync(200);
             await identifyPromise;
             expect(bleClientMock.stopLEScan).toHaveBeenCalled();
-            expect(bleClientMock.connect).toHaveBeenCalledWith('device-a');
+            expect(bleClientMock.connect).toHaveBeenCalledWith('device-a', undefined, { skipDescriptorDiscovery: true });
             expect(bleClientMock.write).toHaveBeenCalledWith('device-a', SERVICE_UUIDS.ULSA_WIND, CHARACTERISTIC_UUIDS.DEVICE_IDENTIFY, dataViewFromBytes(0x01));
             expect(bleClientMock.writeWithoutResponse).not.toHaveBeenCalled();
             expect(bleClientMock.disconnect).toHaveBeenCalledWith('device-a');
@@ -341,6 +423,7 @@ describe('CapacitorBLEAdapter', () => {
         const onData = vi.fn();
         await adapter.connect('device-a');
         const result = await adapter.startSensorNotifications(onData);
+        expect(bleClientMock.connect).toHaveBeenCalledWith('device-a', expect.any(Function), { skipDescriptorDiscovery: true });
         expect(Object.values(result.required).filter(Boolean)).toHaveLength(1);
         expect(notificationCallback).not.toBeNull();
         notificationCallback!(value);
@@ -350,12 +433,14 @@ describe('CapacitorBLEAdapter', () => {
             latestSnapshot: expect.objectContaining({ [changedField]: expectedValue }),
         }));
         await adapter.disconnect();
+        expect(adapter.getConnectionState()).toBe('disconnected');
     });
     it('fails Capacitor measurement startup only when all standard characteristics are unavailable', async () => {
         bleClientMock.startNotifications.mockRejectedValue(new Error('characteristic not found'));
         const adapter = new CapacitorBLEAdapter();
         await adapter.connect('device-a');
         await expect(adapter.startSensorNotifications(vi.fn())).rejects.toThrow('標準センサー通知');
+        expect(bleClientMock.connect).toHaveBeenCalledWith('device-a', expect.any(Function), { skipDescriptorDiscovery: true });
         expect(adapter.getConnectionState()).toBe('connected');
         await adapter.disconnect();
     });

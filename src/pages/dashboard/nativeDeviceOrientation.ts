@@ -1,4 +1,4 @@
-import { Capacitor } from '@capacitor/core';
+import { isNativeIosDevice } from '../../services/nativeRuntime';
 
 export type NativeDeviceOrientationDetail = {
   orientation?: string;
@@ -13,9 +13,10 @@ declare global {
 }
 
 export const isNativeDeviceOrientationAutoFlipAllowed = (): boolean => {
-  try {
-    return Capacitor.isNativePlatform() && Capacitor.getPlatform() === 'ios';
-  } catch {
-    return false;
-  }
+  return isNativeIosDevice();
+};
+
+/** Clockwise bearing of UIKit's screen top relative to the phone's hardware top. */
+export const getNativeInterfaceRotationDegrees = (angle?: number): number => {
+  return angle !== undefined && [0, 90, 180, 270].includes(angle) ? angle : 0;
 };

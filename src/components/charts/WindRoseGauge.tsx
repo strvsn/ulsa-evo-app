@@ -1,4 +1,4 @@
-import { memo, useEffect, useRef } from 'react';
+import { memo, useEffect, useLayoutEffect, useRef } from 'react';
 import { convertWindSpeed, type WindSpeedUnit } from '../../utils/windSpeedConverter';
 import {
   drawWindRoseCanvas,
@@ -20,15 +20,19 @@ interface WindRoseGaugeProps {
   hasWindDirection?: boolean;
   windSpeed: number | null;
   windSpeedUnit: WindSpeedUnit;
-  /** Uncorrected ULSA-relative direction. Compass rotation is applied only while drawing. */
+  /** ULSA/body-relative direction. Display rotation never changes this measurement. */
   windDirectionContinuous: number;
   /** Wall-clock timestamp of the BLE sample; distinct from the render clock. */
   sampleTimestampMs?: number | null;
   isTilted?: boolean;
   tiltDegrees?: number;
   themeVariant?: WindRoseThemeVariant;
-  /** iOS true heading, in degrees clockwise from geographic north. */
+  /** Hardware-top true heading, in degrees clockwise from geographic north. */
   trueHeading?: number | null;
+  /** UIKit plus CSS screen-top bearing relative to hardware top; drawing only. */
+  screenRotationDegrees?: number;
+  /** Maps the existing screen-relative ULSA zero into the native hardware frame. */
+  windReferenceRotationDegrees?: number;
   /** iOS heading uncertainty in degrees. Drawn as a red north-side sector. */
   headingAccuracy?: number | null;
   /** GNSS mode can show platform ground speed in the upper center metric. */
@@ -60,6 +64,8 @@ const WindRoseGauge = ({
   tiltDegrees = 50,
   themeVariant = 'graphite',
   trueHeading = null,
+  screenRotationDegrees = 0,
+  windReferenceRotationDegrees = 0,
   headingAccuracy = null,
   centerPrimaryMetric = 'windDirection',
   groundSpeedMps = null,
@@ -73,6 +79,7 @@ const WindRoseGauge = ({
   const motionModelRef = useRef(new WindRoseMotionModel());
   const renderCadenceRef = useRef(new WindRoseRenderCadence());
   const directionReferenceRef = useRef(directionReference);
+  const windReferenceRotationRef = useRef(windReferenceRotationDegrees);
   const animationFrameRef = useRef<number | null>(null);
   const mountedRef = useRef(true);
   const documentVisibleRef = useRef(true);
@@ -85,6 +92,8 @@ const WindRoseGauge = ({
     tiltDegrees,
     themeVariant,
     trueHeading,
+    screenRotationDegrees,
+    windReferenceRotationDegrees,
     headingAccuracy,
     centerPrimaryMetric,
     groundSpeedMps,
@@ -93,26 +102,33 @@ const WindRoseGauge = ({
     onPeakHoldFrameChange,
   });
 
-  renderOptionsRef.current = {
-    isActive,
-    hasWindData,
-    hasWindDirection,
-    windSpeedUnit,
-    isTilted,
-    tiltDegrees,
-    themeVariant,
-    trueHeading,
-    headingAccuracy,
-    centerPrimaryMetric,
-    groundSpeedMps,
-    directionReference,
-    peakHolds,
-    onPeakHoldFrameChange,
-  };
+  // A suspended/aborted concurrent render must not expose uncommitted angles
+  // to an animation callback still painting the currently visible surface.
+  useLayoutEffect(() => {
+    renderOptionsRef.current = {
+      isActive,
+      hasWindData,
+      hasWindDirection,
+      windSpeedUnit,
+      isTilted,
+      tiltDegrees,
+      themeVariant,
+      trueHeading,
+      screenRotationDegrees,
+      windReferenceRotationDegrees,
+      headingAccuracy,
+      centerPrimaryMetric,
+      groundSpeedMps,
+      directionReference,
+      peakHolds,
+      onPeakHoldFrameChange,
+    };
+  });
 
   const requestDrawRef = useRef<() => void>(() => undefined);
+  const drawSynchronouslyRef = useRef<() => void>(() => undefined);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return undefined;
     mountedRef.current = true;
@@ -168,6 +184,8 @@ const WindRoseGauge = ({
         tiltDegrees: options.tiltDegrees,
         theme: options.themeVariant,
         trueHeading: options.trueHeading,
+        screenRotationDegrees: options.screenRotationDegrees,
+        windReferenceRotationDegrees: options.windReferenceRotationDegrees,
         headingAccuracy: options.headingAccuracy,
         centerPrimaryMetric: options.centerPrimaryMetric,
         groundSpeedMps: options.groundSpeedMps,
@@ -181,7 +199,10 @@ const WindRoseGauge = ({
         displayDirectionDegrees: normalizeDegrees(
           frame.peakDirectionDegrees + (options.trueHeading ?? 0),
         ),
-        displayRotationDegrees: 0,
+        displayRotationDegrees: options.directionReference === 'trueNorth'
+          || options.directionReference === 'trueWind'
+          ? normalizeDegrees(options.trueHeading ?? 0)
+          : 0,
         directionReference: options.directionReference,
       } : null);
       if (frame.needsAnimation) requestDrawRef.current();
@@ -224,6 +245,18 @@ const WindRoseGauge = ({
       requestDrawRef.current();
     };
 
+    drawSynchronouslyRef.current = () => {
+      if (!mountedRef.current || !documentVisibleRef.current || !renderOptionsRef.current.isActive) return;
+      resizeCanvas();
+      if (animationFrameRef.current !== null) {
+        window.cancelAnimationFrame(animationFrameRef.current);
+        animationFrameRef.current = null;
+      }
+      // One urgent frame for a viewport transition, not a higher sensor cadence.
+      renderCadenceRef.current.reset();
+      draw(performance.now());
+    };
+
     const observer = new ResizeObserver(resizeCanvas);
     observer.observe(canvas);
     document.addEventListener('visibilitychange', handleVisibilityChange);
@@ -232,6 +265,7 @@ const WindRoseGauge = ({
       mountedRef.current = false;
       staticLayerRef.current = null;
       requestDrawRef.current = () => undefined;
+      drawSynchronouslyRef.current = () => undefined;
       observer.disconnect();
       document.removeEventListener('visibilitychange', handleVisibilityChange);
       if (animationFrameRef.current !== null) {
@@ -241,14 +275,15 @@ const WindRoseGauge = ({
     };
   }, []);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const now = performance.now();
     const crossesTrueWindBoundary = (
       directionReferenceRef.current === 'trueWind'
     ) !== (directionReference === 'trueWind');
-    if (crossesTrueWindBoundary) {
+    if (crossesTrueWindBoundary || windReferenceRotationRef.current !== windReferenceRotationDegrees) {
       motionModelRef.current.reset(windDirectionContinuous);
     }
+    windReferenceRotationRef.current = windReferenceRotationDegrees;
     directionReferenceRef.current = directionReference;
     const hasCurrentWindData = isActive
       && hasWindData
@@ -270,7 +305,13 @@ const WindRoseGauge = ({
     sampleTimestampMs,
     windDirectionContinuous,
     windSpeed,
+    windReferenceRotationDegrees,
   ]);
+
+  // Commit the matching pixels before the parent commits its CSS flip/paint.
+  useLayoutEffect(() => {
+    if (isActive) drawSynchronouslyRef.current();
+  }, [isActive, screenRotationDegrees, windReferenceRotationDegrees]);
 
   useEffect(() => {
     if (isActive) requestDrawRef.current();
@@ -344,6 +385,8 @@ const areWindRoseGaugePropsEqual = (previous: WindRoseGaugeProps, next: WindRose
     && previous.tiltDegrees === next.tiltDegrees
     && previous.themeVariant === next.themeVariant
     && previous.trueHeading === next.trueHeading
+    && (previous.screenRotationDegrees ?? 0) === (next.screenRotationDegrees ?? 0)
+    && (previous.windReferenceRotationDegrees ?? 0) === (next.windReferenceRotationDegrees ?? 0)
     && previous.headingAccuracy === next.headingAccuracy
     && previous.centerPrimaryMetric === next.centerPrimaryMetric
     && Object.is(previous.groundSpeedMps, next.groundSpeedMps)

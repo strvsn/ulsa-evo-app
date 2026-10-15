@@ -312,6 +312,7 @@ vi.mock('../components/slides', () => ({
     },
     WindRoseGaugeSlide: (props: {
         isActive?: boolean;
+        screenRotationDegrees?: number;
         dataState?: string;
         temperature?: number | null;
         soundSpeed?: number | null;
@@ -325,7 +326,7 @@ vi.mock('../components/slides', () => ({
         onPipActivityChange?: (active: boolean) => void;
     }) => {
         dashboardMocks.windRoseGaugeSlideProps.push(props);
-        return (<div data-testid="wind-rose-gauge-slide" data-active={String(props.isActive)}>
+        return (<div data-testid="wind-rose-gauge-slide" data-active={String(props.isActive)} data-screen-rotation={String(props.screenRotationDegrees)}>
         <input type="checkbox" aria-label="mock compass state"/>
       </div>);
     },
@@ -849,6 +850,7 @@ describe('Dashboard render performance wiring', () => {
         document.body.appendChild(ionApp);
         render(<Dashboard />);
         expect(ionApp).not.toHaveClass('app-manual-upside-down');
+        expect(screen.getByTestId('wind-rose-gauge-slide')).toHaveAttribute('data-screen-rotation', '0');
         act(() => {
             window.dispatchEvent(new CustomEvent('ulsaNativeDeviceOrientation', {
                 detail: { orientation: 'portraitUpsideDown', upsideDown: true, source: 'test' },
@@ -856,6 +858,7 @@ describe('Dashboard render performance wiring', () => {
         });
         expect(ionApp).toHaveClass('app-manual-upside-down');
         expect(screen.getByRole('button', { name: '上下逆さ自動検出中' })).toBeInTheDocument();
+        expect(screen.getByTestId('wind-rose-gauge-slide')).toHaveAttribute('data-screen-rotation', '180');
         act(() => {
             window.dispatchEvent(new CustomEvent('ulsaNativeDeviceOrientation', {
                 detail: { orientation: 'portrait', upsideDown: false, source: 'test' },
@@ -863,6 +866,21 @@ describe('Dashboard render performance wiring', () => {
         });
         expect(ionApp).not.toHaveClass('app-manual-upside-down');
         expect(screen.getByRole('button', { name: '画面を上下反転' })).toBeInTheDocument();
+        expect(screen.getByTestId('wind-rose-gauge-slide')).toHaveAttribute('data-screen-rotation', '0');
+    });
+    it.each([
+        ['portrait', 0],
+        ['portraitUpsideDown', 180],
+        ['landscapeLeft', 270],
+        ['landscapeRight', 90]
+    ])('composes UIKit %s with the actual CSS transform for compass drawing', (interfaceOrientation, degrees) => {
+        render(<Dashboard />);
+        act(() => window.dispatchEvent(new CustomEvent('ulsaNativeScreenMetrics', {
+            detail: { interfaceRotationDegrees: degrees, userInterfaceIdiom: 'pad', source: interfaceOrientation },
+        })));
+        expect(screen.getByTestId('wind-rose-gauge-slide')).toHaveAttribute('data-screen-rotation', String(degrees));
+        fireEvent.click(screen.getByRole('button', { name: '画面を上下反転' }));
+        expect(screen.getByTestId('wind-rose-gauge-slide')).toHaveAttribute('data-screen-rotation', String((degrees + 180) % 360));
     });
     it('ignores native physical orientation events outside Capacitor iOS', () => {
         dashboardMocks.capacitorIsNativePlatform.mockReturnValue(false);

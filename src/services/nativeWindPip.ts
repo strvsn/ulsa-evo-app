@@ -1,4 +1,5 @@
-import { Capacitor, registerPlugin, type PluginListenerHandle } from '@capacitor/core';
+import { registerPlugin, type PluginListenerHandle } from '@capacitor/core';
+import { isNativeIosDevice } from './nativeRuntime';
 import type { WindRoseThemeVariant } from '../components/charts/windRoseTheme';
 import type { WindSpeedUnit } from '../utils/windSpeedConverter';
 
@@ -47,11 +48,7 @@ interface NativeWindPipPlugin {
 const UlsaWindPip = registerPlugin<NativeWindPipPlugin>('UlsaWindPip');
 
 export const isNativeWindPipAvailable = (): boolean => {
-  try {
-    return Capacitor.isNativePlatform() && Capacitor.getPlatform() === 'ios';
-  } catch {
-    return false;
-  }
+  return isNativeIosDevice();
 };
 
 const unavailableSupport: WindPipSupport = {

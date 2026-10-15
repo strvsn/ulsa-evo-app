@@ -25,6 +25,7 @@ import './WindRoseGaugeSlide.css';
 
 interface WindRoseGaugeSlideProps {
   isActive?: boolean;
+  screenRotationDegrees?: number;
   isUlsaConnected?: boolean;
   windSpeed: number | null;
   windSpeedUnit: WindSpeedUnit;
@@ -103,6 +104,7 @@ const getPeakHoldStyle = (
 
 const WindRoseGaugeSlide: React.FC<WindRoseGaugeSlideProps> = ({
   isActive = true,
+  screenRotationDegrees = 0,
   isUlsaConnected = true,
   windSpeed,
   windSpeedUnit,
@@ -142,6 +144,12 @@ const WindRoseGaugeSlide: React.FC<WindRoseGaugeSlideProps> = ({
     ? navigation.trueHeading
     : null;
   const headingAccuracy = trueHeading === null ? null : navigation.headingAccuracy;
+  // ULSA's zero reference follows the visible screen's near-to-far axis.
+  // Convert it to Core Location's fixed hardware-top frame only for compass/GNSS.
+  const referenceRotationDegrees = Number.isFinite(screenRotationDegrees)
+    ? (screenRotationDegrees % 360 + 360) % 360
+    : 0;
+  const windReferenceRotationDegrees = trueHeading === null ? 0 : referenceRotationDegrees;
   const groundSpeedMps = windReferenceMode === 'gnss'
     && navigation.gnssSample.available
     && navigation.gnssSample.speedMps !== null
@@ -177,7 +185,7 @@ const WindRoseGaugeSlide: React.FC<WindRoseGaugeSlideProps> = ({
     }
     return calculateTrueWind({
       apparentSpeedMps: windSpeed,
-      apparentDirectionFromDeviceDegrees: windDirectionContinuous,
+      apparentDirectionFromDeviceDegrees: windDirectionContinuous + referenceRotationDegrees,
       deviceTrueHeadingDegrees: navigation.trueHeading,
       platformSpeedMps: navigation.gnssAssessment.platformSpeedMps,
       platformCourseDegrees: navigation.gnssAssessment.platformCourseDegrees,
@@ -193,12 +201,13 @@ const WindRoseGaugeSlide: React.FC<WindRoseGaugeSlideProps> = ({
     windDirectionContinuous,
     windReferenceMode,
     windSpeed,
+    referenceRotationDegrees,
   ]);
   const isTrueWindApplied = windReferenceMode === 'gnss' && trueWindSolution !== null;
   const displayWindSpeed = isTrueWindApplied ? trueWindSolution.speedMps : windSpeed;
   const displayWindDirection = isTrueWindApplied
     ? (trueWindSolution.directionFromDeviceDegrees ?? windDirectionContinuous)
-    : windDirectionContinuous;
+    : windDirectionContinuous + windReferenceRotationDegrees;
   const hasDisplayWindDirection = hasWindData && trueWindSolution?.isCalm !== true;
   const directionReference = isTrueWindApplied
     ? 'trueWind'
@@ -356,6 +365,8 @@ const WindRoseGaugeSlide: React.FC<WindRoseGaugeSlideProps> = ({
               tiltDegrees={tiltDegrees}
               themeVariant={themeVariant}
               trueHeading={trueHeading}
+              screenRotationDegrees={isIosCompass ? screenRotationDegrees : 0}
+              windReferenceRotationDegrees={windReferenceRotationDegrees}
               headingAccuracy={headingAccuracy}
               centerPrimaryMetric={centerPrimaryMetric}
               groundSpeedMps={groundSpeedMps}
@@ -502,6 +513,7 @@ const areWindRoseGaugeSlidePropsEqual = (
 
   return (
     previousActive === nextActive &&
+    (previous.screenRotationDegrees ?? 0) === (next.screenRotationDegrees ?? 0) &&
     previous.isUlsaConnected === next.isUlsaConnected &&
     Object.is(previous.windSpeed, next.windSpeed) &&
     previous.windSpeedUnit === next.windSpeedUnit &&

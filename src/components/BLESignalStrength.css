@@ -41,7 +41,7 @@
   grid-column: 1;
   grid-row: 1;
   align-self: center;
-  color: var(--instrument-text-secondary);
+  color: var(--instrument-text-primary);
 }
 
 .ble-device-signal {

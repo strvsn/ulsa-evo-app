@@ -7,6 +7,7 @@ import type { IBLEAdapter, BLEPlatformInfo } from './IBLEAdapter';
 import { CapacitorBLEAdapter } from './CapacitorBLEAdapter';
 import { WebBLEAdapter } from './WebBLEAdapter';
 import { detectBLEPlatform, getPlatformInfo } from './platformDetector';
+import { Capacitor } from '@capacitor/core';
 
 /**
  * BLE非サポートエラー
@@ -71,10 +72,9 @@ export function getBLEPlatformInfo(): BLEPlatformInfo {
   
   if (platform === 'capacitor') {
     adapterType = 'Capacitor';
-    // Capacitorのネイティブプラットフォームを検出
-    const nativePlatform = (typeof navigator !== 'undefined' && 
-      navigator.userAgent.includes('iPhone')) ? 'ios' : 'android';
-    platformName = nativePlatform;
+    // iPad and iOS Apps on Mac do not necessarily advertise "iPhone" in their UA.
+    const nativePlatform = Capacitor.getPlatform();
+    platformName = nativePlatform === 'ios' || nativePlatform === 'android' ? nativePlatform : 'unknown';
   } else if (platform === 'web') {
     adapterType = 'WebBluetooth';
     platformName = 'web';

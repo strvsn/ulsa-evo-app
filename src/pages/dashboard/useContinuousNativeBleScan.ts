@@ -65,9 +65,9 @@ export const useContinuousNativeBleScan = ({
     scanInFlightRef.current = true;
     void scanAndConnect().finally(() => {
       scanInFlightRef.current = false;
-      if (scanSessionRef.current === session) {
-        setScanFinishedSequence((current) => current + 1);
-      }
+      // A newly reopened session may be waiting for this cancelled scan to
+      // settle. Wake its effect too; inactive/closed sessions cannot retry.
+      setScanFinishedSequence((current) => current + 1);
     });
   }, [scanAndConnect]);
 
@@ -77,7 +77,9 @@ export const useContinuousNativeBleScan = ({
     clearTotalTimeout();
     setIsContinuousNativeScanActive(false);
     if (isNativeDeviceListScan && scanInFlightRef.current) {
-      void cancelNativeScan();
+      void cancelNativeScan().catch((error) => {
+        console.warn('[BLE] 検索停止に失敗:', error);
+      });
     }
   }, [cancelNativeScan, clearRetryTimer, clearTotalTimeout, isNativeDeviceListScan]);
 

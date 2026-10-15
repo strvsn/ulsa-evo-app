@@ -1,15 +1,20 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useState } from 'react';
 import { readBrowserScreenOrientation, subscribeBrowserScreenOrientation } from './browserScreenOrientation';
 import {
   isNativeDeviceOrientationAutoFlipAllowed,
+  getNativeInterfaceRotationDegrees,
   type NativeDeviceOrientationDetail,
 } from './nativeDeviceOrientation';
 import { createUpsideDownPopoverEvent } from './upsideDownPopover';
+import type { NativeScreenMetricsDetail } from './useNativeScreenMetrics';
+import type { Swiper as SwiperType } from 'swiper';
+import { updateSwiperTouchRatio } from './swiperRuntime';
 
-export const useDashboardOrientationFlip = () => {
+export const useDashboardOrientationFlip = (swiperInstance: SwiperType | null = null) => {
   const [isFlipped, setIsFlipped] = useState(false);
   const [isNativeUpsideDown, setIsNativeUpsideDown] = useState(false);
   const [isBrowserReversePortrait, setIsBrowserReversePortrait] = useState(false);
+  const [nativeScreenRotationDegrees, setNativeScreenRotationDegrees] = useState(0);
 
   const toggleFlip = useCallback(() => {
     setIsFlipped(prev => !prev);
@@ -26,14 +31,25 @@ export const useDashboardOrientationFlip = () => {
     };
 
     applyNativeOrientation(window.__ULSA_NATIVE_DEVICE_ORIENTATION);
+    const applyScreenMetrics = (detail: NativeScreenMetricsDetail | undefined) => {
+      setNativeScreenRotationDegrees(isNativeDeviceOrientationAutoFlipAllowed()
+        ? getNativeInterfaceRotationDegrees(detail?.interfaceRotationDegrees)
+        : 0);
+    };
+    applyScreenMetrics(window.__ULSA_NATIVE_SCREEN_METRICS);
 
     const handleNativeOrientation = (event: Event) => {
       applyNativeOrientation((event as CustomEvent<NativeDeviceOrientationDetail>).detail);
     };
+    const handleScreenMetrics = (event: Event) => {
+      applyScreenMetrics((event as CustomEvent<NativeScreenMetricsDetail>).detail);
+    };
 
     window.addEventListener('ulsaNativeDeviceOrientation', handleNativeOrientation);
+    window.addEventListener('ulsaNativeScreenMetrics', handleScreenMetrics);
     return () => {
       window.removeEventListener('ulsaNativeDeviceOrientation', handleNativeOrientation);
+      window.removeEventListener('ulsaNativeScreenMetrics', handleScreenMetrics);
     };
   }, []);
 
@@ -52,6 +68,13 @@ export const useDashboardOrientationFlip = () => {
     !isNativeDeviceOrientationAutoFlipAllowed() &&
     isBrowserReversePortrait;
   const isUpsideDown = cssFlipRequested && !cssFlipSuppressedByBrowserOrientation;
+  const compassScreenRotationDegrees = isNativeDeviceOrientationAutoFlipAllowed()
+    ? (nativeScreenRotationDegrees + (isUpsideDown ? 180 : 0)) % 360
+    : 0;
+  const swiperTouchRatio = isUpsideDown ? -1 : 1;
+  useLayoutEffect(() => {
+    updateSwiperTouchRatio(swiperInstance, swiperTouchRatio);
+  }, [swiperInstance, swiperTouchRatio]);
   const flipButtonLabel = isNativeUpsideDown
     ? '上下逆さ自動検出中'
     : cssFlipSuppressedByBrowserOrientation
@@ -60,7 +83,7 @@ export const useDashboardOrientationFlip = () => {
         ? '画面反転を解除'
         : '画面を上下反転';
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const ionApp = document.querySelector('ion-app') as HTMLElement | null;
     if (!ionApp) return;
 
@@ -91,6 +114,8 @@ export const useDashboardOrientationFlip = () => {
   }, []);
 
   return {
+    compassScreenRotationDegrees,
+    swiperTouchRatio,
     flipButtonLabel,
     isUpsideDown,
     toggleFlip,

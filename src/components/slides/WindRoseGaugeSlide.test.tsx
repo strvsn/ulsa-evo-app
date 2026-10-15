@@ -1,9 +1,12 @@
 import type { ComponentProps } from 'react';
-import { fireEvent, render, screen } from '@testing-library/react';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { act, fireEvent, render, screen } from '@testing-library/react';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { Capacitor } from '@capacitor/core';
 import WindRoseGaugeSlide from './WindRoseGaugeSlide';
 import { calculateTrueWind } from '../../utils/trueWind';
 import type { WindReferenceNavigationState } from '../../hooks/useWindReferenceNavigation';
+
+const LEGACY_MOUNT_STORAGE_KEY = 'ulsa-evo.wind-sensor-mount-degrees.v1';
 
 const windPipMock = vi.hoisted(() => ({
   available: true,
@@ -47,7 +50,7 @@ const navigationMock = vi.hoisted(() => ({
   } as WindReferenceNavigationState,
 }));
 
-const nativeHeadingCapabilityMock = vi.hoisted(() => ({ available: true }));
+const nativeHeadingCapabilityMock = vi.hoisted(() => ({ available: true, useRuntime: false }));
 
 vi.mock('../../hooks/useWindPip', () => ({
   useWindPip: (options: Record<string, unknown>) => {
@@ -56,9 +59,14 @@ vi.mock('../../hooks/useWindPip', () => ({
   },
 }));
 
-vi.mock('../../services/nativeTrueHeading', () => ({
-  isNativeTrueHeadingAvailable: () => nativeHeadingCapabilityMock.available,
-}));
+vi.mock('../../services/nativeTrueHeading', async () => {
+  const actual = await vi.importActual<typeof import('../../services/nativeTrueHeading')>('../../services/nativeTrueHeading');
+  return {
+    ...actual,
+    isNativeTrueHeadingAvailable: () => nativeHeadingCapabilityMock.useRuntime
+      ? actual.isNativeTrueHeadingAvailable() : nativeHeadingCapabilityMock.available,
+  };
+});
 
 vi.mock('../../hooks/useWindReferenceNavigation', () => ({
   useWindReferenceNavigation: (mode: 'off' | 'compass' | 'gnss') => ({
@@ -79,6 +87,8 @@ vi.mock('../charts', () => ({
     tiltDegrees?: number;
     themeVariant?: string;
     trueHeading?: number | null;
+    screenRotationDegrees?: number;
+    windReferenceRotationDegrees?: number;
     headingAccuracy?: number | null;
     centerPrimaryMetric?: 'windDirection' | 'groundSpeed';
     groundSpeedMps?: number | null;
@@ -104,6 +114,8 @@ vi.mock('../charts', () => ({
       data-tilt-degrees={String(props.tiltDegrees)}
       data-theme-variant={String(props.themeVariant)}
       data-true-heading={String(props.trueHeading)}
+      data-screen-rotation={String(props.screenRotationDegrees)}
+      data-wind-reference-rotation={String(props.windReferenceRotationDegrees)}
       data-heading-accuracy={String(props.headingAccuracy)}
       data-center-primary-metric={String(props.centerPrimaryMetric)}
       data-ground-speed-mps={String(props.groundSpeedMps)}
@@ -145,7 +157,26 @@ const createProps = (overrides: Partial<ComponentProps<typeof WindRoseGaugeSlide
 });
 
 describe('WindRoseGaugeSlide', () => {
+  afterEach(() => {
+    nativeHeadingCapabilityMock.useRuntime = false;
+    window.__ULSA_NATIVE_RUNTIME = { isIOSAppOnMac: false };
+    vi.restoreAllMocks();
+  });
+
+  it('hides compass/GNSS on the actual Mac host boundary and keeps ULSA-relative wind', () => {
+    nativeHeadingCapabilityMock.useRuntime = true;
+    vi.spyOn(Capacitor, 'isNativePlatform').mockReturnValue(true);
+    vi.spyOn(Capacitor, 'getPlatform').mockReturnValue('ios');
+    window.__ULSA_NATIVE_RUNTIME = { isIOSAppOnMac: true };
+    render(<WindRoseGaugeSlide {...createProps({ windDirectionContinuous: 0 })} />);
+    expect(screen.queryByRole('button', { name: 'コンパスをオンにする' })).not.toBeInTheDocument();
+    const gauge = screen.getByTestId('wind-rose-gauge');
+    expect(gauge).toHaveAttribute('data-direction', '0');
+    expect(gauge).toHaveAttribute('data-wind-reference-rotation', '0');
+  });
+
   beforeEach(() => {
+    window.localStorage.removeItem(LEGACY_MOUNT_STORAGE_KEY);
     nativeHeadingCapabilityMock.available = true;
     navigationMock.state.status = 'ready';
     navigationMock.state.trueHeading = 128;
@@ -169,6 +200,171 @@ describe('WindRoseGaugeSlide', () => {
       platformCourseDegrees: 85,
       reason: null,
     };
+  });
+
+  it.each([
+    { heading: 0, rotation: 0, bodyDirection: 0 },
+    { heading: 180, rotation: 180, bodyDirection: 180 },
+  ])('keeps screen-top north wind north at heading $heading and rotation $rotation', ({
+    heading, rotation, bodyDirection,
+  }) => {
+    navigationMock.state.trueHeading = heading;
+    navigationMock.state.gnssAssessment.platformSpeedMps = 0;
+    navigationMock.state.gnssAssessment.platformCourseDegrees = null;
+    // The ULSA zero axis and visible screen top both face geographic north.
+    // Normal uses the camera side; USB-connected inverse uses the charging side.
+    const props = createProps({ windDirectionContinuous: 0, screenRotationDegrees: rotation });
+    render(<WindRoseGaugeSlide {...props} />);
+    const gauge = screen.getByTestId('wind-rose-gauge');
+    expect(gauge).toHaveAttribute('data-direction', '0');
+    expect(gauge).toHaveAttribute('data-wind-reference-rotation', '0');
+    fireEvent.click(screen.getByRole('button', { name: 'コンパスをオンにする' }));
+    expect(gauge).toHaveAttribute('data-direction', String(bodyDirection));
+    expect(gauge).toHaveAttribute('data-true-heading', String(heading));
+    expect(gauge).toHaveAttribute('data-wind-reference-rotation', String(rotation));
+    expect((Number(gauge.getAttribute('data-direction')) + heading) % 360).toBe(0);
+    fireEvent.click(screen.getByRole('button', { name: 'コンパスからGNSS補正モードに切り替える' }));
+    expect(gauge).toHaveAttribute('data-direction-reference', 'trueWind');
+    expect(Number(gauge.getAttribute('data-direction'))).toBeCloseTo(bodyDirection, 8);
+    expect((Number(gauge.getAttribute('data-direction')) + heading) % 360).toBeCloseTo(0, 8);
+    expect(windPipMock.options?.windDirection).toBe(0);
+    fireEvent.click(screen.getByRole('button', { name: /コンパスとGNSS補正をオフにする/ }));
+    expect(gauge).toHaveAttribute('data-direction', '0');
+    expect(gauge).toHaveAttribute('data-wind-reference-rotation', '0');
+  });
+
+  it.each([0, 90, 180, 270].flatMap(heading => (
+    ['compass', 'gnss'].map(mode => ({ heading, mode }))
+  )))('maps N/E/S/W screen-forward winds with camera heading $heading in $mode', ({ heading, mode }) => {
+    navigationMock.state.trueHeading = heading;
+    navigationMock.state.gnssAssessment.platformSpeedMps = 0;
+    navigationMock.state.gnssAssessment.platformCourseDegrees = null;
+    const initial = createProps({ windDirectionContinuous: 0, screenRotationDegrees: 0 });
+    const { rerender } = render(<WindRoseGaugeSlide {...initial} />);
+    fireEvent.click(screen.getByRole('button', { name: 'コンパスをオンにする' }));
+    if (mode === 'gnss') {
+      fireEvent.click(screen.getByRole('button', { name: 'コンパスからGNSS補正モードに切り替える' }));
+    }
+    const gauge = screen.getByTestId('wind-rose-gauge');
+    for (const rotation of [0, 180]) {
+      for (const worldWind of [0, 90, 180, 270]) {
+        // Independent physical oracle: sensor zero faces the visible screen
+        // top, whose earth bearing is camera heading plus screen rotation.
+        const rawDirection = (worldWind - heading - rotation + 720) % 360;
+        rerender(<WindRoseGaugeSlide {...initial}
+          windDirectionContinuous={rawDirection} screenRotationDegrees={rotation} />);
+        expect(gauge).toHaveAttribute('data-wind-reference-rotation', String(rotation));
+        const bodyDirection = Number(gauge.getAttribute('data-direction'));
+        expect((bodyDirection + heading) % 360).toBeCloseTo(worldWind, 8);
+        expect(windPipMock.options?.windDirection).toBe(rawDirection);
+      }
+    }
+    // Return via the unchanged mode cycle and verify the raw near/far values.
+    if (mode === 'compass') {
+      fireEvent.click(screen.getByRole('button', { name: 'コンパスからGNSS補正モードに切り替える' }));
+    }
+    fireEvent.click(screen.getByRole('button', { name: /コンパスとGNSS補正をオフにする/ }));
+    for (const rawDirection of [0, 180]) {
+      rerender(<WindRoseGaugeSlide {...initial}
+        windDirectionContinuous={rawDirection} screenRotationDegrees={180} />);
+      expect(gauge).toHaveAttribute('data-direction', String(rawDirection));
+      expect(gauge).toHaveAttribute('data-wind-reference-rotation', '0');
+    }
+  });
+
+  it.each(['compass', 'gnss'])('keeps north wind when only the phone turns and %s stays active', (mode) => {
+    navigationMock.state.trueHeading = 0;
+    navigationMock.state.gnssAssessment.platformSpeedMps = 0;
+    navigationMock.state.gnssAssessment.platformCourseDegrees = null;
+    const props = createProps({ windDirectionContinuous: 0, screenRotationDegrees: 0 });
+    const { rerender } = render(<WindRoseGaugeSlide {...props} />);
+    fireEvent.click(screen.getByRole('button', { name: 'コンパスをオンにする' }));
+    if (mode === 'gnss') {
+      fireEvent.click(screen.getByRole('button', { name: 'コンパスからGNSS補正モードに切り替える' }));
+    }
+    const gauge = screen.getByTestId('wind-rose-gauge');
+    for (const rotation of [180, 0, 180, 0]) {
+      // ULSA is not turned: its zero and raw north-wind sample remain 0°.
+      // Only the physical phone and matching display orientation are reversed.
+      navigationMock.state.trueHeading = rotation;
+      rerender(<WindRoseGaugeSlide {...props} screenRotationDegrees={rotation} />);
+      expect(Number(gauge.getAttribute('data-direction'))).toBeCloseTo(rotation, 8);
+      expect(gauge).toHaveAttribute('data-true-heading', String(rotation));
+      expect(gauge).toHaveAttribute('data-wind-reference-rotation', String(rotation));
+      expect((Number(gauge.getAttribute('data-direction')) + rotation) % 360).toBeCloseTo(0, 8);
+      expect(Number(gauge.getAttribute('data-speed'))).toBeCloseTo(2.34, 8);
+      expect(gauge).toHaveAttribute('data-sample-timestamp', '123456');
+      expect(gauge).toHaveAttribute('data-direction-reference', mode === 'gnss' ? 'trueWind' : 'trueNorth');
+      expect(windPipMock.options?.windDirection).toBe(0);
+    }
+  });
+
+  it.each(['0', '180'])('ignores obsolete stored mount %s in normal and USB-inverse operation', (legacyValue) => {
+    window.localStorage.setItem(LEGACY_MOUNT_STORAGE_KEY, legacyValue);
+    navigationMock.state.trueHeading = 0;
+    navigationMock.state.gnssAssessment.platformSpeedMps = 0;
+    navigationMock.state.gnssAssessment.platformCourseDegrees = null;
+    const props = createProps({ windDirectionContinuous: 0, screenRotationDegrees: 0 });
+    const { rerender } = render(<WindRoseGaugeSlide {...props} />);
+    fireEvent.click(screen.getByRole('button', { name: 'コンパスをオンにする' }));
+    const gauge = screen.getByTestId('wind-rose-gauge');
+    expect(gauge).toHaveAttribute('data-direction', '0');
+    expect(gauge).toHaveAttribute('data-wind-reference-rotation', '0');
+    act(() => {
+      window.dispatchEvent(new CustomEvent('ulsaWindSensorMountChanged', { detail: 180 }));
+      window.dispatchEvent(new StorageEvent('storage', { key: LEGACY_MOUNT_STORAGE_KEY }));
+    });
+    expect(gauge).toHaveAttribute('data-direction', '0');
+    navigationMock.state.trueHeading = 180;
+    rerender(<WindRoseGaugeSlide {...props} screenRotationDegrees={180} />);
+    expect(gauge).toHaveAttribute('data-direction', '180');
+    expect(gauge).toHaveAttribute('data-wind-reference-rotation', '180');
+    expect((Number(gauge.getAttribute('data-direction')) + 180) % 360).toBe(0);
+    fireEvent.click(screen.getByRole('button', { name: 'コンパスからGNSS補正モードに切り替える' }));
+    expect(gauge).toHaveAttribute('data-direction-reference', 'trueWind');
+    expect((Number(gauge.getAttribute('data-direction')) + 180) % 360).toBeCloseTo(0, 8);
+    expect(windPipMock.options?.windDirection).toBe(0);
+    expect(window.localStorage.getItem(LEGACY_MOUNT_STORAGE_KEY)).toBe(legacyValue);
+  });
+
+  it.each([
+    { heading: 0, rotation: 0, expectedBodyDirection: 323.130102354156 },
+    { heading: 180, rotation: 180, expectedBodyDirection: 143.130102354156 },
+  ])('solves a physical 3-4-5 moving-wind vector at heading $heading', ({
+    heading, rotation, expectedBodyDirection,
+  }) => {
+    navigationMock.state.trueHeading = heading;
+    navigationMock.state.gnssAssessment.platformSpeedMps = 3;
+    navigationMock.state.gnssAssessment.platformCourseDegrees = 90;
+    render(<WindRoseGaugeSlide {...createProps({
+      windSpeed: 4, windDirectionContinuous: 0, screenRotationDegrees: rotation,
+    })} />);
+    fireEvent.click(screen.getByRole('button', { name: 'コンパスをオンにする' }));
+    fireEvent.click(screen.getByRole('button', { name: 'コンパスからGNSS補正モードに切り替える' }));
+    const gauge = screen.getByTestId('wind-rose-gauge');
+    // North apparent wind flows south at 4 m/s; eastbound motion adds 3 m/s
+    // east. The resulting from-bearing is NW (323.130102°), speed 5 m/s.
+    expect(gauge).toHaveAttribute('data-direction-reference', 'trueWind');
+    expect(Number(gauge.getAttribute('data-speed'))).toBeCloseTo(5, 8);
+    expect(Number(gauge.getAttribute('data-direction'))).toBeCloseTo(expectedBodyDirection, 8);
+    expect((Number(gauge.getAttribute('data-direction')) + heading) % 360)
+      .toBeCloseTo(323.130102354156, 8);
+    expect(windPipMock.options).toEqual(expect.objectContaining({ windSpeed: 4, windDirection: 0 }));
+  });
+
+  it('keeps screen-reference conversion inactive until a valid compass heading is available', () => {
+    navigationMock.state.status = 'requesting';
+    navigationMock.state.trueHeading = null;
+    render(<WindRoseGaugeSlide {...createProps({ windDirectionContinuous: 0, screenRotationDegrees: 180 })} />);
+    fireEvent.click(screen.getByRole('button', { name: 'コンパスをオンにする' }));
+    const gauge = screen.getByTestId('wind-rose-gauge');
+    expect(gauge).toHaveAttribute('data-direction', '0');
+    expect(gauge).toHaveAttribute('data-wind-reference-rotation', '0');
+    expect(gauge).toHaveAttribute('data-true-heading', 'null');
+    fireEvent.click(screen.getByRole('button', { name: 'コンパスからGNSS補正モードに切り替える' }));
+    expect(gauge).toHaveAttribute('data-direction-reference', 'gnssPending');
+    expect(gauge).toHaveAttribute('data-direction', '0');
+    expect(gauge).toHaveAttribute('data-wind-reference-rotation', '0');
   });
 
   it('starts iOS Picture in Picture only from its explicit control', () => {
@@ -211,6 +407,38 @@ describe('WindRoseGaugeSlide', () => {
     fireEvent.click(gnssButton);
     expect(screen.getByRole('button', { name: 'コンパスをオンにする' }))
       .toHaveAttribute('data-wind-reference-mode', 'off');
+  });
+
+  it('preserves geographic GNSS wind, HOLD, mode, and raw PiP through screen-forward rotation', () => {
+    const props = createProps();
+    const { rerender } = render(<WindRoseGaugeSlide {...props} screenRotationDegrees={0} />);
+    fireEvent.click(screen.getByRole('button', { name: 'コンパスをオンにする' }));
+    fireEvent.click(screen.getByRole('button', { name: 'コンパスからGNSS補正モードに切り替える' }));
+    const gauge = screen.getByTestId('wind-rose-gauge');
+    const speed = gauge.getAttribute('data-speed');
+    const geographicDirection = (Number(gauge.getAttribute('data-direction')) + 128) % 360;
+    const pipData = windPipMock.options;
+    fireEvent.click(gauge);
+    fireEvent.click(screen.getByRole('button', { name: 'ピークホールド1に現在の風向風速を保存' }));
+
+    for (const rotation of [180, 90, 270, 0]) {
+      // Keep the screen-forward ULSA reference fixed in the world while the
+      // camera edge moves with respect to that reference.
+      const hardwareHeading = (128 - rotation + 360) % 360;
+      navigationMock.state.trueHeading = hardwareHeading;
+      rerender(<WindRoseGaugeSlide {...props} screenRotationDegrees={rotation} />);
+      expect(screen.getByTestId('wind-rose-gauge')).toBe(gauge);
+      expect(gauge).toHaveAttribute('data-screen-rotation', String(rotation));
+      expect(gauge).toHaveAttribute('data-true-heading', String(hardwareHeading));
+      expect(Number(gauge.getAttribute('data-speed'))).toBeCloseTo(Number(speed), 8);
+      expect((Number(gauge.getAttribute('data-direction')) + hardwareHeading) % 360)
+        .toBeCloseTo(geographicDirection, 8);
+      expect(gauge).toHaveAttribute('data-direction-reference', 'trueWind');
+      expect(gauge).toHaveAttribute('data-peak-hold-count', '1');
+      expect(screen.getByRole('button', { name: /コンパスとGNSS補正をオフにする/ }))
+        .toHaveAttribute('data-wind-reference-mode', 'gnss');
+      expect(windPipMock.options).toEqual(pipData);
+    }
   });
 
   it('shows GNSS ground speed first and toggles the upper metric to true-north direction', () => {

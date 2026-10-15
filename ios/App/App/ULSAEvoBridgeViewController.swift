@@ -2,6 +2,7 @@ import Foundation
 import UIKit
 import Capacitor
 import CoreMotion
+import WebKit
 
 @objc(ULSAEvoBridgeViewController)
 class ULSAEvoBridgeViewController: CAPBridgeViewController {
@@ -9,6 +10,8 @@ class ULSAEvoBridgeViewController: CAPBridgeViewController {
     private let motionQueue = OperationQueue()
     private var lastPublishedOrientation: String?
     private var lastPublishedScreenMetricsSignature: String?
+    private var macScreenMetricsInFlight = false
+    private var macPendingScreenMetricsSource: String?
 
     override var shouldAutorotate: Bool {
         true
@@ -21,13 +24,15 @@ class ULSAEvoBridgeViewController: CAPBridgeViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        UIDevice.current.beginGeneratingDeviceOrientationNotifications()
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(deviceOrientationDidChange),
-            name: UIDevice.orientationDidChangeNotification,
-            object: nil
-        )
+        if !ProcessInfo.processInfo.isiOSAppOnMac {
+            UIDevice.current.beginGeneratingDeviceOrientationNotifications()
+            NotificationCenter.default.addObserver(
+                self,
+                selector: #selector(deviceOrientationDidChange),
+                name: UIDevice.orientationDidChangeNotification,
+                object: nil
+            )
+        }
         NotificationCenter.default.addObserver(
             self,
             selector: #selector(applicationWillResignActive),
@@ -49,12 +54,42 @@ class ULSAEvoBridgeViewController: CAPBridgeViewController {
 
     override func capacitorDidLoad() {
         super.capacitorDidLoad()
+        // This hook runs after Capacitor installs its content controller and
+        // before loadWebView(). Publish on every navigation without an async
+        // startup gate that could delay BLE or briefly expose device-only APIs.
+        let isMac = ProcessInfo.processInfo.isiOSAppOnMac ? "true" : "false"
+        let runtimeScript = WKUserScript(
+            source: "window.__ULSA_NATIVE_RUNTIME = Object.freeze({isIOSAppOnMac: \(isMac)});",
+            injectionTime: .atDocumentStart,
+            forMainFrameOnly: true
+        )
+        webView?.configuration.userContentController.addUserScript(runtimeScript)
+#if DEBUG
+        if ProcessInfo.processInfo.isiOSAppOnMac {
+            let inputDiagnostics = WKUserScript(source: """
+                window.__ULSA_MAC_INPUT_DIAGNOSTICS = {pointerdown: 0, click: 0, errors: 0};
+                document.addEventListener('pointerdown', function () { window.__ULSA_MAC_INPUT_DIAGNOSTICS.pointerdown++; }, true);
+                document.addEventListener('click', function () { window.__ULSA_MAC_INPUT_DIAGNOSTICS.click++; }, true);
+                window.addEventListener('error', function () { window.__ULSA_MAC_INPUT_DIAGNOSTICS.errors++; });
+                """, injectionTime: .atDocumentStart, forMainFrameOnly: true)
+            webView?.configuration.userContentController.addUserScript(inputDiagnostics)
+            // Counters only; no user-entered text, sensor samples, or log data.
+            for delay in [15.0, 30.0, 60.0] {
+                DispatchQueue.main.asyncAfter(deadline: .now() + delay) { [weak self] in
+                    self?.webView?.evaluateJavaScript("JSON.stringify(window.__ULSA_MAC_INPUT_DIAGNOSTICS)") { result, error in
+                        print("ULSA_MAC_INPUT \(result ?? "unavailable") error=\(error != nil)")
+                    }
+                }
+            }
+        }
+#endif
         bridge?.registerPluginInstance(ULSASoftApPlugin())
         bridge?.registerPluginInstance(ULSAChartFullscreenPlugin())
         bridge?.registerPluginInstance(ULSATrueHeadingPlugin())
         bridge?.registerPluginInstance(ULSAWindPiPPlugin())
         bridge?.registerPluginInstance(ULSASlideImageSharePlugin())
         bridge?.registerPluginInstance(ULSAAppInfoPlugin())
+        bridge?.registerPluginInstance(ULSALogArchivePlugin())
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -75,7 +110,9 @@ class ULSAEvoBridgeViewController: CAPBridgeViewController {
 
     deinit {
         NotificationCenter.default.removeObserver(self)
-        UIDevice.current.endGeneratingDeviceOrientationNotifications()
+        if !ProcessInfo.processInfo.isiOSAppOnMac {
+            UIDevice.current.endGeneratingDeviceOrientationNotifications()
+        }
         stopPhysicalOrientationPublisher()
     }
 
@@ -161,7 +198,7 @@ class ULSAEvoBridgeViewController: CAPBridgeViewController {
     }
 
     private var shouldUseManualUpsideDownTransform: Bool {
-        UIDevice.current.userInterfaceIdiom == .phone
+        !ProcessInfo.processInfo.isiOSAppOnMac && UIDevice.current.userInterfaceIdiom == .phone
     }
 
     private func publishScreenMetrics(source: String) {
@@ -181,6 +218,7 @@ class ULSAEvoBridgeViewController: CAPBridgeViewController {
         let scale = UIScreen.main.scale
         let cornerRadius = estimatedScreenCornerRadius(bounds: bounds, safeAreaInsets: insets)
         let idiom = userInterfaceIdiomName()
+        let interfaceRotation = interfaceRotationDegrees()
         let signature = [
             formattedNumber(bounds.width),
             formattedNumber(bounds.height),
@@ -191,10 +229,21 @@ class ULSAEvoBridgeViewController: CAPBridgeViewController {
             formattedNumber(insets.left),
             formattedNumber(cornerRadius),
             idiom,
+            String(interfaceRotation),
         ].joined(separator: ":")
 
         guard signature != lastPublishedScreenMetricsSignature else {
             return
+        }
+
+        // Mac layouts can repeat while WebKit is still replying. Keep one
+        // request in flight and recompute only the latest pending viewport.
+        if ProcessInfo.processInfo.isiOSAppOnMac {
+            if macScreenMetricsInFlight {
+                macPendingScreenMetricsSource = source
+                return
+            }
+            macScreenMetricsInFlight = true
         }
 
         let js = """
@@ -211,6 +260,7 @@ class ULSAEvoBridgeViewController: CAPBridgeViewController {
               left: \(formattedNumber(insets.left))
             },
             userInterfaceIdiom: '\(idiom)',
+            interfaceRotationDegrees: \(interfaceRotation),
             source: '\(source)'
           };
           window.__ULSA_NATIVE_SCREEN_METRICS = detail;
@@ -223,6 +273,24 @@ class ULSAEvoBridgeViewController: CAPBridgeViewController {
             if error == nil {
                 self?.lastPublishedScreenMetricsSignature = signature
             }
+            if ProcessInfo.processInfo.isiOSAppOnMac, let self {
+                self.macScreenMetricsInFlight = false
+                let pending = self.macPendingScreenMetricsSource
+                self.macPendingScreenMetricsSource = nil
+                if error == nil, let pending {
+                    self.publishScreenMetrics(source: pending)
+                }
+            }
+        }
+    }
+
+    private func interfaceRotationDegrees() -> Int {
+        // UIKit's landscape names are opposite to UIDeviceOrientation's.
+        switch view.window?.windowScene?.interfaceOrientation ?? .portrait {
+        case .portraitUpsideDown: return 180
+        case .landscapeLeft: return 270
+        case .landscapeRight: return 90
+        default: return 0
         }
     }
 
@@ -318,7 +386,8 @@ final class ULSAAppInfoPlugin: CAPPlugin, CAPBridgedPlugin {
                 ?? info["CFBundleName"] as? String
                 ?? "ULSA EVO",
             "version": info["CFBundleShortVersionString"] as? String ?? "unknown",
-            "build": info["CFBundleVersion"] as? String ?? "unknown"
+            "build": info["CFBundleVersion"] as? String ?? "unknown",
+            "isIOSAppOnMac": ProcessInfo.processInfo.isiOSAppOnMac
         ])
     }
 }
@@ -337,6 +406,13 @@ class ULSAChartFullscreenPlugin: CAPPlugin, CAPBridgedPlugin {
         DispatchQueue.main.async { [weak self] in
             guard let self, let viewController = self.bridge?.viewController else {
                 call.reject("ULSA chart fullscreen bridge is unavailable.")
+                return
+            }
+
+            if ProcessInfo.processInfo.isiOSAppOnMac {
+                // Keep Mac window geometry under macOS control. The shared
+                // chart overlay still resizes and restores focus normally.
+                call.resolve(["landscape": landscape, "geometryUpdated": false])
                 return
             }
 

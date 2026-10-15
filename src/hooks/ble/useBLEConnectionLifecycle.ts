@@ -6,12 +6,12 @@ import { recordPerfEvent } from '../../utils/renderPerfDiagnostics';
 import { normalizeBleUserMessage } from '../../utils/normalizeBleUserMessage';
 import { getTimezoneById } from '../../services/timezoneCatalog';
 import { EMPTY_PARSE_ERROR_STATS, EMPTY_RTC_TIME_STATUS, } from './constants';
-import { mergeDeviceInfoList, toDeviceInfo, upsertDeviceInfo, validateNotificationStartResult, } from './deviceList';
+import { validateNotificationStartResult } from './deviceList';
 import { areDeviceModeStatusesEqual } from './statusEquality';
 import { synchronizeConnectedNodeId } from './connectedNodeIdentity';
 import { useConnectedSensorMonitors } from './useConnectedSensorMonitors';
 import { startOptionalConnectionInitialization } from './optionalConnectionInitialization';
-import { ULSA_DEVICE_NOT_FOUND_ERROR } from './scanMessages';
+import { useBLEDeviceDiscovery } from './useBLEDeviceDiscovery';
 import { useSensorUiFrameCommit } from './useSensorUiFrameCommit';
 import { useSensorNotificationPauseController } from './useSensorNotificationPauseController';
 import { readCardLogControlSafely } from './readCardLogControlSafely';
@@ -95,6 +95,8 @@ interface UseBLEConnectionLifecycleReturn {
 }
 export const useBLEConnectionLifecycle = ({ adapterRef, connectionState, platformInfo, backgroundSensorDisplayActiveRef, lastSensorDataAtRef, rtcRefreshInFlightRef, setConnectionState, setConnectedDevice, setAvailableDevices, setIdentifyingDeviceId, setSensorData, setSensorFieldReceivedAt, setDataState, setLastSensorDataAt, setDeviceInfo, setStm32FirmwareVersion, setStm32FirmwareVersionLastReadAt, setSampleMetadataStatus, setSampleMetadataLastReadAt, setDeviceHealthStatus, setDeviceHealthLastReadAt, setCapabilitiesStatus, setCapabilitiesLastReadAt, setLedBrightnessStatus, setLedBrightnessSupported, setLedBrightnessBusy, setCardStatus, setCardStatusLastReadAt, setCardLogControlStatus, setCardLogControlSupported, setCardLogControlBusy, setCardLogDetailStatus, setCardLogDetailLastReadAt, setCardLogSettingsStatus, setCardLogSettingsLastReadAt, setCardLogSettingsBusy, setRtcTimeStatus, setDeviceModeStatus, setDeviceModeLastReadAt, setDeviceModeNotifyActive, setDeviceModeSupported, setI2cConfigStatus, setI2cConfigSupported, setI2cConfigBusy, setParseErrorStats, setError, publishTimelineSample, publishDisplaySample, updateCardStatus, updateCardLogControlStatus, updateStm32FirmwareVersion, updateSampleMetadataStatus, updateDeviceHealthStatus, updateCapabilitiesStatus, updateLedBrightnessStatus, updateCardLogDetailStatus, updateCardLogSettingsStatus, updateI2cConfigStatus, }: UseBLEConnectionLifecycleOptions): UseBLEConnectionLifecycleReturn => {
     const connectionSessionRef = useRef(0);
+    const scanSessionRef = useRef(0);
+    const connectionInFlightRef = useRef(false);
     const rtcRequestSeqRef = useRef(0);
     const sensorNotificationsPausedRef = useRef(false);
     const sensorNotificationTransitionRef = useRef<Promise<void>>(Promise.resolve());
@@ -107,6 +109,7 @@ export const useBLEConnectionLifecycle = ({ adapterRef, connectionState, platfor
     const handleDisconnect = useCallback(() => {
         cancelPendingSensorUiUpdate();
         connectionSessionRef.current += 1;
+        scanSessionRef.current += 1;
         rtcRequestSeqRef.current += 1;
         rtcRefreshInFlightRef.current = false;
         sensorNotificationsPausedRef.current = false;
@@ -355,6 +358,10 @@ export const useBLEConnectionLifecycle = ({ adapterRef, connectionState, platfor
             setError('BLEが初期化されていません');
             return;
         }
+        if (connectionInFlightRef.current)
+            return;
+        connectionInFlightRef.current = true;
+        scanSessionRef.current += 1;
         const connectionSession = ++connectionSessionRef.current;
         const isCurrentSession = () => connectionSessionRef.current === connectionSession;
         try {
@@ -399,10 +406,17 @@ export const useBLEConnectionLifecycle = ({ adapterRef, connectionState, platfor
             setParseErrorStats(EMPTY_PARSE_ERROR_STATS);
             setConnectionState('connecting');
             sensorNotificationsPausedRef.current = false;
+            if (platformInfo?.adapterType === 'Capacitor' && adapter.stopScan) {
+                await adapter.stopScan();
+                if (!isCurrentSession())
+                    return;
+            }
             await adapter.connect(device.deviceId, () => {
                 if (isCurrentSession())
                     handleDisconnect();
             });
+            if (!isCurrentSession())
+                return;
             try {
                 const notificationResult = await adapter.startSensorNotifications((event) => {
                     if (isCurrentSession())
@@ -475,8 +489,12 @@ export const useBLEConnectionLifecycle = ({ adapterRef, connectionState, platfor
             setDataState('idle');
             setConnectedDevice(null);
         }
+        finally {
+            connectionInFlightRef.current = false;
+        }
     }, [
         adapterRef,
+        platformInfo?.adapterType,
         cancelPendingSensorUiUpdate,
         handleDisconnect,
         handleDeviceModeStatus,
@@ -534,58 +552,10 @@ export const useBLEConnectionLifecycle = ({ adapterRef, connectionState, platfor
         updateCardStatus,
         updateStm32FirmwareVersion
     ]);
-    const scanAndConnect = useCallback(async () => {
-        const adapter = adapterRef.current;
-        if (!adapter) {
-            setError('BLEが初期化されていません');
-            return;
-        }
-        try {
-            setError(null);
-            const isNativeListScan = typeof adapter.scanDevices === 'function' && platformInfo?.adapterType === 'Capacitor';
-            if (!isNativeListScan)
-                setAvailableDevices((prev) => (prev.length === 0 ? prev : []));
-            setConnectionState('scanning');
-            logBLEDebug('🔍 デバイス選択を開始...', platformInfo);
-            if (typeof adapter.scanDevices === 'function' && platformInfo?.adapterType === 'Capacitor') {
-                const devices = await adapter.scanDevices((device) => {
-                    setAvailableDevices((prev) => upsertDeviceInfo(prev, toDeviceInfo(device)));
-                });
-                const deviceInfos = mergeDeviceInfoList(devices);
-                setAvailableDevices((prev) => deviceInfos.reduce((list, device) => upsertDeviceInfo(list, device), prev));
-                if (deviceInfos.length === 0) {
-                    setError(ULSA_DEVICE_NOT_FOUND_ERROR);
-                    setConnectionState('disconnected');
-                    return;
-                }
-                setConnectionState('disconnected');
-                return;
-            }
-            const device = await adapter.scanAndSelect();
-            logBLEDebug('デバイス選択結果:', device);
-            if (!device) {
-                setConnectionState('disconnected');
-                return;
-            }
-            await connectToDevice(toDeviceInfo(device));
-        }
-        catch (err) {
-            if (err instanceof Error && err.name === 'NotFoundError') {
-                logBLEDebug('ユーザーがデバイス選択をキャンセルしました');
-                setConnectionState('disconnected');
-                return;
-            }
-            console.error('スキャンエラー:', err);
-            setError(normalizeBleUserMessage(err instanceof Error ? err.message : '') || 'スキャンに失敗しました');
-            setConnectionState('disconnected');
-        }
-    }, [adapterRef, connectToDevice, platformInfo, setAvailableDevices, setConnectionState, setError]);
-    const cancelScan = useCallback(async () => {
-        const adapter = adapterRef.current;
-        if (platformInfo?.adapterType !== 'Capacitor' || typeof adapter?.stopScan !== 'function')
-            return;
-        await adapter.stopScan();
-    }, [adapterRef, platformInfo?.adapterType]);
+    const { scanAndConnect, cancelScan } = useBLEDeviceDiscovery({
+        adapterRef, platformInfo, scanSessionRef, connectionInFlightRef, connectToDevice,
+        setAvailableDevices, setConnectionState, setError,
+    });
     const identifyDevice = useCallback(async (device: BLEDeviceInfo) => {
         const adapter = adapterRef.current;
         const identifySession = connectionSessionRef.current;
@@ -593,7 +563,7 @@ export const useBLEConnectionLifecycle = ({ adapterRef, connectionState, platfor
             setError('BLEが初期化されていません');
             return;
         }
-        if (connectionState === 'connecting') {
+        if (connectionInFlightRef.current || connectionState === 'connecting') {
             return;
         }
         try {

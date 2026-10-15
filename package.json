@@ -1,7 +1,7 @@
 {
   "name": "ulsa-evo-app",
   "private": true,
-  "version": "1.1.1",
+  "version": "1.2.1",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -37,6 +37,7 @@
   },
   "dependencies": {
     "@capacitor-community/bluetooth-le": "^8.1.3",
+    "@capacitor/app": "8.1.1",
     "@capacitor/core": "^8.3.0",
     "@capacitor/ios": "^8.3.0",
     "@ionic/react": "^8.5.0",

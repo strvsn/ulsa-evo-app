@@ -26,6 +26,8 @@ import {
   describeNativeSoftApJoinFailure,
   probeInitialPortalFromIos,
   shouldRetryNativeSoftApJoin,
+  isNativeSoftApJoinAvailable,
+  removeEsp32SoftApConfiguration,
 } from './nativeSoftAp';
 
 const createDeferred = <T,>() => {
@@ -41,6 +43,22 @@ describe('nativeSoftAp', () => {
     vi.clearAllMocks();
     mocks.isNativePlatform.mockReturnValue(true);
     mocks.getPlatform.mockReturnValue('ios');
+    window.__ULSA_NATIVE_RUNTIME = { isIOSAppOnMac: false };
+  });
+
+  it('uses manual Wi-Fi on Mac without disabling native HTTP reachability', async () => {
+    window.__ULSA_NATIVE_RUNTIME = { isIOSAppOnMac: true };
+    expect(isNativeSoftApJoinAvailable()).toBe(false);
+    const credentials = { ssid: 'ULSA-EVO-OTA-A3F', password: 'session-password' };
+    await expect(connectToEsp32SoftAp(credentials)).resolves.toMatchObject({
+      connected: false, reason: 'unsupported', message: expect.stringContaining('Mac'),
+    });
+    await removeEsp32SoftApConfiguration(credentials);
+    expect(mocks.connect).not.toHaveBeenCalled();
+    expect(mocks.removeConfiguration).not.toHaveBeenCalled();
+    mocks.probeInitialPortal.mockResolvedValue({ reachable: true });
+    await expect(probeInitialPortalFromIos()).resolves.toMatchObject({ reachable: true });
+    expect(mocks.probeInitialPortal).toHaveBeenCalledOnce();
   });
 
   it('uses join-once credentials without issuing a separate removal request', async () => {

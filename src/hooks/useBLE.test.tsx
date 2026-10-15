@@ -16,6 +16,7 @@ vi.mock('../services/ble', () => ({
     getBLEAdapter: vi.fn(),
 }));
 const { BLENotSupportedError, getBLEAdapter } = await import('../services/ble');
+const { getBLEPlatformInfo } = await import('../services/ble');
 const createNotificationResult = (overrides: Partial<NotificationStartResult> = {}): NotificationStartResult => ({
     required: {
         windDirection: true,
@@ -197,6 +198,115 @@ const createAdapter = (): IBLEAdapter => ({
 describe('useBLE', () => {
     beforeEach(() => {
         vi.clearAllMocks();
+        vi.mocked(getBLEPlatformInfo).mockReturnValue({ platform: 'ios', adapterType: 'Capacitor', isSupported: true });
+    });
+    it('reserves an early selection and awaits native scan stop without accepting old discoveries or completion', async () => {
+        const adapter = createAdapter();
+        const selected: BLEDeviceInfo = { deviceId: 'selected', name: 'ULSA EVO #1', nodeId: 1 };
+        const late: BLEDeviceInfo = { deviceId: 'late', name: 'ULSA EVO #2', nodeId: 2 };
+        let found: ((device: BLEDeviceInfo) => void) | undefined;
+        let finishScan: ((devices: BLEDeviceInfo[]) => void) | undefined;
+        let finishStop: (() => void) | undefined;
+        vi.mocked(adapter.scanDevices!).mockImplementation(callback => new Promise(resolve => {
+            found = callback;
+            finishScan = resolve;
+        }));
+        vi.mocked(adapter.stopScan!).mockImplementation(() => new Promise(resolve => { finishStop = resolve; }));
+        vi.mocked(getBLEAdapter).mockReturnValue(adapter);
+        const { result } = renderHook(() => useBLE());
+        await waitFor(() => expect(result.current.isSupported).toBe(true));
+        let scan: Promise<void> | undefined;
+        act(() => { scan = result.current.scanAndConnect(); });
+        act(() => { found?.(selected); });
+        expect(result.current.availableDevices).toEqual([selected]);
+        let connection: Promise<void> | undefined;
+        act(() => { connection = result.current.connectToDevice(selected); });
+        expect(result.current.connectionState).toBe('connecting');
+        expect(adapter.connect).not.toHaveBeenCalled();
+        await act(async () => {
+            found?.(late);
+            finishScan?.([late]);
+            await scan;
+        });
+        expect(result.current.connectionState).toBe('connecting');
+        expect(result.current.availableDevices).toEqual([selected]);
+        expect(result.current.error).toBeNull();
+        await act(async () => { finishStop?.(); await connection; });
+        expect(adapter.connect).toHaveBeenCalledExactlyOnceWith('selected', expect.any(Function));
+        expect(result.current.connectionState).toBe('connected');
+    });
+    it('ignores a late scan failure after the selected device is connected', async () => {
+        const consoleError = vi.spyOn(console, 'error').mockImplementation(() => undefined);
+        const adapter = createAdapter();
+        let failScan: ((error: Error) => void) | undefined;
+        vi.mocked(adapter.scanDevices!).mockImplementation(() => new Promise((_resolve, reject) => { void _resolve; failScan = reject; }));
+        vi.mocked(getBLEAdapter).mockReturnValue(adapter);
+        const { result } = renderHook(() => useBLE());
+        await waitFor(() => expect(result.current.isSupported).toBe(true));
+        let scan: Promise<void> | undefined;
+        act(() => { scan = result.current.scanAndConnect(); });
+        await act(async () => { await result.current.connectToDevice({ deviceId: 'selected', name: 'ULSA EVO #1' }); });
+        await act(async () => { failScan?.(new Error('old scan failure')); await scan; });
+        expect(result.current.connectionState).toBe('connected');
+        expect(result.current.connectedDevice?.deviceId).toBe('selected');
+        expect(result.current.error).toBeNull();
+        expect(consoleError).not.toHaveBeenCalled();
+        consoleError.mockRestore();
+    });
+    it('accepts only one same-tick connection and refuses identify or another search while it is pending', async () => {
+        const adapter = createAdapter();
+        let finishStop: (() => void) | undefined;
+        vi.mocked(adapter.stopScan!).mockImplementation(() => new Promise(resolve => { finishStop = resolve; }));
+        vi.mocked(getBLEAdapter).mockReturnValue(adapter);
+        const { result } = renderHook(() => useBLE());
+        await waitFor(() => expect(result.current.isSupported).toBe(true));
+        const first = { deviceId: 'first', name: 'ULSA EVO #1' };
+        const second = { deviceId: 'second', name: 'ULSA EVO #2' };
+        let pending: Promise<void> | undefined;
+        act(() => {
+            pending = result.current.connectToDevice(first);
+            void result.current.connectToDevice(second);
+            void result.current.identifyDevice(second);
+            void result.current.scanAndConnect();
+        });
+        expect(adapter.stopScan).toHaveBeenCalledOnce();
+        expect(adapter.identifyDevice).not.toHaveBeenCalled();
+        expect(adapter.scanDevices).not.toHaveBeenCalled();
+        await act(async () => { finishStop?.(); await pending; });
+        expect(adapter.connect).toHaveBeenCalledExactlyOnceWith('first', expect.any(Function));
+        expect(adapter.startSensorNotifications).toHaveBeenCalledOnce();
+    });
+    it('does not connect when native scan stop fails and allows a clean retry', async () => {
+        const consoleError = vi.spyOn(console, 'error').mockImplementation(() => undefined);
+        const adapter = createAdapter();
+        vi.mocked(adapter.stopScan!).mockRejectedValueOnce(new Error('native stop failed'));
+        vi.mocked(getBLEAdapter).mockReturnValue(adapter);
+        const { result } = renderHook(() => useBLE());
+        await waitFor(() => expect(result.current.isSupported).toBe(true));
+        const device = { deviceId: 'selected', name: 'ULSA EVO #1' };
+        await act(async () => { await result.current.connectToDevice(device); });
+        expect(adapter.connect).not.toHaveBeenCalled();
+        expect(result.current.connectionState).toBe('disconnected');
+        expect(result.current.error).toBe('native stop failed');
+        await act(async () => { await result.current.connectToDevice(device); });
+        expect(adapter.connect).toHaveBeenCalledExactlyOnceWith('selected', expect.any(Function));
+        expect(result.current.connectionState).toBe('connected');
+        expect(result.current.error).toBeNull();
+        consoleError.mockRestore();
+    });
+    it('keeps Web chooser selection unchanged without a native scan-stop call', async () => {
+        vi.mocked(getBLEPlatformInfo).mockReturnValue({ platform: 'web', adapterType: 'WebBluetooth', isSupported: true });
+        const adapter = createAdapter();
+        vi.mocked(adapter.scanAndSelect).mockResolvedValue({ deviceId: 'chooser-selected', name: 'ULSA EVO #1' });
+        vi.mocked(getBLEAdapter).mockReturnValue(adapter);
+        const { result } = renderHook(() => useBLE());
+        await waitFor(() => expect(result.current.isSupported).toBe(true));
+        await act(async () => { await result.current.scanAndConnect(); });
+        expect(adapter.scanAndSelect).toHaveBeenCalledOnce();
+        expect(adapter.scanDevices).not.toHaveBeenCalled();
+        expect(adapter.stopScan).not.toHaveBeenCalled();
+        expect(adapter.connect).toHaveBeenCalledExactlyOnceWith('chooser-selected', expect.any(Function));
+        expect(result.current.connectionState).toBe('connected');
     });
     it('normalizes external initialization error branding before exposing it to the UI', async () => {
         const consoleError = vi.spyOn(console, 'error').mockImplementation(() => undefined);

@@ -1,7 +1,6 @@
 import Capacitor
 import CoreLocation
 import Foundation
-import UIKit
 
 @objc(ULSATrueHeadingPlugin)
 class ULSATrueHeadingPlugin: CAPPlugin, CAPBridgedPlugin, CLLocationManagerDelegate {
@@ -24,19 +23,13 @@ class ULSATrueHeadingPlugin: CAPPlugin, CAPBridgedPlugin, CLLocationManagerDeleg
         locationManager.delegate = self
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
         locationManager.headingFilter = 1
-        updateHeadingOrientation()
-        UIDevice.current.beginGeneratingDeviceOrientationNotifications()
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(deviceOrientationDidChange),
-            name: UIDevice.orientationDidChangeNotification,
-            object: nil
-        )
+        // Heading uses the phone's hardware top. Screen-relative wind is
+        // converted separately; never change this measurement frame for a UI flip.
+        // The renderer separately accounts for UIKit and WebView rotation.
+        locationManager.headingOrientation = .portrait
     }
 
     deinit {
-        NotificationCenter.default.removeObserver(self)
-        UIDevice.current.endGeneratingDeviceOrientationNotifications()
         locationManager.stopUpdatingHeading()
         locationManager.stopUpdatingLocation()
     }
@@ -103,15 +96,11 @@ class ULSATrueHeadingPlugin: CAPPlugin, CAPBridgedPlugin, CLLocationManagerDeleg
         notifyNavigationChangedIfNeeded()
     }
 
-    @objc private func deviceOrientationDidChange() {
-        updateHeadingOrientation()
-    }
-
     private func startUpdates(_ call: CAPPluginCall) {
         navigationModeEnabled = call.getBool("navigationMode") ?? false
         configureLocationManager()
 
-        guard CLLocationManager.headingAvailable() else {
+        guard !ProcessInfo.processInfo.isiOSAppOnMac, CLLocationManager.headingAvailable() else {
             call.resolve(headingPayload(trueHeading: nil, headingAccuracy: nil, available: false, authorization: "unsupported"))
             notifyNavigationChangedIfNeeded()
             return
@@ -119,7 +108,6 @@ class ULSATrueHeadingPlugin: CAPPlugin, CAPBridgedPlugin, CLLocationManagerDeleg
 
         switch locationManager.authorizationStatus {
         case .authorizedAlways, .authorizedWhenInUse:
-            updateHeadingOrientation()
             locationManager.startUpdatingLocation()
             locationManager.startUpdatingHeading()
             isUpdating = true
@@ -165,19 +153,6 @@ class ULSATrueHeadingPlugin: CAPPlugin, CAPBridgedPlugin, CLLocationManagerDeleg
         locationManager.distanceFilter = kCLDistanceFilterNone
         locationManager.activityType = navigationModeEnabled ? .otherNavigation : .other
         locationManager.pausesLocationUpdatesAutomatically = !navigationModeEnabled
-    }
-
-    private func updateHeadingOrientation() {
-        switch UIDevice.current.orientation {
-        case .portraitUpsideDown:
-            locationManager.headingOrientation = .portraitUpsideDown
-        case .landscapeLeft:
-            locationManager.headingOrientation = .landscapeRight
-        case .landscapeRight:
-            locationManager.headingOrientation = .landscapeLeft
-        default:
-            locationManager.headingOrientation = .portrait
-        }
     }
 
     private func headingPayload(

@@ -416,8 +416,13 @@ export const useLogRecording = ({
     setBrowserLogExportBusy(true);
     setBrowserLogExportError(null);
     void deliverBrowserLogArchive(archive.file)
-      .then(() => {
+      .then((delivery) => {
         setBrowserLogPreparedArchive(null);
+        const deliveredMessage = delivery.method === 'saved'
+          ? `保存完了: ${delivery.filename}。保存先: ${delivery.path}`
+          : delivery.method === 'share'
+            ? `共有先へZIPを渡しました: ${delivery.filename}。保存結果は共有先で確認してください。`
+            : `ダウンロード要求を送信しました: ${delivery.filename}。保存結果はブラウザーのダウンロード一覧で確認してください。`;
         if (archive.batchIndex + 1 < archive.batchCount) {
           setBrowserLogNextExportBatch({
             sessionId: archive.scopeSessionId,
@@ -427,11 +432,11 @@ export const useLogRecording = ({
             plan: archive.plan,
           });
           setBrowserLogExportNotice(
-            `ZIP ${archive.batchIndex + 1}/${archive.batchCount}を共有/保存しました。次のZIPを準備してください。`,
+            `${deliveredMessage} 次のZIP (${archive.batchIndex + 2}/${archive.batchCount}) を準備してください。`,
           );
         } else {
           setBrowserLogNextExportBatch(null);
-          setBrowserLogExportNotice('ZIPを共有/保存しました。保存済みログは自動削除されません。');
+          setBrowserLogExportNotice(`${deliveredMessage} アプリ内の保存済みログは自動削除されません。`);
         }
       })
       .catch((error: unknown) => {

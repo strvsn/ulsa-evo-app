@@ -2,6 +2,7 @@ import { act, renderHook, waitFor } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { useLogRecording } from './useLogRecording';
 import type { SensorData } from '../../types/ble';
+import type { BrowserLogDeliveryResult } from '../../services/browserLog/exportFiles';
 import { BROWSER_LOG_INTERVAL_STORAGE_KEY, LOG_RECORDING_MODE_STORAGE_KEY, } from './logRecordingPreferences';
 const browserLogMocks = vi.hoisted(() => ({
     instances: [] as Array<{
@@ -16,7 +17,7 @@ const browserLogMocks = vi.hoisted(() => ({
         getStatus: ReturnType<typeof vi.fn>;
         isActive: ReturnType<typeof vi.fn>;
     }>,
-    deliverBrowserLogArchive: vi.fn(async () => 'download'),
+    deliverBrowserLogArchive: vi.fn<() => Promise<BrowserLogDeliveryResult>>(async () => ({ method: 'download', filename: 'logs.zip' })),
     restoredStatus: null as Record<string, unknown> | null,
 }));
 vi.mock('../../services/browserLog', () => {
@@ -570,6 +571,18 @@ describe('useLogRecording', () => {
         await waitFor(() => expect(result.current.browserLogExportNotice).toContain('共有をキャンセル'));
         expect(result.current.browserLogPreparedArchive).not.toBeNull();
         expect(result.current.browserLogStatus.error).toBeNull();
+    });
+    it('only calls a Mac ZIP saved when its destination was confirmed', async () => {
+        browserLogMocks.restoredStatus = { storedSessionCount: 1, storedSegmentCount: 1, storedRowCount: 10, storedBytes: 1024, hasExportableData: true };
+        browserLogMocks.deliverBrowserLogArchive.mockResolvedValueOnce({ method: 'saved', filename: 'logs.zip', path: '/save-fixture/logs.zip' });
+        const { result } = renderHook(() => useLogRecording(createOptions()));
+        await waitFor(() => expect(result.current.browserLogStatus.hasExportableData).toBe(true));
+        act(() => result.current.prepareBrowserLogExport());
+        await waitFor(() => expect(result.current.browserLogPreparedArchive).not.toBeNull());
+        act(() => result.current.deliverPreparedBrowserLogExport());
+        await waitFor(() => expect(result.current.browserLogExportNotice).toContain('保存完了'));
+        expect(result.current.browserLogExportNotice).toContain('/save-fixture/logs.zip');
+        expect(result.current.browserLogExportNotice).toContain('自動削除されません');
     });
     it('never lets app-log ZIP state block stopping an active card recording', async () => {
         browserLogMocks.restoredStatus = {

@@ -58,6 +58,8 @@
 	<string>ゲージやグラフの画像を、共有画面から写真に保存するために使用します。</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
+	<key>UIApplicationSupportsIndirectInputEvents</key>
+	<true/>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>

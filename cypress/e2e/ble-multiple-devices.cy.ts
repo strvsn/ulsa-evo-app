@@ -1,4 +1,23 @@
 describe('iOS multi-device connection dialog', () => {
+  it('allows an explicit device choice before search finishes without enabling a second search', () => {
+    cy.viewport(393, 852);
+    cy.visit('/cypress/ble-device-list-harness.html?state=scanning');
+    cy.get('html[data-ble-presented="true"]').should('exist');
+    cy.get('.ble-device-connect-button').first().should('have.prop', 'disabled', false).click();
+    cy.get('[data-testid="selected-device"]').should('have.text', 'fixture-device-1');
+    cy.get('.ble-modal-footer ion-button').should('have.prop', 'disabled', true);
+    cy.get('.ble-device-card').should('have.length', 6);
+  });
+
+  it('disables both device actions once a connection is reserved', () => {
+    cy.viewport(393, 852);
+    cy.visit('/cypress/ble-device-list-harness.html?state=connecting');
+    cy.get('html[data-ble-presented="true"]').should('exist');
+    cy.get('.ble-device-connect-button').each($button => expect($button[0]).to.have.property('disabled', true));
+    cy.get('.ble-identify-button').each($button => expect($button[0]).to.have.property('disabled', true));
+    cy.get('[data-testid="selected-device"]').should('have.text', '');
+  });
+
   for (const size of [{ width: 320, height: 568 }, { width: 393, height: 852 }, { width: 1024, height: 768 }, { width: 852, height: 393 }]) {
     for (const theme of ['light', 'dark']) {
       it(`shows six separate cards with reachable controls at ${size.width}x${size.height} ${theme}`, () => {

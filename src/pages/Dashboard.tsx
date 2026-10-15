@@ -26,7 +26,7 @@ import { useSettingsDrawerSwipe } from './dashboard/useSettingsDrawerSwipe';
 import { useThemeBackgroundSync } from './dashboard/useThemeBackgroundSync';
 import { useBleConnectionModal } from './dashboard/useBleConnectionModal';
 import { useBLEBackgroundNotificationPolicy } from './dashboard/useBLEBackgroundNotificationPolicy';
-import { updateCarouselAutoHeight, updateSwiperTouchRatio } from './dashboard/swiperRuntime';
+import { updateCarouselAutoHeight } from './dashboard/swiperRuntime';
 import { recordPerfEvent } from '../utils/renderPerfDiagnostics';
 import { getNextChartScaleMode } from './dashboard/chartScaleCycle';
 import { moveDashboardCarousel } from './dashboard/dashboardCarouselNavigation';
@@ -82,8 +82,7 @@ const Dashboard: React.FC = () => {
     const currentTheme = getUlsaThemeIndex(currentThemeId);
     const showMemoryMonitor = import.meta.env.VITE_MEMORY_DEBUG === '1';
     const activeIndexRef = useRef(activeIndex);
-    const { flipButtonLabel, isUpsideDown, toggleFlip, } = useDashboardOrientationFlip();
-    const swiperTouchRatio = isUpsideDown ? -1 : 1;
+    const { flipButtonLabel, isUpsideDown, toggleFlip, compassScreenRotationDegrees, swiperTouchRatio, } = useDashboardOrientationFlip(swiperInstance);
     const moveCarousel = (offset: -1 | 1) => moveDashboardCarousel(swiperInstance, offset);
     useThemeBackgroundSync({
         gradient: themes[currentTheme].gradient,
@@ -105,9 +104,6 @@ const Dashboard: React.FC = () => {
     useEffect(() => {
         activeIndexRef.current = activeIndex;
     }, [activeIndex]);
-    useEffect(() => {
-        updateSwiperTouchRatio(swiperInstance, swiperTouchRatio);
-    }, [swiperInstance, swiperTouchRatio]);
     const [windSpeedMax, setWindSpeedMax] = useState(5);
     const [temperatureMax, setTemperatureMax] = useState(35);
     const [soundSpeedMax, setSoundSpeedMax] = useState(360);
@@ -319,7 +315,7 @@ const Dashboard: React.FC = () => {
                 }} className="main-swiper">
               
               <SwiperSlide dir="ltr">
-                <WindRoseGaugeSlide isActive={activeIndex === WIND_ROSE_SLIDE_INDEX} isUlsaConnected={ble.connectionState === 'connected'} windSpeed={sensorValues.windSpeed} windSpeedUnit={windSpeedUnit} windDirectionContinuous={sensorValues.windDirectionContinuous} temperature={sensorValues.temperature} soundSpeed={sensorValues.soundSpeed} headingSpeed={sensorValues.headingSpeed} windSpeedAverage10m={sensorValues.windSpeedAverage10m} cardLogState={cardPipLogStatus?.state ?? 'disabled'} cardLogDetail={cardPipLogStatus?.detail} appLogState={appPipLogStatus?.state ?? 'disabled'} appLogDetail={appPipLogStatus?.detail} sampleTimestampMs={windRoseDataFreshness.sampleTimestampMs} themeVariant={resolveWindRoseThemeVariant(currentTheme)} dataState={windRoseDataFreshness.dataState} onUnitCycle={cycleWindSpeedUnit} onRequestActivate={handleWindPipRestore} onPipActivityChange={handleWindPipActivityChange}/>
+                <WindRoseGaugeSlide isActive={activeIndex === WIND_ROSE_SLIDE_INDEX} screenRotationDegrees={compassScreenRotationDegrees} isUlsaConnected={ble.connectionState === 'connected'} windSpeed={sensorValues.windSpeed} windSpeedUnit={windSpeedUnit} windDirectionContinuous={sensorValues.windDirectionContinuous} temperature={sensorValues.temperature} soundSpeed={sensorValues.soundSpeed} headingSpeed={sensorValues.headingSpeed} windSpeedAverage10m={sensorValues.windSpeedAverage10m} cardLogState={cardPipLogStatus?.state ?? 'disabled'} cardLogDetail={cardPipLogStatus?.detail} appLogState={appPipLogStatus?.state ?? 'disabled'} appLogDetail={appPipLogStatus?.detail} sampleTimestampMs={windRoseDataFreshness.sampleTimestampMs} themeVariant={resolveWindRoseThemeVariant(currentTheme)} dataState={windRoseDataFreshness.dataState} onUnitCycle={cycleWindSpeedUnit} onRequestActivate={handleWindPipRestore} onPipActivityChange={handleWindPipActivityChange}/>
               </SwiperSlide>
 
               

@@ -1,3 +1,4 @@
+import { Capacitor } from '@capacitor/core';
 import { BleClient, numbersToDataView } from '@capacitor-community/bluetooth-le';
 import { CHARACTERISTIC_UUIDS, SERVICE_UUIDS } from './bleConstants';
 import { logBLEDebug } from './bleLogger';
@@ -8,7 +9,10 @@ const DEVICE_IDENTIFY_SETTLE_MS = 200;
 export class CapacitorBleDeviceIdentify {
   private pending: Promise<void> | null = null;
 
-  constructor(private readonly getConnectedDeviceId: () => string | null) {}
+  constructor(
+    private readonly getConnectedDeviceId: () => string | null,
+    private readonly stopScan: () => Promise<void>,
+  ) {}
 
   async waitForIdle(): Promise<void> {
     if (!this.pending) return;
@@ -36,11 +40,17 @@ export class CapacitorBleDeviceIdentify {
       throw new Error('別のULSAに接続中は候補デバイスを識別できません');
     }
     const temporaryConnection = connectedDeviceId !== deviceId;
+    // Reclaim the scanner owner and await the radio stop before temporary GATT work.
+    // Stop failures must remain stop failures, not unsupported-firmware errors.
+    if (temporaryConnection) await this.stopScan();
 
     try {
       if (temporaryConnection) {
-        await BleClient.stopLEScan().catch(() => undefined);
-        await BleClient.connect(deviceId);
+        if (Capacitor.getPlatform() === 'ios') {
+          await BleClient.connect(deviceId, undefined, { skipDescriptorDiscovery: true });
+        } else {
+          await BleClient.connect(deviceId);
+        }
       }
       const payload = numbersToDataView([0x01]);
       try {

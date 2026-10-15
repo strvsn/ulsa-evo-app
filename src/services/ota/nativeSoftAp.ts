@@ -1,4 +1,5 @@
-import { Capacitor, registerPlugin } from '@capacitor/core';
+import { registerPlugin } from '@capacitor/core';
+import { isNativeIosApp, isNativeIosDevice } from '../nativeRuntime';
 export interface SoftApCredentials {
   ssid: string;
   password: string;
@@ -35,7 +36,7 @@ const UlsaSoftAp = registerPlugin<NativeSoftApPlugin>('UlsaSoftAp');
 let nativeJoinInFlight = false;
 
 export const isNativeSoftApJoinAvailable = (): boolean =>
-  Capacitor.isNativePlatform() && Capacitor.getPlatform() === 'ios';
+  isNativeIosDevice();
 
 export const connectToEsp32SoftAp = async (
   session: SoftApCredentials
@@ -45,7 +46,7 @@ export const connectToEsp32SoftAp = async (
       ssid: session.ssid,
       connected: false,
       reason: 'unsupported',
-      message: 'Wi-Fi auto-join is only available in the iOS Capacitor app.',
+      message: 'Wi-Fi自動接続はiPhone／iPadで利用できます。MacではWi-Fiメニューから接続してください。',
     };
   }
 
@@ -101,7 +102,8 @@ export const connectToInitialSoftApWithTimeout = async (
 };
 
 export const probeInitialPortalFromIos = async (): Promise<NativeInitialPortalProbeResult> => {
-  if (!isNativeSoftApJoinAvailable()) return { reachable: false, reason: 'unsupported' };
+  // HTTP reachability is available on Mac even though Wi-Fi auto-join is not.
+  if (!isNativeIosApp()) return { reachable: false, reason: 'unsupported' };
   let timeoutId: ReturnType<typeof setTimeout> | undefined;
   try {
     return await Promise.race([

@@ -1,6 +1,7 @@
 import { describe, expect, it, vi } from 'vitest';
 import { drawWindRoseCanvas } from './windRoseCanvasRenderer';
-import type { WindRoseMotionFrame } from './windRoseMotionModel';
+import { WindRoseMotionModel, type WindRoseMotionFrame } from './windRoseMotionModel';
+import { normalizeDegrees, projectWindRosePoint } from './windRoseGaugeMath';
 import {
   WIND_ROSE_CORE_WIDTH_RATIO,
   WIND_ROSE_GLOW_BLUR_RATIO,
@@ -59,7 +60,255 @@ const frame: WindRoseMotionFrame = {
   needsAnimation: false,
 };
 
+type WorldVector = readonly [east: number, north: number];
+const WORLD_CARDINALS = [0, 90, 180, 270] as const;
+const worldVector = (bearing: number): WorldVector => [
+  Math.sin(bearing * Math.PI / 180), Math.cos(bearing * Math.PI / 180),
+];
+const vectorDot = (first: WorldVector, second: WorldVector): number => (
+  first[0] * second[0] + first[1] * second[1]
+);
+
+/** Resolve a world wind-from vector on the product's visible near/far sensor basis. */
+const sensorReadingForWorldWind = (
+  windFrom: WorldVector,
+  phoneHeading: number,
+  screenRotation: number,
+): number => {
+  const phoneForward = worldVector(phoneHeading);
+  const phoneRight: WorldVector = [phoneForward[1], -phoneForward[0]];
+  const screenForward = worldVector(screenRotation);
+  const sensorZero: WorldVector = [
+    phoneForward[0] * screenForward[1] + phoneRight[0] * screenForward[0],
+    phoneForward[1] * screenForward[1] + phoneRight[1] * screenForward[0],
+  ];
+  const sensorRight: WorldVector = [sensorZero[1], -sensorZero[0]];
+  return Math.atan2(vectorDot(windFrom, sensorRight), vectorDot(windFrom, sensorZero))
+    * 180 / Math.PI;
+};
+
+const expectWorldWindOnCanvas = (
+  worldFromBearing: number,
+  phoneHeading: number,
+  screenRotation: number,
+): void => {
+  const windFrom = worldVector(worldFromBearing);
+  const rawSensorDirection = sensorReadingForWorldWind(windFrom, phoneHeading, screenRotation);
+  const model = new WindRoseMotionModel();
+  // The real display model consumes the existing screen-to-hardware conversion.
+  model.setTarget(3, rawSensorDirection + screenRotation, true, 0, 0);
+  const currentFrame = model.advance(500);
+  const context = createContext();
+  drawWindRoseCanvas(context, {
+    width: 400, height: 400, frame: currentFrame, unit: 'm/s',
+    hasCurrentWindData: true, isTilted: false, tiltDegrees: 50, theme: 'graphite',
+    trueHeading: phoneHeading, headingAccuracy: null,
+    screenRotationDegrees: screenRotation, windReferenceRotationDegrees: screenRotation,
+  });
+
+  const centerDigits = vi.mocked(context.fillText).mock.calls
+    .filter(([text, , y]) => /^\d$/.test(text) && y === 172)
+    .map(([text]) => text).join('');
+  expect(centerDigits).not.toBe('');
+  expect(((Number(centerDigits) % 360) + 360) % 360).toBe(worldFromBearing);
+
+  const activeIndices = Array.from(currentFrame.rayActivity.keys())
+    .filter((index) => currentFrame.rayActivity[index] >= 0.003);
+  const brightestIndex = activeIndices.reduce((brightest, index) => (
+    currentFrame.rayActivity[index] > currentFrame.rayActivity[brightest] ? index : brightest
+  ));
+  // Baseline first, then three glow passes. Inspect the real model's brightest ray.
+  const point = vi.mocked(context.moveTo).mock.calls[
+    120 + activeIndices.length * 2 + activeIndices.indexOf(brightestIndex)
+  ];
+  const localX = Number(point[0]) - 200;
+  const localY = Number(point[1]) - 200;
+  const radius = Math.hypot(localX, localY);
+  const rotation = screenRotation * Math.PI / 180;
+  // Undo only the actual CSS/UIKit surface transform, then compare world-vector
+  // projections on the hardware phone basis; do not duplicate the angle formula.
+  const hardwareEast = (Math.cos(rotation) * localX - Math.sin(rotation) * localY) / radius;
+  const hardwareNorth = -(Math.sin(rotation) * localX + Math.cos(rotation) * localY) / radius;
+  const phoneForward = worldVector(phoneHeading);
+  const phoneRight: WorldVector = [phoneForward[1], -phoneForward[0]];
+  expect(hardwareEast).toBeCloseTo(vectorDot(windFrom, phoneRight), 8);
+  expect(hardwareNorth).toBeCloseTo(vectorDot(windFrom, phoneForward), 8);
+};
+
+describe('screen-basis wind-coordinate consistency with the real display model', () => {
+  it.each(WORLD_CARDINALS)(
+    'preserves world %s° on the unchanged visible near/far sensor basis',
+    (worldFromBearing) => {
+      for (const phoneHeading of WORLD_CARDINALS) {
+        for (const screenRotation of WORLD_CARDINALS) {
+          expectWorldWindOnCanvas(worldFromBearing, phoneHeading, screenRotation);
+        }
+      }
+    },
+  );
+
+  it.each([0, 180])(
+    'keeps raw 0° near-to-far and 180° far-to-near with screen rotation %s°',
+    (screenRotation) => {
+      const phoneHeading = screenRotation === 0 ? 0 : 180;
+      // Both layouts point their visible far side north, despite opposite
+      // physical phone-top headings. No mounting preference participates.
+      for (const rawDirection of [0, 180]) {
+        const windFrom = worldVector(rawDirection);
+        const sensorReading = sensorReadingForWorldWind(windFrom, phoneHeading, screenRotation);
+        expect(((sensorReading % 360) + 360) % 360).toBeCloseTo(rawDirection, 8);
+        expectWorldWindOnCanvas(rawDirection, phoneHeading, screenRotation);
+      }
+    },
+  );
+
+  it('keeps north wind north through normal, connector-up, and normal layouts', () => {
+    expectWorldWindOnCanvas(0, 0, 0);
+    expectWorldWindOnCanvas(0, 180, 180);
+    expectWorldWindOnCanvas(0, 0, 0);
+  });
+});
+
 describe('drawWindRoseCanvas center metrics', () => {
+  it.each(['trueNorth', 'trueWind'] as const)('keeps a north HOLD north after a physical turn in %s mode', (directionReference) => {
+    const context = createContext();
+    const heldRays = new Float32Array(120);
+    heldRays[0] = 1;
+    drawWindRoseCanvas(context, {
+      width: 400, height: 400, frame, unit: 'm/s', hasCurrentWindData: false,
+      isTilted: false, tiltDegrees: 50, theme: 'graphite',
+      trueHeading: 180, headingAccuracy: null, screenRotationDegrees: 180,
+      peakHolds: [{
+        rayActivity: heldRays, speedMps: 3, displayDirectionDegrees: 0,
+        displayRotationDegrees: 0, directionReference, bankIndex: 0,
+      }],
+    });
+    const north = vi.mocked(context.fillText).mock.calls.find(([text]) => text === 'N');
+    const heldStart = vi.mocked(context.moveTo).mock.calls[120];
+    expect(Number(north?.[2])).toBeLessThan(200);
+    expect(Number(heldStart?.[1])).toBeLessThan(200);
+    expect(heldRays[0]).toBe(1);
+  });
+
+  it.each([false, true])('preserves fractional/wrapped geographic HOLD bearings with tilt=%s', (isTilted) => {
+    for (const [capturedHeading, currentHeading, rotation, rayIndex] of [
+      [0, 180, 180, 0], [73.5, 180.7, 180, 5], [359.7, 1.1, 0, 0],
+      [15.4, 95.2, 90, 10], [280.6, 10.3, 270, 70],
+    ]) {
+      const context = createContext();
+      const rays = new Float32Array(120);
+      rays[rayIndex] = 1;
+      const bearing = normalizeDegrees(rayIndex * 3 + capturedHeading);
+      drawWindRoseCanvas(context, {
+        width: 400, height: 400, frame, unit: 'm/s', hasCurrentWindData: false,
+        isTilted, tiltDegrees: 50, theme: 'graphite', trueHeading: currentHeading,
+        headingAccuracy: null, screenRotationDegrees: rotation,
+        peakHolds: [{
+          rayActivity: rays, speedMps: 3, displayDirectionDegrees: bearing,
+          displayRotationDegrees: capturedHeading, directionReference: 'trueNorth', bankIndex: 0,
+        }],
+      });
+      const expected = projectWindRosePoint({
+        centerX: 200, centerY: 200, radius: 400 * 0.44,
+        angle: normalizeDegrees(bearing - currentHeading - rotation),
+        size: 400, isTilted, tiltDegrees: 50,
+      });
+      const heldStart = vi.mocked(context.moveTo).mock.calls[120];
+      expect(Number(heldStart[0])).toBeCloseTo(expected.x, 8);
+      expect(Number(heldStart[1])).toBeCloseTo(expected.y, 8);
+      expect(rays[rayIndex]).toBe(1);
+    }
+  });
+
+  it('does not plot a geographic HOLD in a fabricated reference when heading is unavailable', () => {
+    const context = createContext();
+    const rays = new Float32Array(120);
+    rays[0] = 1;
+    const hold = {
+      rayActivity: rays, speedMps: 3, displayDirectionDegrees: 73.5,
+      displayRotationDegrees: 73.5, directionReference: 'trueNorth' as const, bankIndex: 0 as const,
+    };
+    drawWindRoseCanvas(context, {
+      width: 400, height: 400, frame, unit: 'm/s', hasCurrentWindData: false,
+      isTilted: false, tiltDegrees: 50, theme: 'graphite',
+      trueHeading: null, headingAccuracy: null, peakHolds: [hold],
+    });
+    expect(vi.mocked(context.moveTo).mock.calls).toHaveLength(120);
+    expect(hold.displayDirectionDegrees).toBe(73.5);
+    expect(hold.displayRotationDegrees).toBe(73.5);
+    expect(hold.rayActivity).toBe(rays);
+  });
+
+  it('keeps an ULSA-relative HOLD on the visible sensor axis while compass changes', () => {
+    const context = createContext();
+    const rays = new Float32Array(120);
+    rays[0] = 1;
+    drawWindRoseCanvas(context, {
+      width: 400, height: 400, frame, unit: 'm/s', hasCurrentWindData: false,
+      isTilted: false, tiltDegrees: 50, theme: 'graphite',
+      trueHeading: 180, headingAccuracy: null, screenRotationDegrees: 180,
+      windReferenceRotationDegrees: 180,
+      peakHolds: [{
+        rayActivity: rays, speedMps: 3, displayDirectionDegrees: 0,
+        displayRotationDegrees: 0, directionReference: 'ulsa', bankIndex: 0,
+      }],
+    });
+    expect(Number(vi.mocked(context.moveTo).mock.calls[120][1])).toBeLessThan(200);
+  });
+
+  it('places connector-up north wind and an ULSA-relative HOLD at the unchanged N overlay', () => {
+    const context = createContext();
+    const live = new Float32Array(120);
+    live[60] = 1; // Screen-relative ULSA 0° expressed in the physical phone frame.
+    const held = new Float32Array(120);
+    held[0] = 1; // Captured while compass was off: still ULSA-relative.
+    drawWindRoseCanvas(context, {
+      width: 400, height: 400, frame: { ...frame, peakDirectionDegrees: 180, rayActivity: live },
+      unit: 'm/s', hasCurrentWindData: true, isTilted: false, tiltDegrees: 50, theme: 'graphite',
+      trueHeading: 180, headingAccuracy: null, screenRotationDegrees: 180, windReferenceRotationDegrees: 180,
+      peakHolds: [{
+        rayActivity: held, speedMps: 3, displayDirectionDegrees: 0,
+        displayRotationDegrees: 0, directionReference: 'ulsa', bankIndex: 0,
+      }],
+    });
+    const north = vi.mocked(context.fillText).mock.calls.find(([text]) => text === 'N');
+    expect(Number(north?.[2])).toBeLessThan(200);
+    // After the 120 baseline bars: one saved ray and the three live glow passes.
+    for (const index of [120, 121, 122, 123]) {
+      expect(Number(vi.mocked(context.moveTo).mock.calls[index][1])).toBeLessThan(200);
+    }
+  });
+
+  it('counter-rotates NEWS and body-fixed wind rays before the 180-degree app transform', () => {
+    const context = createContext();
+    const bodyForwardActivity = new Float32Array(120);
+    bodyForwardActivity[0] = 1;
+    drawWindRoseCanvas(context, {
+      width: 320,
+      height: 320,
+      frame: { ...frame, peakDirectionDegrees: 0, rayActivity: bodyForwardActivity },
+      unit: 'm/s',
+      hasCurrentWindData: true,
+      isTilted: false,
+      tiltDegrees: 50,
+      theme: 'graphite',
+      trueHeading: 0,
+      headingAccuracy: null,
+      screenRotationDegrees: 180,
+    });
+
+    const north = vi.mocked(context.fillText).mock.calls.find(([text]) => text === 'N');
+    expect(Number(north?.[2])).toBeGreaterThan(160);
+    const outerRadius = 320 * 0.44;
+    const bottomStarts = vi.mocked(context.moveTo).mock.calls.filter(([x, y]) => (
+      Math.abs(Number(x) - 160) < 0.0001
+      && Math.abs(Number(y) - (160 + outerRadius)) < 0.0001
+    ));
+    // Baseline plus three live-ray passes: CSS rotates them back onto hardware top.
+    expect(bottomStarts).toHaveLength(4);
+    expect(bodyForwardActivity[0]).toBe(1);
+  });
+
   it('keeps live rays on the screen-relative sensor lattice when compass heading changes', () => {
     const context = createContext();
     const northOnlyActivity = new Float32Array(120);
@@ -92,6 +341,41 @@ describe('drawWindRoseCanvas center metrics', () => {
     // The 90° heading rotates NEWS, not the wind ray itself.
     expect(topStarts).toHaveLength(4);
     expect(rightStarts).toHaveLength(1);
+  });
+
+  it.each([0, 90, 180, 270])('keeps geographic north invariant after the %s-degree viewport transform', (rotation) => {
+    for (const heading of [0, 45, 180, 359]) {
+      const context = createContext();
+      drawWindRoseCanvas(context, {
+        width: 400, height: 400, frame, unit: 'm/s', hasCurrentWindData: false,
+        isTilted: false, tiltDegrees: 50, theme: 'graphite', trueHeading: heading,
+        headingAccuracy: null, screenRotationDegrees: rotation,
+      });
+      const north = vi.mocked(context.fillText).mock.calls.find(([text]) => text === 'N');
+      const x = Number(north?.[1]) - 200;
+      const y = Number(north?.[2]) - 200;
+      const radius = Math.hypot(x, y);
+      const radians = rotation * Math.PI / 180;
+      // Compose the actual rendered point with the external UIKit/CSS rotation.
+      expect((x * Math.cos(radians) - y * Math.sin(radians)) / radius)
+        .toBeCloseTo(-Math.sin(heading * Math.PI / 180), 8);
+      expect((x * Math.sin(radians) + y * Math.cos(radians)) / radius)
+        .toBeCloseTo(-Math.cos(heading * Math.PI / 180), 8);
+    }
+  });
+
+  it('leaves ULSA-relative mode unchanged when the display flips without compass', () => {
+    const normal = createContext();
+    const flipped = createContext();
+    const input = {
+      width: 400, height: 400, frame, unit: 'm/s' as const, hasCurrentWindData: true,
+      isTilted: false, tiltDegrees: 50, theme: 'graphite' as const,
+      trueHeading: null, headingAccuracy: null,
+    };
+    drawWindRoseCanvas(normal, input);
+    drawWindRoseCanvas(flipped, { ...input, screenRotationDegrees: 180 });
+    expect(vi.mocked(flipped.moveTo).mock.calls).toEqual(vi.mocked(normal.moveTo).mock.calls);
+    expect(vi.mocked(flipped.fillText).mock.calls).toEqual(vi.mocked(normal.fillText).mock.calls);
   });
 
   it('shows a valid calm speed without inventing a wind direction', () => {

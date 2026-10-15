@@ -5,6 +5,10 @@
 import '@testing-library/jest-dom/extend-expect';
 import { vi } from 'vitest';
 
+// Native-wrapper tests default to an iPhone/iPad shell. Mac and unknown-host
+// cases override this document-start payload explicitly in their own tests.
+window.__ULSA_NATIVE_RUNTIME = { isIOSAppOnMac: false };
+
 // Mock matchmedia
 window.matchMedia = window.matchMedia || function() {
   return {

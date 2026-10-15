@@ -138,12 +138,70 @@ describe('BLEModal', () => {
     expect(screen.getByText('デバイスを検索中...')).toBeInTheDocument();
     expect(screen.queryByText('デバイスを選択中...')).not.toBeInTheDocument();
 
-    expect(screen.getByRole('button', { name: 'ULSA EVO #1 に接続' })).toBeDisabled();
+    expect(screen.getByRole('button', { name: 'ULSA EVO #1 に接続' })).toBeEnabled();
     expect(screen.getByLabelText('ULSA EVO #1 のLEDを点滅してさがす')).toBeEnabled();
     fireEvent.click(screen.getByLabelText('ULSA EVO #1 のLEDを点滅してさがす'));
     screen.getByRole('button', { name: 'ULSA EVO #1 に接続' }).click();
 
     expect(onIdentifyDevice).toHaveBeenCalledWith(device);
+    expect(onConnectToDevice).toHaveBeenCalledWith(device);
+  });
+
+  it('makes each time-separated native discovery selectable without choosing any automatically', () => {
+    const onConnectToDevice = vi.fn();
+    const props = createBLEModalProps({ isOpen: true, connectionState: 'scanning',
+      dataState: 'idle', connectedDevice: null, isContinuousNativeScanActive: true,
+      onConnectToDevice });
+    const { rerender } = render(<BLEModal {...props} />);
+    const devices = ['a', 'b', 'c'].map((id) => ({ deviceId: id,
+      name: 'ULSA EVO #7', nodeId: 7, rssi: -60 }));
+
+    for (let count = 1; count <= devices.length; count++) {
+      rerender(<BLEModal {...props} availableDevices={devices.slice(0, count)} />);
+      expect(screen.getAllByRole('button', { name: 'ULSA EVO #7 に接続' })).toHaveLength(count);
+      for (const button of screen.getAllByRole('button', { name: 'ULSA EVO #7 に接続' })) {
+        expect(button).toBeEnabled();
+      }
+      expect(onConnectToDevice).not.toHaveBeenCalled();
+      expect(screen.getByText('ULSAを捜索中...')).toBeInTheDocument();
+      expect(screen.getByText('検索中…').closest('ion-button'))
+        .toHaveAttribute('data-control-interaction', 'disabled');
+    }
+    expect(Array.from(document.querySelectorAll('.ble-device-card'))
+      .map((card) => card.getAttribute('data-device-id'))).toEqual(['a', 'b', 'c']);
+    fireEvent.click(screen.getAllByRole('button', { name: 'ULSA EVO #7 に接続' })[1]);
+    expect(onConnectToDevice).toHaveBeenCalledOnce();
+    expect(onConnectToDevice).toHaveBeenCalledWith(devices[1]);
+  });
+
+  it('keeps all native connect and identify buttons disabled during connection', () => {
+    const onConnectToDevice = vi.fn();
+    const onIdentifyDevice = vi.fn();
+    const devices = ['a', 'b'].map((id, index) => ({ deviceId: id,
+      name: `ULSA EVO #${index + 1}`, nodeId: index + 1 }));
+    render(<BLEModal {...createBLEModalProps({ isOpen: true, connectionState: 'connecting',
+      connectedDevice: null, availableDevices: devices, onConnectToDevice, onIdentifyDevice })} />);
+    for (const device of devices) {
+      const connect = screen.getByRole('button', { name: `${device.name} に接続` });
+      const identify = screen.getByRole('button', { name: `${device.name} のLEDを点滅してさがす` });
+      expect(connect).toBeDisabled();
+      expect(identify).toBeDisabled();
+      fireEvent.click(connect);
+      fireEvent.click(identify);
+    }
+    expect(onConnectToDevice).not.toHaveBeenCalled();
+    expect(onIdentifyDevice).not.toHaveBeenCalled();
+  });
+
+  it('does not enable retained cards while the Web Bluetooth chooser is scanning', () => {
+    const onConnectToDevice = vi.fn();
+    const device = { deviceId: 'device-a', name: 'ULSA EVO #1' };
+    render(<BLEModal {...createBLEModalProps({ isOpen: true, connectionState: 'scanning',
+      connectedDevice: null, availableDevices: [device], onConnectToDevice,
+      platformInfo: { platform: 'web', adapterType: 'WebBluetooth', isSupported: true } })} />);
+    const connect = screen.getByRole('button', { name: 'ULSA EVO #1 に接続' });
+    expect(connect).toBeDisabled();
+    fireEvent.click(connect);
     expect(onConnectToDevice).not.toHaveBeenCalled();
   });
 

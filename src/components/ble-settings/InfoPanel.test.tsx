@@ -17,6 +17,7 @@ const runtimeInfo: RuntimeAppInfo = {
   build: '20260830110000',
   source: 'ios-bundle',
   error: null,
+  isIOSAppOnMac: false,
 };
 
 const missingConfiguration: ProductInformation = {

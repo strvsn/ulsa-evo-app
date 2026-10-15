@@ -40,7 +40,7 @@ describe('getRuntimeAppInfo', () => {
   it('uses the installed iOS bundle version and build number', async () => {
     mocks.getPlatform.mockReturnValue('ios');
     mocks.isNativePlatform.mockReturnValue(true);
-    mocks.getInfo.mockResolvedValue({ name: 'EVO APP', version: '1.0.0', build: '20260830110000' });
+    mocks.getInfo.mockResolvedValue({ name: 'EVO APP', version: '1.0.0', build: '20260830110000', isIOSAppOnMac: false });
 
     await expect(getRuntimeAppInfo()).resolves.toEqual({
       name: 'EVO APP',
@@ -48,6 +48,25 @@ describe('getRuntimeAppInfo', () => {
       build: '20260830110000',
       source: 'ios-bundle',
       error: null,
+      isIOSAppOnMac: false,
+    });
+  });
+
+  it('reports Mac execution without relabelling the installed iOS bundle', async () => {
+    mocks.getPlatform.mockReturnValue('ios');
+    mocks.isNativePlatform.mockReturnValue(true);
+    mocks.getInfo.mockResolvedValue({ version: '1.2.1', build: '20261003090000', isIOSAppOnMac: true });
+    await expect(getRuntimeAppInfo()).resolves.toMatchObject({
+      source: 'ios-bundle', isIOSAppOnMac: true, version: '1.2.1', error: null,
+    });
+  });
+
+  it('does not guess the host of an older native bridge', async () => {
+    mocks.getPlatform.mockReturnValue('ios');
+    mocks.isNativePlatform.mockReturnValue(true);
+    mocks.getInfo.mockResolvedValue({ version: '1.2.0', build: '20261002142900' });
+    await expect(getRuntimeAppInfo()).resolves.toMatchObject({
+      source: 'ios-bundle', isIOSAppOnMac: null, error: null,
     });
   });
 

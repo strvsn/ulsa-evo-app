@@ -66,6 +66,10 @@ final class ULSAWindPiPPlugin: CAPPlugin,
     @objc func isSupported(_ call: CAPPluginCall) {
         DispatchQueue.main.async { [weak self] in
             guard let self else { return }
+            guard !ProcessInfo.processInfo.isiOSAppOnMac else {
+                call.resolve(self.statePayload(phase: "unavailable"))
+                return
+            }
             self.ensurePrepared()
             let supported = AVPictureInPictureController.isPictureInPictureSupported()
             call.resolve([
@@ -79,6 +83,10 @@ final class ULSAWindPiPPlugin: CAPPlugin,
     @objc func start(_ call: CAPPluginCall) {
         DispatchQueue.main.async { [weak self] in
             guard let self else { return }
+            guard !ProcessInfo.processInfo.isiOSAppOnMac else {
+                call.reject("Mac版ではPicture in Pictureを利用できません", "PIP_UNSUPPORTED")
+                return
+            }
             guard let snapshot = self.parseSnapshot(call) else {
                 call.reject("PiP表示データが不正です", "INVALID_SNAPSHOT")
                 return
@@ -164,6 +172,10 @@ final class ULSAWindPiPPlugin: CAPPlugin,
     @objc func update(_ call: CAPPluginCall) {
         DispatchQueue.main.async { [weak self] in
             guard let self else { return }
+            guard !ProcessInfo.processInfo.isiOSAppOnMac else {
+                call.resolve(self.statePayload(phase: "unavailable"))
+                return
+            }
             guard let snapshot = self.parseSnapshot(call) else {
                 call.reject("PiP表示データが不正です", "INVALID_SNAPSHOT")
                 return
@@ -205,7 +217,8 @@ final class ULSAWindPiPPlugin: CAPPlugin,
     }
 
     private func ensurePrepared() {
-        guard pictureInPictureController == nil,
+        guard !ProcessInfo.processInfo.isiOSAppOnMac,
+              pictureInPictureController == nil,
               AVPictureInPictureController.isPictureInPictureSupported(),
               let presentingView = bridge?.viewController?.view else {
             if pictureInPictureController == nil {
@@ -475,6 +488,9 @@ final class ULSAWindPiPPlugin: CAPPlugin,
     }
 
     private func statePayload(phase overridePhase: String? = nil) -> [String: Any] {
+        if ProcessInfo.processInfo.isiOSAppOnMac {
+            return ["supported": false, "possible": false, "active": false, "phase": "unavailable"]
+        }
         let currentPhase = overridePhase ?? phase
         var payload: [String: Any] = [
             "supported": AVPictureInPictureController.isPictureInPictureSupported(),

@@ -13,6 +13,8 @@ import '../../src/pages/Dashboard.css';
 
 const params = new URLSearchParams(location.search);
 const light = params.get('theme') !== 'dark';
+const connectionState = params.get('state') === 'scanning' ? 'scanning'
+  : params.get('state') === 'connecting' ? 'connecting' : 'disconnected';
 setupIonicReact({ mode: params.get('mode') === 'md' ? 'md' : 'ios', animated: false });
 document.addEventListener('ionModalDidPresent', () => { document.documentElement.dataset.blePresented = 'true'; });
 const devices = Array.from({ length: 6 }, (_, index) => ({
@@ -27,7 +29,7 @@ export const Harness = () => {
   return <IonApp>
     <output data-testid="selected-device">{selected}</output>
     <output data-testid="rescans">{rescans}</output>
-    <BLEModal isOpen={open} onDismiss={() => setOpen(false)} connectionState="disconnected" dataState="idle"
+    <BLEModal isOpen={open} onDismiss={() => setOpen(false)} connectionState={connectionState} dataState="idle"
       connectedDevice={null} availableDevices={devices} error={null} isSupported
       platformInfo={{ platform: 'ios', adapterType: 'Capacitor', isSupported: true }}
       themeIsLight={light} themeGradient={light ? 'linear-gradient(150deg, #edf7f7, #d9e8ed)' : undefined}

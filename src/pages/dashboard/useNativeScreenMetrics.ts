@@ -12,6 +12,8 @@ export type NativeScreenMetricsDetail = {
     left?: number;
   };
   userInterfaceIdiom?: string;
+  /** Actual UIKit viewport orientation; distinct from physical device posture. */
+  interfaceRotationDegrees?: number;
   source?: string;
 };
 

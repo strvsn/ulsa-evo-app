@@ -24,6 +24,7 @@
 		C7B250A52E2A100100B1C201 /* ULSAWindRoseMotionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7B250A42E2A100100B1C201 /* ULSAWindRoseMotionModel.swift */; };
 		C7B250A72E2A100100B1C201 /* ULSAWindRoseTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7B250A62E2A100100B1C201 /* ULSAWindRoseTheme.swift */; };
 		E9B1D0012F00000100A10001 /* ULSASlideImageSharePlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9B1D0002F00000100A10001 /* ULSASlideImageSharePlugin.swift */; };
+		EA3100012F00000100A10001 /* ULSALogArchivePlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA3100002F00000100A10001 /* ULSALogArchivePlugin.swift */; };
 		D93A00012F00000100A10001 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = D93A00002F00000100A10001 /* PrivacyInfo.xcprivacy */; };
 /* End PBXBuildFile section */
 
@@ -48,6 +49,7 @@
 		C7B250A42E2A100100B1C201 /* ULSAWindRoseMotionModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ULSAWindRoseMotionModel.swift; sourceTree = "<group>"; };
 		C7B250A62E2A100100B1C201 /* ULSAWindRoseTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ULSAWindRoseTheme.swift; sourceTree = "<group>"; };
 		E9B1D0002F00000100A10001 /* ULSASlideImageSharePlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ULSASlideImageSharePlugin.swift; sourceTree = "<group>"; };
+		EA3100002F00000100A10001 /* ULSALogArchivePlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ULSALogArchivePlugin.swift; sourceTree = "<group>"; };
 		D93A00002F00000100A10001 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -95,6 +97,7 @@
 				C7B250A42E2A100100B1C201 /* ULSAWindRoseMotionModel.swift */,
 				C7B250A62E2A100100B1C201 /* ULSAWindRoseTheme.swift */,
 				E9B1D0002F00000100A10001 /* ULSASlideImageSharePlugin.swift */,
+				EA3100002F00000100A10001 /* ULSALogArchivePlugin.swift */,
 				D93A00002F00000100A10001 /* PrivacyInfo.xcprivacy */,
 				504EC30B1FED79650016851F /* Main.storyboard */,
 				504EC30E1FED79650016851F /* Assets.xcassets */,
@@ -143,6 +146,9 @@
 						LastSwiftMigration = 1100;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
+							com.apple.AssociatedDomains = {
+								enabled = 1;
+							};
 							com.apple.HotspotConfiguration = {
 								enabled = 1;
 							};
@@ -203,6 +209,7 @@
 				C7B250A52E2A100100B1C201 /* ULSAWindRoseMotionModel.swift in Sources */,
 				C7B250A72E2A100100B1C201 /* ULSAWindRoseTheme.swift in Sources */,
 				E9B1D0012F00000100A10001 /* ULSASlideImageSharePlugin.swift in Sources */,
+				EA3100012F00000100A10001 /* ULSALogArchivePlugin.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -344,7 +351,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = App/App.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 5;
 				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = App/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
@@ -352,12 +359,13 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1.1;
+				MARKETING_VERSION = 1.2.1;
 				OTHER_SWIFT_FLAGS = "$(inherited) \"-D\" \"COCOAPODS\" \"-DDEBUG\"";
 				PRODUCT_BUNDLE_IDENTIFIER = com.strvsn.ulsaEvoApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_VERSION = 5.0;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -368,7 +376,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = App/App.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 5;
 				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = App/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
@@ -376,11 +384,12 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1.1;
+				MARKETING_VERSION = 1.2.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.strvsn.ulsaEvoApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "";
 				SWIFT_VERSION = 5.0;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;

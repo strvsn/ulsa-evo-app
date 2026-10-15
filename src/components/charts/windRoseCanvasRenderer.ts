@@ -29,6 +29,10 @@ export interface WindRoseCanvasRenderInput {
   tiltDegrees: number;
   theme: WindRoseThemeVariant;
   trueHeading: number | null;
+  /** Viewport rotation for inverse drawing; incoming wind is mapped to hardware separately. */
+  screenRotationDegrees?: number;
+  /** Screen-relative ULSA to hardware-top rotation, used to position saved ULSA holds. */
+  windReferenceRotationDegrees?: number;
   headingAccuracy: number | null;
   /** GNSS mode can replace the upper direction metric with platform ground speed. */
   centerPrimaryMetric?: WindRoseCenterPrimaryMetric;
@@ -61,7 +65,7 @@ export interface WindRoseCapturedFrameSnapshot {
   rayActivity: Float32Array;
   speedMps: number;
   displayDirectionDegrees: number;
-  /** Reserved for backwards-compatible snapshots; live captures use screen-relative 0°. */
+  /** Captured body-to-reference rotation: heading for geographic holds, 0° for ULSA. */
   displayRotationDegrees: number;
   /** Reference frame fixed at capture time; true north remains meaningful even at heading 0°. */
   directionReference: WindRoseDirectionReference;
@@ -383,6 +387,8 @@ export const drawWindRoseCanvas = (
     tiltDegrees,
     theme,
     trueHeading,
+    screenRotationDegrees = 0,
+    windReferenceRotationDegrees = 0,
     headingAccuracy,
     centerPrimaryMetric = 'windDirection',
     groundSpeedMps = null,
@@ -395,6 +401,9 @@ export const drawWindRoseCanvas = (
   const centerY = height / 2;
   const displayRotation = trueHeading ?? 0;
   const rawDisplayDirection = normalizeDegrees(frame.peakDirectionDegrees + displayRotation);
+  const screenRotation = trueHeading !== null && Number.isFinite(screenRotationDegrees)
+    ? normalizeDegrees(screenRotationDegrees)
+    : 0;
   const geometry = createWindRoseGeometry({ size });
   const palette = getWindRosePaletteForSpeed(hasCurrentWindData ? frame.speedMps : null, theme);
   const surface = getWindRoseSurfacePalette(theme);
@@ -415,20 +424,24 @@ export const drawWindRoseCanvas = (
     context.save();
     context.lineCap = 'round';
     peakHolds.forEach((hold) => {
+      const isGeographicHold = hold.directionReference === 'trueNorth'
+        || hold.directionReference === 'trueWind';
+      // Preserve the saved value, but do not invent its current screen position
+      // when the live geographic reference is unavailable.
+      if (isGeographicHold && (trueHeading === null || !Number.isFinite(trueHeading))) return;
       const holdPalette = getWindRosePeakHoldPalette(theme, hold.bankIndex);
       context.strokeStyle = holdPalette.stroke;
       context.shadowColor = holdPalette.glow;
       context.shadowBlur = Math.max(2, size * 0.009);
-      const displayBinOffset = Math.round(
-        hold.displayRotationDegrees / WIND_ROSE_BAR_STEP_DEGREES,
-      );
+      const displayAngleOffset = hold.displayRotationDegrees
+        - (isGeographicHold ? (trueHeading ?? 0) : 0)
+        + (!isGeographicHold && trueHeading !== null ? windReferenceRotationDegrees : 0)
+        - screenRotation;
       hold.rayActivity.forEach((activity, index) => {
         if (activity < 0.003) return;
-        const displayIndex = (index + displayBinOffset + hold.rayActivity.length)
-          % hold.rayActivity.length;
         const heldBar = {
           ...templateBar,
-          angle: displayIndex * WIND_ROSE_BAR_STEP_DEGREES,
+          angle: normalizeDegrees(index * WIND_ROSE_BAR_STEP_DEGREES + displayAngleOffset),
         };
         const heldLength = minimumActiveLength
           + (maximumLength - minimumActiveLength) * activity;
@@ -455,9 +468,9 @@ export const drawWindRoseCanvas = (
     const activeRays: WindRoseActiveRay[] = [];
     frame.rayActivity.forEach((activity, index) => {
       if (activity < 0.003) return;
-      // The sensor axis is fixed to the iPhone screen. Heading rotates the
-      // geographic NEWS overlay and numeric bearing, never the sensed rays.
-      const activeAngle = index * WIND_ROSE_BAR_STEP_DEGREES;
+      // Heading never rotates the measured field. Only compensate the viewport
+      // transform so body-fixed rays and geographic NEWS share the same frame.
+      const activeAngle = normalizeDegrees(index * WIND_ROSE_BAR_STEP_DEGREES - screenRotation);
       const activeLength = minimumActiveLength
         + (maximumLength - minimumActiveLength) * activity;
       const activeBar = {
@@ -503,7 +516,7 @@ export const drawWindRoseCanvas = (
       centerX,
       centerY,
       geometry,
-      trueHeading,
+      normalizeDegrees(trueHeading + screenRotation),
       headingAccuracy,
       size,
       isTilted,
